@@ -55,7 +55,7 @@
       <div class="bg-emerald-50/70 border border-emerald-200/60 rounded-2xl px-4 py-3 text-xs text-emerald-900 leading-relaxed flex items-center gap-3 shadow-sm">
         <div class="p-2 bg-emerald-100/80 text-emerald-700 rounded-xl shrink-0">🎓</div>
         <div>
-          <strong class="font-bold">Mode Apprentis :</strong> Catalogue étendu à 28 repas complets. Clique sur <span class="inline-block bg-white px-1 py-0.5 rounded border border-emerald-200 text-[10px]">🔄</span> pour faire varier une journée.
+          <strong class="font-bold">Mode Apprentis :</strong> Menu généré selon tes recettes. Cliquez sur <span class="inline-block bg-white px-1 py-0.5 rounded border border-emerald-200 text-[10px]">🔄</span> pour varier une journée.
         </div>
       </div>
       <div id="cards-container" class="space-y-4"></div>
@@ -112,10 +112,7 @@
   <!-- MODALE RECETTE -->
   <div id="modal-recette" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm hidden z-50 flex items-end sm:items-center justify-center transition-opacity p-0 sm:p-4">
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[85vh] sm:max-h-[90vh] overflow-y-auto p-6 space-y-5 modal-shadow relative animate-in fade-in slide-in-from-bottom-5 duration-200">
-      
-      <!-- Poignée visuelle pour mobile -->
       <div class="w-12 h-1 bg-slate-200 rounded-full mx-auto -mt-2 mb-2 sm:hidden"></div>
-
       <div class="sticky top-0 bg-white z-10 -mx-6 -mt-4 p-6 pt-2 pb-4 border-b border-slate-100 flex justify-between items-start">
         <div class="space-y-1 pr-4">
           <span id="modal-badge" class="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 inline-block border border-slate-200/60"></span>
@@ -124,10 +121,8 @@
         <button id="close-modal" class="p-2 -mr-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition active:scale-95">✕</button>
       </div>
 
-      <!-- Stats -->
       <div id="modal-stats" class="grid grid-cols-3 gap-2"></div>
 
-      <!-- Matériel -->
       <div id="modal-materiel-wrap">
         <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <span>🧰</span> Matériel nécessaire
@@ -135,7 +130,6 @@
         <div id="modal-materiel" class="flex flex-wrap gap-1.5"></div>
       </div>
 
-      <!-- Ingrédients -->
       <div>
         <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
           <span>🥑 Ingrédients</span>
@@ -144,7 +138,6 @@
         <ul id="modal-ingredients" class="grid grid-cols-1 gap-1.5 text-xs text-slate-700 font-medium"></ul>
       </div>
 
-      <!-- Mise en place -->
       <div id="modal-miseenplace-wrap">
         <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <span>📋</span> Mise en place <span class="text-[10px] text-slate-400 normal-case font-semibold">(Avant la cuisson)</span>
@@ -152,7 +145,6 @@
         <ul id="modal-miseenplace" class="space-y-1.5 text-xs text-slate-600"></ul>
       </div>
 
-      <!-- Pas-à-pas -->
       <div>
         <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <span>👩‍🍳</span> Pas-à-pas guidé
@@ -160,7 +152,6 @@
         <ol id="modal-etapes" class="space-y-3 text-xs text-slate-600 pl-4 list-decimal marker:font-bold marker:text-emerald-600 leading-relaxed"></ol>
       </div>
 
-      <!-- Astuce Chef -->
       <div id="modal-astuce"></div>
     </div>
   </div>
@@ -209,139 +200,12 @@
           dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: ["250g de fraises", "2 yaourts grecs", "1 cs de miel"] }
         },
         {
-          cuisine: "🌱 Printemps • Oméga-3",
-          entree: {
-            nom: "Salade tiède de fèves, feta & menthe",
-            prep: 10, cuisson: 6, difficulte: 1,
-            materiel: ["Casserole", "Passoire", "Saladier"],
-            ingredients: ["250g de fèves (fraîches ou surgelées)", "60g de feta", "10 feuilles de menthe fraîche", "1 cs d'huile d'olive", "1/2 citron"],
-            miseenplace: ["Ciseler la menthe.", "Émietter la feta."],
-            etapes: [
-              "Fais bouillir les fèves 6 minutes dans une casserole d'eau salée.",
-              "Égoutte-les et retire la seconde peau si elle est épaisse.",
-              "Mélange les fèves tièdes avec l'huile d'olive, le jus de citron, la menthe et la feta."
-            ],
-            astuce: "Dérober les fèves (enlever leur petite peau) rend la salade nettement plus digestion-friendly."
-          },
-          plat: {
-            nom: "Filet de lieu noir, petits pois au beurre d'estragon & riz bio",
-            prep: 10, cuisson: 14, difficulte: 2,
-            materiel: ["Poêle", "Casserole", "Verre doseur"],
-            ingredients: ["300g de filet de lieu noir", "150g de riz basmati", "200g de petits pois", "15g de beurre", "Estragon frais", "1 cs d'huile de colza"],
-            miseenplace: ["Sécher le poisson avec du papier absorbant.", "Hacher l'estragon."],
-            etapes: [
-              "Cuis le riz dans deux fois son volume d'eau pendant 11 minutes à feu doux.",
-              "Fais cuire les petits pois 5 minutes à l'eau bouillante, égoutte puis incorpore le beurre et l'estragon.",
-              "Poêle le lieu noir 3 à 4 minutes par face à feu moyen dans l'huile de colza.",
-              "Dresse le filet de poisson sur le riz accompagné des petits pois parfumés."
-            ],
-            astuce: "Assure-toi que ta poêle est bien chaude avant d'y déposer le lieu noir pour éviter qu'il n'attache."
-          },
-          dessert: { nom: "Kiwi & fromage blanc", prep: 5, ingredients: ["2 kiwis", "200g de fromage blanc", "1 cs de sirop d'érable"] }
-        },
-        {
-          cuisine: "🌱 Printemps • Végétarien Gourmand",
-          entree: {
-            nom: "Velouté léger de fanes de radis & croûtons",
-            prep: 10, cuisson: 15, difficulte: 1,
-            materiel: ["Casserole", "Mixeur plongeant", "Planche à découper"],
-            ingredients: ["Fanes d'une botte de radis", "1 pomme de terre", "1 oignon", "1 cs d'huile d'olive", "30g de croûtons"],
-            miseenplace: ["Laver très soigneusement les fanes à l'eau claire.", "Éplucher et couper la pomme de terre en dés."],
-            etapes: [
-              "Fais revenir l'oignon émincé avec l'huile d'olive dans la casserole à feu moyen pendant 3 minutes.",
-              "Ajoute les dés de pomme de terre et les fanes de radis, puis couvre avec 500ml d'eau salée.",
-              "Laisse cuire 15 minutes à bouillon moyen.",
-              "Mixe finement au mixeur plongeant et parsème de croûtons au moment de servir."
-            ],
-            astuce: "Une poignée de graines de tournesol grillées peut remplacer les croûtons pour une option sans gluten."
-          },
-          plat: {
-            nom: "Risotto crémeux d'asperges vertes au parmesan",
-            prep: 15, cuisson: 20, difficulte: 2,
-            materiel: ["Sautéuse", "Casserole à bouillon", "Louche"],
-            ingredients: ["160g de riz arborio", "250g d'asperges vertes", "1/2 oignon", "40g de parmesan râpé", "750ml de bouillon végétal", "1.5 cs d'huile d'olive"],
-            miseenplace: ["Couper les asperges en tronçons de 2 cm (garder les pointes intactes).", "Chauffer le bouillon."],
-            etapes: [
-              "Fais suer l'oignon dans l'huile d'olive pendant 2 minutes dans la sauteuse.",
-              "Nacre le riz arborio 2 minutes à feu moyen jusqu'à ce qu'il devienne translucide.",
-              "Ajoute le bouillon louche par louche pendant 18 minutes en remuant régulièrement.",
-              "Incorpore les tronçons d'asperges à mi-cuisson (10 min de la fin).",
-              "Hors du feu, ajoute le parmesan, couvre 2 minutes et sers aussitôt."
-            ],
-            astuce: "Ajouter le parmesan uniquement hors du feu garantit une liaison crémeuse sans faire filer le fromage."
-          },
-          dessert: { nom: "Compote de rhubarbe & pomme au four", prep: 10, ingredients: ["200g de rhubarbe", "1 pomme", "1 cs de sucre complet"] }
-        },
-        {
-          cuisine: "🌱 Printemps • Terroir Doux",
-          entree: {
-            nom: "Carpaccio de courgettes jaunes, pignons & parmigiano",
-            prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Mandoline ou couteau bien aiguisé", "Petite poêle"],
-            ingredients: ["2 courgettes jaunes fines bio", "20g de pignons de pin", "30g de copeaux de parmesan", "1 cs d'huile d'olive extra verte", "1/2 citron"],
-            miseenplace: ["Laver les courgettes.", "Sécher les pignons."],
-            etapes: [
-              "Tranche les courgettes en lamelles transparentes à la mandoline.",
-              "Doré les pignons à sec dans la poêle 2 minutes à feu vif.",
-              "Dispose les lamelles en roseta sur l'assiette, arrose du jus de citron et d'huile d'olive.",
-              "Parsème des pignons grillés et des copeaux de parmesan."
-            ],
-            astuce: "Conserve les courgettes au frais jusqu'au dernier moment pour conserver leur croquant."
-          },
-          plat: {
-            nom: "Pavé de cabillaud rôti, mousseline de carottes au cumin",
-            prep: 15, cuisson: 15, difficulte: 2,
-            materiel: ["Casserole", "Mixeur plongeant", "Poêle"],
-            ingredients: ["300g de dos de cabillaud", "450g de carottes", "1 cc de cumin en poudre", "1 cs d'huile d'olive", "10g de beurre"],
-            miseenplace: ["Éplucher les carottes et les tailler en fines rondelles.", "Sécher le cabillaud."],
-            etapes: [
-              "Fais cuire les carottes à l'eau bouillante salée 15 minutes avec le cumin.",
-              "Égoutte les carottes en gardant un demi-verre d'eau de cuisson, puis mixe finement avec le beurre.",
-              "Poêle le cabillaud dans l'huile d'olive 4 minutes côté peau, puis 3 minutes sur l'autre face.",
-              "Sers le poisson bien chaud sur la mousseline de carottes onctueuse."
-            ],
-            astuce: "Le cumin rehausse la douceur naturelle des carottes de printemps."
-          },
-          dessert: { nom: "Fraises au basilic & vinaigre balsamique", prep: 5, ingredients: ["250g de fraises", "4 feuilles de basilic", "1 cc de crème de balsamique"] }
-        },
-        {
-          cuisine: "🌱 Printemps • Énergie & Végétal",
-          entree: {
-            nom: "Salade de petits pois frais, menthe & ricotta",
-            prep: 10, cuisson: 3, difficulte: 1,
-            materiel: ["Casserole", "Bol"],
-            ingredients: ["200g de petits pois frais", "80g de ricotta", "10 feuilles de menthe", "1 cs d'huile d'olive", "Zeste d'un 1/2 citron"],
-            miseenplace: ["Écosser les petits pois si frais.", "Zester le citron."],
-            etapes: [
-              "Plonge les petits pois 3 minutes dans de l'eau bouillante salée pour conserver leur vert éclatant.",
-              "Égoutte-les et stoppe la cuisson immédiatement sous l'eau glacée.",
-              "Dresse les petits pois avec la ricotta déposée en quenelles, la menthe ciselée, l'huile et les zestes."
-            ],
-            astuce: "L'eau glacée est le secret pour garder la couleur verte vive des petits pois."
-          },
-          plat: {
-            nom: "Sauté de dinde aux poivrons printaniers & quinoa aux herbes",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Wok ou sauteuse", "Casserole"],
-            ingredients: ["320g de filet de dinde", "150g de quinoa", "1 poivron rouge", "1 poivron jaune", "1 cs de sauce soja bio", "1.5 cs d'huile de sésame"],
-            miseenplace: ["Détailler la dinde en fines lanières.", "Émincer les poivrons en bâtonnets."],
-            etapes: [
-              "Fais cuire le quinoa 12 minutes dans 300ml d'eau bouillante salée.",
-              "Dans un wok bien chaud, saisis la dinde dans l'huile de sésame 4 minutes à feu vif.",
-              "Ajoute les poivrons et la sauce soja, puis saute le tout 6 minutes en remuant constamment.",
-              "Mélange le quinoa avec un peu d'herbes hachées et sers chaud."
-            ],
-            astuce: "La cuisson rapide au wok préserve le croquant et les vitamines des poivrons."
-          },
-          dessert: { nom: "Pomme Granny Smith & poignée de noisettes", prep: 2, ingredients: ["2 pommes vertes", "25g de noisettes"] }
-        },
-        {
-          cuisine: "🌱 Printemps • Vitalité Verte",
+          cuisine: "🌱 Printemps • Vitalité Verde",
           entree: {
             nom: "Tartine d'avocat écrasé, graines de chanvre & fleur de sel",
             prep: 8, cuisson: 0, difficulte: 1,
             materiel: ["Fourchette", "Grille-pain"],
-            ingredients: ["1 avocat mûr", "2 tranches de pain complet au levain", "1 cs de graines de chanvre ou sésame", "1/2 citron", "Piment d'Espelette"],
+            ingredients: ["1 avocat mûr", "2 tranches de pain complet au levain", "1 cs de graines de chanvre", "1/2 citron", "Piment d'Espelette"],
             miseenplace: ["Trancher le pain.", "Évider l'avocat."],
             etapes: [
               "Grille les tranches de pain au grille-pain.",
@@ -365,6 +229,37 @@
             astuce: "Ne bats pas trop longuement les œufs pour garder une texture baveuse à la cuisson."
           },
           dessert: { nom: "Mélange de fruits rouges & yaourt au miel", prep: 5, ingredients: ["200g de fruits rouges", "2 yaourts nats", "1 cs de miel"] }
+        },
+        {
+          cuisine: "🌱 Printemps • Levantin & Douceur",
+          entree: {
+            nom: "Salade de pois chiches, menthe & feta",
+            prep: 10, cuisson: 0, difficulte: 1,
+            materiel: ["Saladier", "Passoire"],
+            ingredients: ["200g de pois chiches cuits", "60g de feta", "1/2 botte de menthe fraîche", "1 cs d'huile d'olive", "1/2 citron"],
+            miseenplace: ["Rincer et égoutter les pois chiches.", "Ciseler la menthe.", "Émietter la feta."],
+            etapes: [
+              "Mélange les pois chiches avec l'huile d'olive et le jus de citron.",
+              "Ajoute la feta et la menthe délicatement.",
+              "Assaisonne avec un poivre moulu frais."
+            ],
+            astuce: "Presse le jus de citron directement sur les pois chiches chauds si tu les réchauffes légèrement pour qu'ils absorbent mieux les arômes."
+          },
+          plat: {
+            nom: "Pavé de cabillaud en croûte d'herbes & écrasé de fenouil",
+            prep: 12, cuisson: 15, difficulte: 2,
+            materiel: ["Plat à four", "Casserole", "Presse-purée"],
+            ingredients: ["300g de filet de cabillaud", "2 fenouils", "30g de chapelure", "1 cs de persil haché", "1 cs d'huile d'olive"],
+            miseenplace: ["Préchauffer le four à 200°C.", "Couper les fenouils en morceaux.", "Mélanger chapelure, persil et 1 cc d'huile."],
+            etapes: [
+              "Fais cuire le fenouil dans de l'eau bouillante salée 12 minutes puis écrase-le à la fourchette.",
+              "Dispose le cabillaud dans un plat, recouvre-le du mélange de chapelure aux herbes.",
+              "Enfourne 12 minutes jusqu'à ce que le dessus soit bien doré.",
+              "Sers le poisson croustillant sur son lit d'écrasé de fenouil."
+            ],
+            astuce: "Assure-toi que le poisson est bien séché avec de l'essuie-tout avant d'ajouter la croûte."
+          },
+          dessert: { nom: "Carpaccio de kiwis & sirop léger de fleur d'oranger", prep: 5, ingredients: ["3 kiwis", "1 cc d'eau de fleur d me d'oranger", "1 cs de miel"] }
         }
       ],
       ete: [
@@ -401,160 +296,35 @@
           dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches mûres", "2 yaourts", "1 cs de miel"] }
         },
         {
-          cuisine: "☀️ Été • Méditerranéen & Maigre",
+          cuisine: "☀️ Été • Riviera & Épices",
           entree: {
-            nom: "Gaspacho glacé de tomates & poivron rouge",
+            nom: "Salade de melon, tomates cerises & basilic",
             prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Mixeur ou blender", "Planche à découper"],
-            ingredients: ["4 tomates bien mûres", "1 poivron rouge", "1/2 concombre", "1 cs d'huile d'olive", "1 cs de vinaigre de Xérès"],
-            miseenplace: ["Épépiner le poivron et le concombre.", "Couper tous les légumes en gros morceaux."],
+            materiel: ["Couteau", "Saladier"],
+            ingredients: ["1/2 melon", "150g de tomates cerises", "1/2 botte de basilic", "1 cs d'huile d'olive", "1 cs de vinaigre balsamique"],
+            miseenplace: ["Couper le melon en bille ou dés.", "Couper les tomates cerises en deux."],
             etapes: [
-              "Place l'ensemble des ingrédients dans le bol du blender.",
-              "Mixe à haute vitesse pendant 2 minutes jusqu'à consistance très fluide.",
-              "Ajuste l'assaisonnement avec du sel, du poivre et un trait de vinaigre.",
-              "Reserve au frais 20 minutes avant de déguster."
+              "Mélanger le melon et les tomates dans un saladier.",
+              "Ajouter l'huile d'olive et le vinaigre balsamique.",
+              "Parsemer de basilic frais ciselé au dernier moment."
             ],
-            astuce: "Ajoute un glaçon lors du mixage pour conserver une couleur rouge éclatante."
+            astuce: "Conserve le melon à température ambiante 1h avant de servir pour révéler son parfum."
           },
           plat: {
-            nom: "Brochettes de dinde marinées, ratatouille express & semoule",
-            prep: 15, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle grill", "Casserole", "Piques à brochette"],
-            ingredients: ["300g de filet de dinde", "1 courgette", "1 aubergine", "2 tomates", "150g de semoule moyenne", "1.5 cs d'huile d'olive", "Herbes de Provence"],
-            miseenplace: ["Couper la dinde en cubes de 3 cm.", "Détailler courgette, aubergine et tomates en dés."],
+            nom: "Brochettes de poulet marinées au citron & taboulé de boulgour",
+            prep: 15, cuisson: 10, difficulte: 2,
+            materiel: ["Pic en bois", "Poêle grill ou BBQ", "Saladier"],
+            ingredients: ["350g de blanc de poulet", "150g de boulgour", "1 citron", "1 cc de origan", "1 cs d'huile d'olive", "1/2 concombre"],
+            miseenplace: ["Couper le poulet en cubes.", "Faire tremper le boulgour dans de l'eau chaude 15 min.", "Couper le concombre en petits dés."],
             etapes: [
-              "Fais cuire les légumes en ratatouille dans une sauteuse avec 1 cs d'huile d'olive pendant 15 minutes à feu moyen.",
-              "Enfile la dinde sur des piques, assaisonne avec herbes de Provence et sel.",
-              "Grille les brochettes 8 à 10 minutes à la poêle grill à feu vif.",
-              "Verse l'eau bouillante salée sur la semoule (1:1), couvre 5 minutes puis égrène à la fourchette."
+              "Faire mariner le poulet dans le jus de citron, l'huile et l'origan pendant 10 min.",
+              "Enfiler sur les pics et faire griller 10 minutes à la poêle en tournant régulièrement.",
+              "Mélanger le boulgour gonflé avec les dés de concombre et de l'huile d'olive.",
+              "Servir les brochettes bien chaudes sur le taboulé frais."
             ],
-            astuce: "La dinde reste juteuse grâce à une cuisson saisie sur poêle très chaude."
+            astuce: "Fais tremper les pics en bois dans l'eau 10 min avant pour éviter qu'ils ne brûlent à la cuisson."
           },
-          dessert: { nom: "Tranches de melon frais & menthe", prep: 5, ingredients: ["1/2 melon", "Feuilles de menthe fraîche"] }
-        },
-        {
-          cuisine: "☀️ Été • Protéines Végétales",
-          entree: {
-            nom: "Salade de melon, mozzarella di bufala & basilic",
-            prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Cuillère parisienne ou couteau", "Saladier"],
-            ingredients: ["1/2 melon", "125g de mozzarella di bufala", "1 cs d'huile d'olive bio", "6 feuilles de basilic", "Poivre du moulin"],
-            miseenplace: ["Détailler le melon en billes ou cubes.", "Égoutter la mozzarella et la couper en morceaux."],
-            etapes: [
-              "Mélange doucement le melon et la mozzarella dans un saladier.",
-              "Ajoute l'huile d'olive et le basilic ciselé juste au dernier moment.",
-              "Donne un généreux tour de moulin à poivre noir."
-            ],
-            astuce: "Conserve le melon à température ambiante 1 heure avant pour en révéler tout le parfum."
-          },
-          plat: {
-            nom: "Tofu mariné au soja, taboulé de persil & menthe au quinoa",
-            prep: 15, cuisson: 12, difficulte: 1,
-            materiel: ["Poêle", "Casserole", "Saladier"],
-            ingredients: ["250g de tofu ferme", "150g de quinoa", "1 botte de persil plat", "1/2 botte de menthe", "2 tomates", "2 cs de sauce soja", "1 cs d'huile de sésame"],
-            miseenplace: ["Couper le tofu en dés et le faire mariner 10 min dans la sauce soja.", "Hacher finement persil et menthe."],
-            etapes: [
-              "Fais cuire le quinoa 12 minutes à l'eau bouillante salée, puis laisse-le refroidir.",
-              "Poêle les dés de tofu 6 minutes à feu vif dans l'huile de sésame jusqu'à coloration dorée.",
-              "Mélange le quinoa froid, les herbes hachées et les tomates coupées en très petits dés.",
-              "Sers le taboulé rafraîchissant surmonté du tofu chaud croustillant."
-            ],
-            astuce: "Presse bien le tofu dans du papier absorbant avant de le mariner pour qu'il absorbe les saveurs."
-          },
-          dessert: { nom: "Pastèque fraîche au jus de citron vert", prep: 5, ingredients: ["300g de pastèque", "1/2 citron vert"] }
-        },
-        {
-          cuisine: "☀️ Été • Soleil d'Italie",
-          entree: {
-            nom: "Salade Caprese aux tomates anciennes & origan",
-            prep: 8, cuisson: 0, difficulte: 1,
-            materiel: ["Planche à découper", "Grand couteau"],
-            ingredients: ["3 tomates anciennes variées", "125g de mozzarella di bufala", "1 cs d'huile d'olive extra vierge", "1 cc d'origan séché", "Fleur de sel"],
-            miseenplace: ["Trancher les tomates et la mozzarella en rondelles épaisses."],
-            etapes: [
-              "Alterne les rondelles de tomates et de mozzarella sur un grand plat.",
-              "Arrose d'huile d'olive et saupoudre d'origan et de fleur de sel.",
-              "Laisse reposer 5 minutes avant de servir pour mêler les jus."
-            ],
-            astuce: "Utilise des tomates à température ambiante pour exhaler toutes leurs arômes."
-          },
-          plat: {
-            nom: "Thon mi-cuit en croûte de sésame & salade de haricots verts au basilic",
-            prep: 12, cuisson: 8, difficulte: 2,
-            materiel: ["Poêle", "Casserole", "Assiette creuse"],
-            ingredients: ["300g de steak de thon frais", "40g de graines de sésame", "250g de haricots verts frais", "1.5 cs d'huile d'olive", "1 cs de vinaigre de balsamique"],
-            miseenplace: ["Équeuter les haricots verts.", "Rouler le thon dans les graines de sésame."],
-            etapes: [
-              "Cuire les haricots verts 7 minutes à l'eau bouillante. Égoutter et assaisonner avec huile et balsamique.",
-              "Saisir le thon dans une poêle très chaude avec 0.5 cs d'huile pendant 1 minute par face seulement.",
-              "Trancher le thon en lamelles et servir immédiatement avec la salade de haricots verts."
-            ],
-            astuce: "Le cœur du thon doit rester bien rose et tendre."
-          },
-          dessert: { nom: "Sorbet citron maison express ou brugnons", prep: 5, ingredients: ["2 brugnons mûrs", "Feuilles de menthe"] }
-        },
-        {
-          cuisine: "☀️ Été • Grillades & Légèreté",
-          entree: {
-            nom: "Poivrons marines grillés à l'ail & vinaigre de Xérès",
-            prep: 10, cuisson: 15, difficulte: 1,
-            materiel: ["Four (Grill)", "Bol"],
-            ingredients: ["2 poivrons (1 rouge, 1 jaune)", "1 gousse d'ail", "1 cs d'huile d'olive", "1 cc de vinaigre de Xérès"],
-            miseenplace: ["Couper les poivrons en quatre et retirer les graines."],
-            etapes: [
-              "Place les poivrons sous le grill du four pendant 15 minutes jusqu'à ce que la peau noircisse.",
-              "Enferme-les 5 minutes dans un sac plastique pour décoller la peau facilement.",
-              "Pèle-les, évide les peaux et détaille la chair en lanières.",
-              "Marine avec l'ail haché, l'huile et le vinaigre."
-            ],
-            astuce: "La vapeur emprisonnée dans le sac rend l'épluchage ultra simple."
-          },
-          plat: {
-            nom: "Brochettes de crevette à la citronnelle & riz sauvage",
-            prep: 15, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle grill", "Casserole", "Piques à brochette"],
-            ingredients: ["300g de décortiquées crues", "150g de riz sauvage ou basmati", "1 tige de citronnelle", "1 cs d'huile de sésame", "1/2 citron vert"],
-            miseenplace: ["Hacher la citronnelle.", "Mariner les crevettes 10 min avec citronnelle et jus de citron vert."],
-            etapes: [
-              "Cuis le riz sauvage 15 minutes dans l'eau bouillante salée.",
-              "Enfile les crevettes marinées sur des piques.",
-              "Grille les brochettes 2 minutes par face à feu vif dans la poêle grill avec l'huile de sésame.",
-              "Sers les brochettes dorées sur le riz égoutté."
-            ],
-            astuce: "Ne surcuits pas les crevettes pour éviter qu'elles deviennent caoutchouteuses."
-          },
-          dessert: { nom: "Carpaccio d'ananas au citron vert", prep: 5, ingredients: ["200g d'ananas frais", "1/2 citron vert"] }
-        },
-        {
-          cuisine: "☀️ Été • Bento Fraîcheur",
-          entree: {
-            nom: "Salade de courgettes crues, menthe & amandes effilées",
-            prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Économe", "Poêle"],
-            ingredients: ["2 courgettes bien fraîches", "20g d'amandes effilées", "8 feuilles de menthe", "1 cs d'huile de colza", "1 cs de jus de citron"],
-            miseenplace: ["Laver les courgettes."],
-            etapes: [
-              "Réalise de rubans de courgettes à l'économe sur toute la longueur.",
-              "Fais griller les amandes effilées à sec 2 minutes dans la poêle.",
-              "Mélange les rubans de courgette avec l'huile, le citron et la menthe.",
-              "Parseme des amandes grillées croquantes au moment de servir."
-            ],
-            astuce: "Stoppe les rubans de courgette au niveau du cœur de pépins trop mou."
-          },
-          plat: {
-            nom: "Salade repas de poulet grillé, maïs, avocat & pois chiches",
-            prep: 12, cuisson: 8, difficulte: 1,
-            materiel: ["Poêle", "Grand saladier"],
-            ingredients: ["300g de blanc de poulet", "1 avocat", "150g de pois chiches cuits", "100g de maïs doux", "1.5 cs d'huile d'olive", "Coriandre"],
-            miseenplace: ["Couper le poulet en dés.", "Découper l'avocat en cubes."],
-            etapes: [
-              "Fais dorer les dés de poulet dans la poêle avec l'huile d'olive 8 minutes à feu moyen.",
-              "Dans un saladier, assemble les pois chiches rincés, le maïs, l'avocat et le poulet tiède.",
-              "Assaisonne d'un trait d'huile d'olive, de sel, de poivre et de coriandre fraîche."
-            ],
-            astuce: "Le mélange tiède du poulet et froid des légumes crée un contraste idéal."
-          },
-          dessert: { nom: "Figues fraîches & yaourt grec", prep: 5, ingredients: ["4 figues fraîches", "2 yaourts grecs"] }
+          dessert: { nom: "Granité express de pastèque au citron vert", prep: 5, ingredients: ["300g de pastèque", "1 citron vert"] }
         }
       ],
       automne: [
@@ -590,159 +360,35 @@
           dessert: { nom: "Poire mûre, yaourt & noix", prep: 5, ingredients: ["2 poires", "2 yaourts", "30g de cerneaux de noix"] }
         },
         {
-          cuisine: "🍂 Automne • Confort & Réconfort",
+          cuisine: "🍂 Automne • Saveurs de la Terre",
           entree: {
-            nom: "Soupe veloutée de courge butternut aux noisettes",
-            prep: 12, cuisson: 18, difficulte: 1,
-            materiel: ["Faitout", "Mixeur plongeant", "Poêle"],
-            ingredients: ["400g de courge butternut", "1 oignon", "20g de noisettes concassées", "1 cs d'huile d'olive", "Muscade"],
-            miseenplace: ["Éplucher la courge et la couper en dés de 2 cm.", "Émincer l'oignon."],
-            etapes: [
-              "Suer l'oignon 3 minutes dans l'huile d'olive au fond du faitout.",
-              "Ajouter la courge, une pincée de muscade, couvrir d'eau à hauteur et cuire 18 minutes.",
-              "Griller les noisettes à sec dans la poêle 3 minutes.",
-              "Mixer la soupe jusqu'à consistance très veloutée et parsemer de noisettes."
-            ],
-            astuce: "Concasser les noisettes juste avant de servir préserve tout leur croquant."
-          },
-          plat: {
-            nom: "Émincé de dinde aux champignons, purée de panais & pommes de terre",
-            prep: 15, cuisson: 20, difficulte: 2,
-            materiel: ["Casserole", "Presse-purée", "Poêle"],
-            ingredients: ["300g de filet de dinde", "250g de champignons de Paris", "200g de panais", "200g de pommes de terre", "1.5 cs d'huile d'olive", "Persil"],
-            miseenplace: ["Éplucher et couper panais et pommes de terre en morceaux.", "Émincer les champignons et la dinde."],
-            etapes: [
-              "Cuire panais et pommes de terre à l'eau bouillante salée 18 minutes. Égoutter et écraser en purée.",
-              "Poêler les champignons à sec 5 minutes pour leur faire perdre leur eau.",
-              "Ajouter la dinde et 1 cs d'huile d'olive, saisir 6 minutes à feu vif.",
-              "Servir l'émincé bien chaud étalé sur la purée de panais."
-            ],
-            astuce: "Le panais apporte une note douce et sucrée qui se marie parfaitement avec la volaille."
-          },
-          dessert: { nom: "Pomme au four à la cannelle", prep: 5, ingredients: ["2 pommes", "1 cc de cannelle", "1 cc de miel"] }
-        },
-        {
-          cuisine: "🍂 Automne • Terre & Mer",
-          entree: {
-            nom: "Salade tiède de lentilles vertes & betteraves rôties",
+            nom: "Velouté de potimarron aux éclats de noisettes",
             prep: 10, cuisson: 20, difficulte: 1,
-            materiel: ["Casserole", "Saladier"],
-            ingredients: ["120g de lentilles vertes du Puy", "150g de betterave cuite", "50g de fromage de chèvre ou feta", "1 cs d'huile de noix", "1 cs de vinaigre de cidre"],
-            miseenplace: ["Couper la betterave en dés de 1 cm.", "Émietter le fromage."],
-            etapes: [
-              "Cuire les lentilles vertes dans 3 volumes d'eau froide pendant 20 minutes à feu moyen.",
-              "Égoutter les lentilles et les mélanger immédiatement à chaud avec l'huile de noix et le vinaigre.",
-              "Ajouter les dés de betterave et le chèvre émietté par-dessus."
-            ],
-            astuce: "Assaisonner les lentilles encore chaudes permet à la vinaigrette d'être absorbée au cœur."
-          },
-          plat: {
-            nom: "Cabillaud en croûte d'herbes & potimarron rôti au four",
-            prep: 12, cuisson: 22, difficulte: 2,
-            materiel: ["Plaque de four", "Bol"],
-            ingredients: ["300g de dos de cabillaud", "400g de potimarron", "30g de chapelure", "Herbes fraîches (persil, ciboulette)", "1.5 cs d'huile d'olive"],
-            miseenplace: ["Préchauffer le four à 200°C.", "Laver le potimarron et le couper en tranches fines (peau conservée)."],
-            etapes: [
-              "Disposer les tranches de potimarron sur la plaque avec 1 cs d'huile d'olive et saler. Enfourner 10 min.",
-              "Mélanger la chapelure, les herbes hachées et 0.5 cs d'huile d'olive dans un bol.",
-              "Placer le cabillaud sur la plaque, recouvrir avec le mélange de chapelure d'herbes.",
-              "Poursuivre la cuisson au four 12 minutes jusqu'à ce que le poisson soit cuit à cœur et le potimarron tendre."
-            ],
-            astuce: "Inutile d'éplucher le potimarron bio : sa peau ramollit complètement à la cuisson."
-          },
-          dessert: { nom: "Compote de poires maison à la vanille", prep: 10, ingredients: ["2 poires", "1 gousse de vanille"] }
-        },
-        {
-          cuisine: "🍂 Automne • Rustique & Chaleureux",
-          entree: {
-            nom: "Poêlée de champignons sauvages & ail des ours sur toast",
-            prep: 8, cuisson: 8, difficulte: 1,
-            materiel: ["Poêle", "Grille-pain"],
-            ingredients: ["250g de poêlée de champignons (chanterelles, de Paris)", "2 tranches de pain de campagne", "2 gousses d'ail", "15g de beurre", "Persil haché"],
-            miseenplace: ["Brosser les champignons sans les tremper dans l'eau.", "Griller le pain."],
-            etapes: [
-              "Saisis les champignons dans le beurre fondu à feu vif 5 minutes.",
-              "Ajoute l'ail haché et le persil, sale et poivre, puis cuis encore 2 minutes.",
-              "Dresse généreusement la poêlée de champignons sur les tranches de pain grillé tièdes."
-            ],
-            astuce: "Ne lave jamais les champignons à grande eau pour éviter qu'ils ne se gorgent d'eau."
-          },
-          plat: {
-            nom: "Pavé de saumon grillé, purée de patates douces au gingembre",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Casserole", "Presse-purée", "Poêle"],
-            ingredients: ["300g de pavé de saumon", "400g de patates douces", "1 cm de racine de gingembre frais", "1 cs d'huile d'olive", "10g de beurre"],
-            miseenplace: ["Éplucher les patates douces et les couper en dés.", "Râper le gingembre."],
-            etapes: [
-              "Cuire les patates douces 12 minutes dans l'eau bouillante salée. Égoutter et écraser avec le beurre et le gingembre.",
-              "Saisir le saumon à la poêle avec l'huile d'olive 4 minutes côté peau, puis 3 minutes sur la chair.",
-              "Dresser le pavé de saumon sur la purée parfumée au gingembre."
-            ],
-            astuce: "Le gingembre équilibre la richesse naturelle du saumon."
-          },
-          dessert: { nom: "Noix fraîches & quartiers de poires", prep: 3, ingredients: ["2 poires", "30g de noix fraîches"] }
-        },
-        {
-          cuisine: "🍂 Automne • Équilibre Végétal",
-          entree: {
-            nom: "Salade de céleri-rave râpé, pommes & noisettes",
-            prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Râpe ou robot", "Saladier"],
-            ingredients: ["200g de céleri-rave", "1 pomme rouge", "20g de noisettes", "1 cs de mayonnaise légère ou yaourt", "1 cs de jus de citron"],
-            miseenplace: ["Éplucher le céleri.", "Râper céleri et pomme."],
-            etapes: [
-              "Mélange immédiatement le céleri et la pomme râpés avec le jus de citron pour éviter l'oxydation.",
-              "Incorpore la cuillère de sauce au yaourt, le sel et le poivre.",
-              "Parsème de noisettes concassées au moment de déguster."
-            ],
-            astuce: "Le jus de citron conserve la couleur bien blanche du céleri."
-          },
-          plat: {
-            nom: "Chili végétalien aux haricots rouges, maïs & riz complet",
-            prep: 15, cuisson: 20, difficulte: 1,
-            materiel: ["Faitout", "Casserole"],
-            ingredients: ["250g de haricots rouges cuits", "100g de maïs doux", "140g de riz complet", "400g de pulpe de tomate", "1 cc de cumin", "1 oignon"],
-            miseenplace: ["Émincer l'oignon.", "Rincer les haricots et le maïs."],
-            etapes: [
-              "Cuis le riz complet 20 minutes à l'eau bouillante salée.",
-              "Fais suer l'oignon 3 minutes dans le faitout avec 1 cs d'huile.",
-              "Ajoute la pulpe de tomate, les haricots, le maïs et le cumin. Laisse mijoter à feu doux 15 minutes.",
-              "Sers le chili bien chaud accompagné du riz complet."
-            ],
-            astuce: "Un chili est encore plus savoureux lorsqu'il a mijoté longtemps à feu très doux."
-          },
-          dessert: { nom: "Compote pomme-châtaigne", prep: 5, ingredients: ["200g de compote de pomme", "2 cs de crème de marron"] }
-        },
-        {
-          cuisine: "🍂 Automne • Saveurs de la Forêt",
-          entree: {
-            nom: "Velouté de poireaux, navets & graines de tournesol",
-            prep: 10, cuisson: 18, difficulte: 1,
             materiel: ["Faitout", "Mixeur plongeant"],
-            ingredients: ["2 poireaux", "2 navets", "20g de graines de tournesol", "1 cs d'huile de colza", "Sel, poivre"],
-            miseenplace: ["Laver et couper les poireaux.", "Éplucher et tailler les navets."],
+            ingredients: ["400g de potimarron", "1 oignon", "20g de noisettes concassées", "1 cs d'huile d'olive", "1 pincée de muscade"],
+            miseenplace: ["Laver le potimarron (pas besoin d'éplucher), retirer les graines et couper en cubes.", "Émincer l'oignon."],
             etapes: [
-              "Fais suer les légumes 4 minutes au fond du faitout avec l'huile.",
-              "Couvre avec 500ml d'eau, sale et cuis 18 minutes à feu moyen.",
-              "Mixe le tout jusqu'à consistance lisse et ajoute les graines de tournesol au moment de servir."
+              "Faire revenir l'oignon dans l'huile d'olive dans le faitout.",
+              "Ajouter le potimarron, couvrir d'eau à hauteur et cuire 20 minutes.",
+              "Mixer finement avec la muscade et servir parsemé de noisettes torréfiées à sec."
             ],
-            astuce: "Le navet apporte de la rondeur sans surcharger en glucides."
+            astuce: "La peau du potimarron devient très tendre à la cuisson et donne une belle couleur soutenue au velouté."
           },
           plat: {
-            nom: "Sauté de bœuf maigre aux brocolis & sauce tamari",
-            prep: 12, cuisson: 10, difficulte: 2,
-            materiel: ["Wok ou sauteuse", "Casserole"],
-            ingredients: ["300g de rumsteck de bœuf", "300g de fleurettes de brocoli", "150g de riz basmati", "2 cs de sauce tamari / soja", "1.5 cs d'huile de sésame"],
-            miseenplace: ["Trancher le bœuf en très fines lanières.", "Détailler le brocoli en petites fleurettes."],
+            nom: "Poêlée de champignons, thon poêlé & écrasé de pommes de terre",
+            prep: 15, cuisson: 15, difficulte: 2,
+            materiel: ["Casserole", "Poêle", "Presse-purée"],
+            ingredients: ["300g de pavés de thon frais", "250g de champignons de Paris", "300g de pommes de terre", "1.5 cs d'huile d'olive", "1 gousse d'ail"],
+            miseenplace: ["Éplucher les pommes de terre et les couper en cubes.", "Émincer les champignons et l'ail."],
             etapes: [
-              "Fais cuire le riz 11 minutes dans l'eau bouillante.",
-              "Blanchis les fleurettes de brocoli 3 minutes à l'eau bouillante pour les garder croquantes.",
-              "Saisis le bœuf à feu très vif 2 minutes dans l'huile de sésame au wok.",
-              "Ajoute le brocoli et la sauce tamari, saute 2 minutes de plus et sers immédiatement avec le riz."
+              "Cuire les pommes de terre 15 min dans l'eau salée, égoutter et écraser avec 1 cs d'huile d'olive.",
+              "Faire sauter les champignons et l'ail 8 minutes à feu vif.",
+              "Poêler les steaks de thon 2 minutes de chaque côté pour les garder mi-cuits et fondants.",
+              "Assembler l'écrasé, les champignons persillés et le thon."
             ],
-            astuce: "Saisir la viande à feu maximum garde tout son jus à l'intérieur."
+            astuce: "Saisis le thon à feu très vif pour former une croûte rosée sans assécher le cœur."
           },
-          dessert: { nom: "Poire pochée au jus de raisin", prep: 10, ingredients: ["2 poires", "150ml de jus de raisin noir"] }
+          dessert: { nom: "Pommes au four à la cannelle", prep: 5, ingredients: ["2 pommes", "1 cc de cannelle", "1 cs de miel"] }
         }
       ],
       hiver: [
@@ -779,165 +425,44 @@
           dessert: { nom: "Orange, yaourt & miel", prep: 5, ingredients: ["2 oranges", "2 yaourts", "1 cs de miel"] }
         },
         {
-          cuisine: "❄️ Hiver • Énergie Hivernale",
+          cuisine: "❄️ Hiver • Chaud & Épicé",
           entree: {
-            nom: "Salade croquante d'endives, poires & noix",
-            prep: 8, cuisson: 0, difficulte: 1,
-            materiel: ["Saladier", "Couteau"],
-            ingredients: ["3 endives", "1 poire", "30g de cerneaux de noix", "1 cs d'huile de colza", "1 cc de moutarde à l'ancienne"],
-            miseenplace: ["Émincer les endives en tronçons d'1 cm.", "Couper la poire en fin de tranches."],
-            etapes: [
-              "Prépare la vinaigrette au fond du saladier en fouettant la moutarde avec l'huile de colza et 1 cs d'eau.",
-              "Ajoute les endives et la poire émincée.",
-              "Mélange délicatement et parsème de noix concassées."
-            ],
-            astuce: "Retirer le petit cône à la base de l'endive élimine toute amertume."
-          },
-          plat: {
-            nom: "Parmentier végétal de lentilles vertes & courge butternut",
-            prep: 15, cuisson: 25, difficulte: 2,
-            materiel: ["Plat à four", "Casserole", "Presse-purée"],
-            ingredients: ["150g de lentilles vertes cuites", "500g de courge butternut", "1 oignon", "1 gousse d'ail", "2 cs de levure maltée", "1.5 cs d'huile d'olive"],
-            miseenplace: ["Préchauffer le four à 200°C.", "Couper la butternut en cubes."],
-            etapes: [
-              "Fais cuire la butternut à la vapeur ou à l'eau 15 minutes, puis écrase-la en purée dense.",
-              "Fais revenir l'oignon et l'ail dans l'huile d'olive 4 minutes, puis incorpore les lentilles cuites.",
-              "Dispose le mélange de lentilles au fond d'un plat à gratin.",
-              "Recouvre de purée de butternut, saupoudre de levure maltée et enfourne 10 minutes pour gratiné."
-            ],
-            astuce: "La levure maltée apporte une délicieuse note dorée proche du fromage grillé."
-          },
-          dessert: { nom: "Cémentines & deux carrés de chocolat noir", prep: 2, ingredients: ["3 clémentines", "20g de chocolat noir 70%"] }
-        },
-        {
-          cuisine: "❄️ Hiver • Chaud & Nourrissant",
-          entree: {
-            nom: "Soupe rustique de poireaux & pommes de terre",
+            nom: "Salade tiède de lentilles vertes & échalotes rôties",
             prep: 10, cuisson: 20, difficulte: 1,
-            materiel: ["Casserole", "Mixeur plongeant"],
-            ingredients: ["2 poireaux", "2 pommes de terre", "1 cs d'huile de colza", "Muscade", "Sel et poivre"],
-            miseenplace: ["Laver soigneusement les poireaux et les émincer.", "Éplucher et couper les pommes de terre."],
+            materiel: ["Casserole", "Planche à découper"],
+            ingredients: ["150g de lentilles vertes", "2 échalotes", "1 cs de moutarde", "1 cs de vinaigre de cidre", "1 cs d'huile d'olive"],
+            miseenplace: ["Émincer les échalotes."],
             etapes: [
-              "Fais suer les poireaux 4 minutes dans la casserole avec l'huile.",
-              "Ajoute les pommes de terre et couvre avec 600ml d'eau salée.",
-              "Laisse cuire à bouillon moyen pendant 20 minutes.",
-              "Mixe grossièrement pour conserver un peu de texture rustique."
+              "Cuire les lentilles vertes dans 3 volumes d'eau froide pendant 20 minutes (sans sel).",
+              "Pendant ce temps, faire suer doucement les échalotes à la poêle avec l'huile d'olive.",
+              "Mélanger la moutarde et le vinaigre de cidre.",
+              "Incorporer les lentilles égouttées tièdes aux échalotes et à la vinaigrette."
             ],
-            astuce: "Conserve le vert des poireaux s'il est tendre : il apporte une excellente dose de fibres."
+            astuce: "Assaisonne les lentilles encore chaudes pour qu'elles s'imprégnent de la sauce."
           },
           plat: {
-            nom: "Omelette baveuse aux champignons de Paris & salade de mâche",
-            prep: 8, cuisson: 8, difficulte: 1,
-            materiel: ["Poêle antiadhésive", "Bol", "Fouet"],
-            ingredients: ["5 œufs bio", "200g de champignons de Paris", "100g de mâche", "15g de beurre", "1 cs d'huile d'olive", "Ciboulette"],
-            miseenplace: ["Émincer les champignons.", "Battre les œufs dans un bol avec du sel et du poivre."],
-            etapes: [
-              "Fais dorer les champignons dans la poêle à feu vif avec 1 cs d'huile d'olive pendant 4 minutes. Réserver.",
-              "Fais fondre le beurre dans la même poêle à feu moyen-doux.",
-              "Verse les œufs battus, remue doucement à la spatule 2 minutes, puis ajoute les champignons au centre.",
-              "Plie l'omelette en deux et sers immédiatement avec la mâche assaisonnée."
-            ],
-            astuce: "Retire l'omelette du feu lorsqu'elle est encore légèrement liquide au centre : la cuisson se termine dans l'assiette."
-          },
-          dessert: { nom: "Pomme séchée & poignée d'amandes", prep: 2, ingredients: ["1 pomme", "20g d'amandes bio"] }
-        },
-        {
-          cuisine: "❄️ Hiver • Cocooning Pur",
-          entree: {
-            nom: "Velouté de carottes au gingembre & lait de coco",
-            prep: 10, cuisson: 18, difficulte: 1,
-            materiel: ["Casserole", "Mixeur plongeant"],
-            ingredients: ["400g de carottes", "1 cm de gingembre", "100ml de lait de coco léger", "1 cs d'huile d'olive", "1/2 oignon"],
-            miseenplace: ["Éplucher les carottes et les émincer.", "Hacher l'oignon et râper le gingembre."],
-            etapes: [
-              "Fais revenir l'oignon et le gingembre 3 minutes avec l'huile dans la casserole.",
-              "Ajoute les carottes, couvre avec 500ml d'eau et cuis 18 minutes.",
-              "Versez le lait de coco et mixe jusqu'à obtention d'une texture parfaitement crèmeuse."
-            ],
-            astuce: "Le gingembre réchauffe agréablement les soirées d'hiver."
-          },
-          plat: {
-            nom: "Dahl de lentilles corail au curcuma, épinards & riz basmati",
-            prep: 10, cuisson: 20, difficulte: 1,
+            nom: "Poêlée de dinde au curcuma, poireaux confits & quinoa",
+            prep: 12, cuisson: 18, difficulte: 2,
             materiel: ["Sauteuse", "Casserole"],
-            ingredients: ["160g de lentilles corail", "150g de pousses d'épinards", "150g de riz basmati", "1 cc de curcuma", "1 cc de cumin", "1.5 cs d'huile d'olive"],
-            miseenplace: ["Rincer le riz et les lentilles."],
+            ingredients: ["350g d'escalope de dinde", "2 poireaux", "150g de quinoa", "1 cs de curcuma", "1 cs d'huile d'olive"],
+            miseenplace: ["Émincer les poireaux finement.", "Couper la dinde en lanières."],
             etapes: [
-              "Cuire le riz basmati 11 minutes à l'eau bouillante salée.",
-              "Dans la sauteuse, fais revenir les épices 1 minute dans l'huile d'olive.",
-              "Ajoute les lentilles corail et 450ml d'eau. Cuis à feu doux 15 minutes.",
-              "Incorpore les épinards en fin de cuisson pendant 2 minutes et sers avec le riz."
+              "Lancer la cuisson du quinoa dans 300ml d'eau (12 min).",
+              "Faire confire les poireaux dans la sauteuse avec l'huile d'olive pendant 10 minutes à couvert.",
+              "Ajouter les lanières de dinde et le curcuma, puis sauter le tout 6-8 minutes à feu vif.",
+              "Mélanger le quinoa avec la poêlée de dinde et poireaux."
             ],
-            astuce: "Faire torréfier les épices à sec dans l'huile décuple leurs arômes."
+            astuce: "Bien laver les poireaux sous l'eau pour enlever le sable entre les feuilles."
           },
-          dessert: { nom: "Compote de pommes maison au four", prep: 8, ingredients: ["2 pommes", "1 pincée de cannelle"] }
-        },
-        {
-          cuisine: "❄️ Hiver • Terroir Réconfort",
-          entree: {
-            nom: "Salade de mâche, betterave rouge & graines de courge",
-            prep: 8, cuisson: 0, difficulte: 1,
-            materiel: ["Saladier"],
-            ingredients: ["100g de mâche fraîche", "1 betterave cuite", "20g de graines de courge", "1 cs d'huile de colza", "1 cs de vinaigre de cidre"],
-            miseenplace: ["Rincer et essorer la mâche.", "Couper la betterave en cubes."],
-            etapes: [
-              "Prépare la vinaigrette huile/vinaigre dans le fond du saladier.",
-              "Ajoute la mâche et la betterave.",
-              "Parsème des graines de courge au moment de servir."
-            ],
-            astuce: "La mâche est l'une des salades les plus riches en oméga-3."
-          },
-          plat: {
-            nom: "Choucroute de la mer express (Cabillaud & saumon au chou)",
-            prep: 15, cuisson: 20, difficulte: 2,
-            materiel: ["Sauteuse avec couvercle"],
-            ingredients: ["200g de dos de cabillaud", "200g de pavé de saumon", "400g de choucroute cuite au naturel", "2 pommes de terre cuites", "1 cs d'huile d'olive", "Baies de genièvre"],
-            miseenplace: ["Rincer la choucroute.", "Couper les poissons en gros cubes."],
-            etapes: [
-              "Réchauffe la choucroute dans la sauteuse avec l'huile et les baies de genièvre 10 minutes à feu doux.",
-              "Ajoute les pommes de terre et dépose les morceaux de poisson par-dessus.",
-              "Couvre et laisse cuire à la vapeur 10 minutes à feu doux jusqu'à ce que le poisson soit translucide à cœur."
-            ],
-            astuce: "La cuisson vapeur sur le lit de choucroute garde le poisson extrêmement moelleux."
-          },
-          dessert: { nom: "Kiwi vert & carré de chocolat noir 85%", prep: 2, ingredients: ["2 kiwis", "15g de chocolat noir"] }
-        },
-        {
-          cuisine: "❄️ Hiver • Douceur Automnale",
-          entree: {
-            nom: "Velouté de navets boule d'or à la muscade",
-            prep: 10, cuisson: 20, difficulte: 1,
-            materiel: ["Casserole", "Mixeur plongeant"],
-            ingredients: ["3 navets boule d'or", "1 pomme de terre", "15g de beurre", "1 pinch de noix de muscade"],
-            miseenplace: ["Éplucher les légumes et les tailler en petits dés."],
-            etapes: [
-              "Fais fondre le beurre dans la casserole et ajoute les légumes 3 minutes.",
-              "Couvre d'eau à hauteur, sale et laisse cuire 20 minutes à couvert.",
-              "Mixe très finement avec la muscade."
-            ],
-            astuce: "Le navet boule d'or possède une saveur nettement plus douce que le navet violet."
-          },
-          plat: {
-            nom: "Filet de dinde rôti au thym, écrasé de céleri & pommes de terre",
-            prep: 15, cuisson: 20, difficulte: 2,
-            materiel: ["Poêle", "Casserole", "Presse-purée"],
-            ingredients: ["320g de filet de dinde", "250g de céleri-rave", "200g de pommes de terre", "Thym frais", "1.5 cs d'huile d'olive"],
-            miseenplace: ["Éplucher céleri et pommes de terre et les couper en morceaux."],
-            etapes: [
-              "Fais cuire les légumes 18 minutes à l'eau bouillante salée, puis écrase-les en purée avec 0.5 cs d'huile d'olive.",
-              "Poêle les filets de dinde avec le thym et 1 cs d'huile 6 minutes par face à feu moyen.",
-              "Sers les filets dorés avec l'écrasé de céleri bien chaud."
-            ],
-            astuce: "Le céleri apport une touche parfumée très élégante qui allège la purée."
-          },
-          dessert: { nom: "Pomme chaude compotée aux amandes", prep: 8, ingredients: ["2 pommes", "20g d'amandes effilées"] }
+          dessert: { nom: "Compotée de pommes aux dattes & cannelle", prep: 5, ingredients: ["2 pommes", "4 dattes", "1/2 cc de cannelle"] }
         }
       ]
     };
 
+    // Sélection élargie avec recettes de fêtes (Temps long autorisé jusqu'à 1h - 1h15)
     const recettesShabbat = [
       {
-        cuisine: "✡️ Shabbat • Tradition & Équilibre",
+        cuisine: "✡️ Shabbat • Le Grand Mijoté",
         fete: true,
         entree: {
           nom: "Matbucha maison & carottes au cumin",
@@ -968,101 +493,102 @@
         dessert: { nom: "Salade d'oranges à la cannelle & dattes", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool", "Cannelle"] }
       },
       {
+        cuisine: "✡️ Shabbat • Festin Méditerranéen",
+        fete: true,
+        entree: {
+          nom: "Chakchouka rouge aux poivrons & ail",
+          prep: 15, cuisson: 25, difficulte: 2,
+          materiel: ["Sauteuse large", "Planche à découper"],
+          ingredients: ["4 poivrons (rouges et jaunes)", "4 tomates très mûres", "4 gousses d'ail", "1 cs de paprika doux", "1.5 cs d'huile d'olive"],
+          miseenplace: ["Émincer les poivrons en lanières.", "Hacher l'ail.", "Découper les tomates en cubes."],
+          etapes: [
+            "Faire revenir les poivrons et l'ail dans l'huile d'olive pendant 10 min à feu moyen.",
+            "Ajouter les tomates, le paprika, du sel et du poivre.",
+            "Laisser réduire à feu doux à couvert pendant 15 minutes jusqu'à ce que les poivrons soient très fondants."
+          ],
+          astuce: "Peut se déguster chaude ou tiède avec du pain hallah maison."
+        },
+        plat: {
+          nom: "Mijoté de poulet aux olives vertes, citron & coriandre",
+          prep: 15, cuisson: 45, difficulte: 2,
+          materiel: ["Cocotte ou faitout", "Passoire"],
+          ingredients: ["4 cuisses de poulet", "150g d'olives vertes dénoyautées", "2 oignons", "1 citron bio", "1 bouquet de coriandre", "1 cs de gingembre moulu"],
+          miseenplace: ["Faire blanchir les olives 5 min dans l'eau bouillante pour enlever l'excès de sel.", "Émincer les oignons."],
+          etapes: [
+            "Faire dorer les cuisses de poulet dans la cocotte avec un filet d'huile 5 min par côté.",
+            "Retirer le poulet, faire suer les oignons à la place.",
+            "Remettre le poulet, ajouter le gingembre, le jus d'un demi citron, les olives et 200ml d'eau.",
+            "Couvrir et laisser mijoter 40 minutes à feu doux. Parsemer de coriandre avant de servir."
+          ],
+          astuce: "Blanchir les olives évite d'avoir un plat trop salé en fin de cuisson."
+        },
+        dessert: { nom: "Salade de fruits frais à l'eau de fleur d'oranger", prep: 10, ingredients: ["2 pêches", "200g de fraises", "1 cc d'eau de fleur d'oranger"] }
+      },
+      {
+        cuisine: "✡️ Shabbat • Tradition & Épices",
+        fete: true,
+        entree: {
+          nom: "Salade de carottes râpées à la marocaine & harissa douce",
+          prep: 15, cuisson: 0, difficulte: 1,
+          materiel: ["Râpe à légumes", "Saladier"],
+          ingredients: ["4 grandes carottes", "1 gousse d'ail", "1 cc de cumin", "1/2 cc de harissa", "2 cs d'huile d'olive", "Jus d'un 1/2 citron"],
+          miseenplace: ["Éplucher et râper les carottes.", "Hacher l'ail très finement."],
+          etapes: [
+            "Emulsionner l'huile d'olive, le jus de citron, la harissa, l'ail et le cumin dans un saladier.",
+            "Ajouter les carottes râpées et mélanger vigoureusement.",
+            "Laisse reposer au moins 20 minutes au frais avant de servir pour infuser les arômes."
+          ],
+          astuce: "Cette salade gagne encore plus en saveur si elle est préparée la veille."
+        },
+        plat: {
+          nom: "Chraime : Poisson mijoté à la sauce tomate épicée & couscous",
+          prep: 15, cuisson: 30, difficulte: 2,
+          materiel: ["Sauteuse large", "Casserole"],
+          ingredients: ["400g de pavés de cabillaud ou colin", "400g de chair de tomate", "4 gousses d'ail", "1 cc de carvi", "1 cs de paprika", "150g de graine de couscous"],
+          miseenplace: ["Piler l'ail avec les épices (carvi, paprika).", "Éponger le poisson."],
+          etapes: [
+            "Faire revenir l'ail et les épices dans 2 cs d'huile 1 minute sans brûler.",
+            "Ajouter la chair de tomate et 100ml d'eau. Laisser réduire 15 minutes.",
+            "Déposer les pavés de poisson dans la sauce, couvrir et cuire 15 min à feu doux.",
+            "Préparer la semoule de couscous à côté en versant 150ml d'eau bouillante salée dessus."
+          ],
+          astuce: "Arrose régulièrement le poisson avec la sauce tomate pendant la cuisson."
+        },
+        dessert: { nom: "Dattes Medjool fourrées aux noix & cannelle", prep: 5, ingredients: ["6 dattes Medjool", "30g de cerneaux de noix", "Pincée de cannelle"] }
+      },
+      {
         cuisine: "✡️ Shabbat • Saveurs d'Orient",
         fete: true,
         entree: {
-          nom: "Zaalouk d'aubergines grillées & chouchouka douce",
-          prep: 15, cuisson: 25, difficulte: 2,
-          materiel: ["Sauteuse", "Poêle grill"],
-          ingredients: ["2 aubergines", "3 tomates mûres", "2 poivrons doux", "2 gousses d'ail", "1.5 cs d'huile d'olive", "Paprika, cumin"],
-          miseenplace: ["Griller les aubergines au four ou à la poêle.", "Hacher la chair des aubergines."],
+          nom: "Aubergine brûlée au tahini & grenades",
+          prep: 10, cuisson: 30, difficulte: 2,
+          materiel: ["Plaque de four", "Fourchette", "Bol"],
+          ingredients: ["2 aubergines", "2 cs de tahini", "1 cs de jus de citron", "30g de graines de grenade", "1 cs d'huile d'olive"],
+          miseenplace: ["Préchauffer le four à 220°C.", "Piquer la peau des aubergines à la fourchette."],
           etapes: [
-            "Fais suer l'ail et les tomates coupées en dés dans 1 cs d'huile d'olive pendant 10 minutes.",
-            "Ajoute la chair d'aubergine hachée et les épices.",
-            "Laisse mijoter à feu doux 15 minutes en écrasant à la fourchette."
+            "Enfourner les aubergines entières 30 minutes jusqu'à ce qu'elles soient complètement flétries.",
+            "Ouvrir en deux, prélever la chair et l'écraser grossièrement.",
+            "Mélanger le tahini, le citron et l'eau pour obtenir une sauce fluide.",
+            "Napper la chair d'aubergines de sauce tahini, d'huile d'olive et de graines de grenade."
           ],
-          astuce: "Le zaalouk est encore meilleur préparé la veille et servi tiède."
+          astuce: "Le goût légèrement fumé vient de la peau bien cuite de l'aubergine."
         },
         plat: {
-          nom: "Pavé de saumon au four aux poivrons, pois chiches & coriandre",
-          prep: 15, cuisson: 25, difficulte: 2,
-          materiel: ["Plat à gratin", "Couteau"],
-          ingredients: ["400g de pavés de saumon", "200g de pois chiches cuits", "2 poivrons rouges", "1 cs de concentré de tomate", "1.5 cs d'huile d'olive", "Coriandre fraîche"],
-          miseenplace: ["Préchauffer le four à 180°C.", "Couper les poivrons en lanières."],
+          nom: "Pala (Daube douce) de bœuf aux pruneaux, patates douces & riz",
+          prep: 20, cuisson: 55, difficulte: 2,
+          materiel: ["Cocotte en fonte", "Casserole"],
+          ingredients: ["400g de paleron de bœuf en cubes", "100g de pruneaux dénoyautés", "300g de patates douces", "2 oignons", "1 bâton de cannelle", "150g de riz basmati"],
+          miseenplace: ["Émincer les oignons.", "Éplucher et couper les patates douces en gros morceaux."],
           etapes: [
-            "Fais revenir les poivrons 8 minutes dans une poêle avec l'huile d'olive et le concentré de tomate délayé dans 100ml d'eau.",
-            "Disposes les pois chiches et la poêlée de poivrons dans le plat à gratin.",
-            "Dépose les pavés de saumon par-dessus et enfourne 15 minutes à 180°C.",
-            "Parsème de coriandre fraîche au moment de servir."
+            "Faire saisir les dés de bœuf à feu vif dans 1 cs d'huile 5 minutes dans la cocotte.",
+            "Ajouter les oignons, le bâton de cannelle, du sel, du poivre et couvrir d'eau.",
+            "Laisser mijoter à feu doux à couvert pendant 35 minutes.",
+            "Ajouter les patates douces et les pruneaux, puis poursuivre la cuisson 20 minutes.",
+            "Servir avec du riz basmati chaud."
           ],
-          astuce: "Les pois chiches absorbent le jus du saumon et des poivrons pendant la cuisson au four."
+          astuce: "La cuisson douce et prolongée rend la viande de bœuf parfaitement fondante."
         },
-        dessert: { nom: "Dattes fraîches, amandes & thé à la menthe", prep: 5, ingredients: ["8 dattes", "30g d'amandes bio"] }
-      },
-      {
-        cuisine: "✡️ Shabbat • Douceur Andalouse",
-        fete: true,
-        entree: {
-          nom: "Salade de fenouil croquant aux olives noires & orange",
-          prep: 12, cuisson: 0, difficulte: 1,
-          materiel: ["Mandoline ou couteau", "Saladier"],
-          ingredients: ["2 fenouils", "2 oranges", "50g d'olives noires dénoyautées", "1.5 cs d'huile d'olive extra", "Fleur de sel"],
-          miseenplace: ["Émincer le fenouil très finement.", "Peler les oranges à vif et prélever les suprêmes."],
-          etapes: [
-            "Mélange le fenouil émincé et les suprêmes d'orange dans un grand plat.",
-            "Ajoute les olives noires et arrose généreusement d'huile d'olive.",
-            "Assaisonne de fleur de sel et laisse mariner 10 minutes avant de servir."
-          ],
-          astuce: "Le mariage du sucré de l'orange et de l'anisé du fenouil offre une entrée particulièrement rafraîchissante."
-        },
-        plat: {
-          nom: "Boulettes de bœuf mijotées aux pruneaux & amandes grillées",
-          prep: 20, cuisson: 35, difficulte: 2,
-          materiel: ["Faitout", "Bol"],
-          ingredients: ["400g de bœuf haché 5%", "100g de pruneaux d'Agen", "30g d'amandes effilées", "1 oignon", "1 cc de cannelle", "1.5 cs d'huile d'olive"],
-          miseenplace: ["Façonner des boulettes de bœuf salées et poivrées.", "Hacher l'oignon."],
-          etapes: [
-            "Fais dorer l'oignon dans l'huile d'olive 4 minutes au fond du faitout.",
-            "Saisis les boulettes 5 minutes jusqu'à ce qu'elles soient bien dorées sur toutes les faces.",
-            "Ajoute les pruneaux, la cannelle et 250ml d'eau. Couvre et laisse mijoter à feu doux 25 minutes.",
-            "Grille les amandes à sec 2 minutes et parsème-les sur le plat chaud avant de servir."
-          ],
-          astuce: "La sauce devient naturellement sirupeuse grâce aux pruneaux en fin de cuisson."
-        },
-        dessert: { nom: "Poires pochées au sirop d'épices & fleur d'oranger", prep: 10, ingredients: ["4 poires", "1 cs d'eau de fleur d'oranger", "1 bâton de cannelle"] }
-      },
-      {
-        cuisine: "✡️ Shabbat • Méditerranée Profonde",
-        fete: true,
-        entree: {
-          nom: "Caviar d'aubergines au sésame (Baba Ganoush) & pains pitas",
-          prep: 15, cuisson: 30, difficulte: 1,
-          materiel: ["Plaque de four", "Fourchette", "Mixeur"],
-          ingredients: ["2 grandes aubergines", "2 cs de tahini", "1 gousse d'ail", "1 cs d'huile d'olive", "1/2 citron", "2 pains pitas"],
-          miseenplace: ["Préchauffer le four à 200°C.", "Piquer la peau des aubergines à la fourchette."],
-          etapes: [
-            "Enfourne les aubergines entières pendant 30 minutes jusqu'à ce qu'elles soient très tendres.",
-            "Gratter la chair à la cuillère et égoutte-la 5 minutes dans une passoire.",
-            "Mixe la chair d'aubergine avec le tahini, l'ail écrasé, le jus de citron et l'huile d'olive.",
-            "Sers tiède ou frais avec les pains pitas réchauffés."
-          ],
-          astuce: "Faire bien égoutter la chair d'aubergine évite d'avoir un caviar d'aubergines trop liquide."
-        },
-        plat: {
-          nom: "Tajine de poulet aux olives vertes, citrons confits & semoule",
-          prep: 20, cuisson: 40, difficulte: 2,
-          materiel: ["Tajine ou faitout", "Casserole"],
-          ingredients: ["4 cuisses de poulet sans peau", "100g d'olives vertes dénoyautées", "2 citrons confits", "150g de semoule", "1 cc de gingembre en poudre", "1.5 cs d'huile d me colza"],
-          miseenplace: ["Émincer les citrons confits.", "Désaler les olives 5 minutes dans l'eau chaude."],
-          etapes: [
-            "Fais dorer le poulet 5 minutes dans l'huile au fond du faitout.",
-            "Ajoute le gingembre, les citrons confits, les olives et 300ml d'eau. Couvre et cuis 35 minutes à feu doux.",
-            "Prépare la semoule avec son volume d'eau bouillante salée.",
-            "Dresse le poulet fondant et sa sauce sur un lit de semoule égrénée."
-          ],
-          astuce: "Les olives apportent juste ce qu'il faut de sel et d'acidité sans avoir besoin de réassaisonner en sel."
-        },
-        dessert: { nom: "Salade de fraises & menthe fraîche au sirop de grenade", prep: 5, ingredients: ["300g de fraises", "Menthe fraîche", "1 cs de sirop de grenade"] }
+        dessert: { nom: "Compote de poires au miel & graines de sésame", prep: 10, ingredients: ["3 poires", "1 cs de miel", "1 cs de sésame"] }
       }
     ];
 
@@ -1090,10 +616,10 @@
     }
 
     const RAYONS = [
-      { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","petits pois","fèves","avocat","patate douce","potimarron","potiron","butternut","champignon","panais","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","aneth","persil","ciboulette","gingembre","pousses","mesclun","salade","maïs","céleri","haricots verts","fraise","pêche","melon","pastèque","poire","pomme","orange","clémentine","kiwi","raisin","figue","abricot","endive","mâche","navet","chou","choucroute","ananas","brugnon"] },
-      { nom: "🐟 Poissons & Viandes", mots: ["poulet","truite","saumon","cabillaud","dinde","bœuf","boeuf","lieu","dorade","poisson","cuisse","steak","crevette","thon","rumsteck"] },
+      { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","petits pois","fèves","avocat","patate douce","potimarron","potiron","butternut","champignon","panais","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","aneth","persil","ciboulette","gingembre","pousses","mesclun","salade","maïs","céleri","haricots verts","fraise","pêche","melon","pastèque","poire","pomme","orange","clémentine","kiwi","raisin","figue","abricot","endive","mâche","navet","chou","choucroute","ananas","brugnon","grenade"] },
+      { nom: "🐟 Poissons & Viandes", mots: ["poulet","truite","saumon","cabillaud","dinde","bœuf","boeuf","lieu","dorade","poisson","cuisse","steak","crevette","thon","rumsteck","paleron","colin"] },
       { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","fromage blanc","œuf","oeuf","tofu","edamame","chèvre","beurre","parmesan","ricotta"] },
-      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","pois cassé","haricot","tahini","houmous","huile","vinaigre","graine","sésame","noix","noisette","amande","pignon","granola","miel","sucre","cannelle","muscade","curcuma","cumin","curry","paprika","zaatar","chili","tamari","soja","sauce","chocolat","citron confit","lait de coco","moutarde","balsamique","laurier","thym","bouillon","épices","datte","fleur d'oranger","pita","challah","pain","croûtons","chapelure","levure","pruneau","olive","grenade"] }
+      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","pois cassé","haricot","tahini","houmous","huile","vinaigre","graine","sésame","noix","noisette","amande","pignon","granola","miel","sucre","cannelle","muscade","curcuma","cumin","curry","paprika","zaatar","chili","tamari","soja","sauce","chocolat","citron confit","lait de coco","moutarde","balsamique","laurier","thym","bouillon","épices","datte","fleur d'oranger","pita","challah","pain","croûtons","chapelure","levure","pruneau","olive","grenade","carvi","harissa"] }
     ];
     const ORDRE_RAYONS = ["🥬 Fruits & Légumes","🐟 Poissons & Viandes","🧀 Frais & Crèmerie","🌾 Épicerie & Secs","🛒 Autres"];
     
@@ -1106,7 +632,7 @@
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    const STORAGE_KEY = "menu-market-v6";
+    const STORAGE_KEY = "menu-market-v7";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
     function persister() { safeSet({ menuSemaine, etatStock, joursSelectionnes, saison: saisonActuelle }); }
@@ -1164,7 +690,7 @@
         const t = tempsRepas(item);
         const bt = badgeTemps(t);
         const chipTemps = estShabbat
-          ? `<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full badge-shabbat flex items-center gap-1 inline-flex">🕯️ Repas de fête</span>`
+          ? `<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full badge-shabbat flex items-center gap-1 inline-flex">🕯️ Repas de fête (~${t} min)</span>`
           : `<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${bt.classe} inline-flex items-center gap-1">⏱️ Repas prêt en ~${t} min</span>`;
 
         container.innerHTML += `
