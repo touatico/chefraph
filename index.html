@@ -125,7 +125,7 @@
         </h2>
         <form id="form-add-custom-item" class="grid grid-cols-1 sm:grid-cols-12 gap-2 text-xs">
           <input type="text" id="custom-nom" placeholder="Ex: Pâtes Penne, Conserve de tomates..." required class="sm:col-span-5 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
-          <input type="text" id="custom-qte" placeholder="Quantité (laisse vide = auto)" class="sm:col-span-3 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="text" id="custom-qte" placeholder="Quantité (ex: 500g, 3 pièces)" class="sm:col-span-3 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
           <input type="text" id="custom-date" placeholder="Achat / Péremption" class="sm:col-span-2 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
           <button type="submit" class="sm:col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl py-2.5 transition active:scale-95">Ajouter</button>
         </form>
@@ -136,7 +136,7 @@
         <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
           <div>
             <h2 class="font-extrabold text-slate-900 text-base">📦 Mon Placard & Frigo</h2>
-            <p class="text-xs text-slate-500">Cochez ce que vous avez. Les quantités nécessaires au menu sont attribuées automatiquement si non précisées.</p>
+            <p class="text-xs text-slate-500">Cochez ce que vous avez. Saisissez votre propre quantité sans risque de duplication.</p>
           </div>
         </div>
         <div id="inventaire-container" class="space-y-4"></div>
@@ -290,22 +290,6 @@
 
     function ingredientsDuJour(item) {
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
-    }
-
-    function obtenirQuantiteMenu(nomAliment) {
-      const nomLower = nomAliment.toLowerCase();
-      const quantites = [];
-
-      menuSemaine.forEach(jour => {
-        const ings = ingredientsDuJour(jour);
-        ings.forEach(ing => {
-          if (ing.toLowerCase().includes(nomLower) || nomLower.includes(ing.toLowerCase())) {
-            quantites.push(ing);
-          }
-        });
-      });
-
-      return quantites.length > 0 ? quantites.join(" + ") : "Quantité nécessaire (menu)";
     }
 
     const STORAGE_KEY = "chef-raphael-touati-v1";
@@ -573,8 +557,9 @@
       const etat = !stockPlacard[ing].enStock;
       stockPlacard[ing].enStock = etat;
       
-      if (etat && !stockPlacard[ing].qte) {
-        stockPlacard[ing].qte = obtenirQuantiteMenu(ing);
+      // Affecte "En stock" uniquement si aucun texte personnalisé n'est déjà entré
+      if (etat && (!stockPlacard[ing].qte || stockPlacard[ing].qte.includes("+"))) {
+        stockPlacard[ing].qte = "En stock";
       }
 
       persister();
@@ -683,7 +668,7 @@
           customItems.push(nom);
         }
         
-        const qteFinale = qteSaisie !== "" ? qteSaisie : obtenirQuantiteMenu(nom);
+        const qteFinale = qteSaisie !== "" ? qteSaisie : "En stock";
         stockPlacard[nom] = { enStock: true, qte: qteFinale, date: date };
         
         persister();
