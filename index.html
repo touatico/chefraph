@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Menu & Market — Chef Personnel</title>
+  <title>Chef Raphaël Touati — Assistant Culinaire</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,9 +27,9 @@
       <div>
         <div class="flex items-center gap-1.5">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <p id="header-saison" class="text-[11px] font-bold text-emerald-700 tracking-wider uppercase">Chef Personnel</p>
+          <p id="header-saison" class="text-[11px] font-bold text-emerald-700 tracking-wider uppercase">Assistant Personnel</p>
         </div>
-        <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Menu & Market</h1>
+        <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Chef Raphaël Touati</h1>
       </div>
       <button id="btn-reset-all" class="p-2.5 rounded-2xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 transition-all duration-200 border border-slate-200/60 active:scale-95 flex items-center justify-center group" title="Générer une nouvelle semaine">
         <svg class="w-5 h-5 transition-transform group-hover:rotate-180 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
@@ -125,8 +125,8 @@
         </h2>
         <form id="form-add-custom-item" class="grid grid-cols-1 sm:grid-cols-12 gap-2 text-xs">
           <input type="text" id="custom-nom" placeholder="Ex: Pâtes Penne, Conserve de tomates..." required class="sm:col-span-5 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
-          <input type="text" id="custom-qte" placeholder="Quantité (ex: 500g, 2 boîtes)" class="sm:col-span-3 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
-          <input type="text" id="custom-date" placeholder="Achat / Peremption (ex: 15/10)" class="sm:col-span-2 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="text" id="custom-qte" placeholder="Quantité (laisse vide = auto)" class="sm:col-span-3 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="text" id="custom-date" placeholder="Achat / Péremption" class="sm:col-span-2 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
           <button type="submit" class="sm:col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl py-2.5 transition active:scale-95">Ajouter</button>
         </form>
       </div>
@@ -136,7 +136,7 @@
         <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
           <div>
             <h2 class="font-extrabold text-slate-900 text-base">📦 Mon Placard & Frigo</h2>
-            <p class="text-xs text-slate-500">Gérez le stock chez vous. Ce qui est "En stock" est retiré des courses.</p>
+            <p class="text-xs text-slate-500">Cochez ce que vous avez. Les quantités nécessaires au menu sont attribuées automatiquement si non précisées.</p>
           </div>
         </div>
         <div id="inventaire-container" class="space-y-4"></div>
@@ -292,10 +292,27 @@
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    const STORAGE_KEY = "menu-market-v10";
+    // EXTRACTION AUTOMATIQUE DES QUANTITÉS DU MENU
+    function obtenirQuantiteMenu(nomAliment) {
+      const nomLower = nomAliment.toLowerCase();
+      const quantites = [];
+
+      menuSemaine.forEach(jour => {
+        const ings = ingredientsDuJour(jour);
+        ings.forEach(ing => {
+          if (ing.toLowerCase().includes(nomLower) || nomLower.includes(ing.toLowerCase())) {
+            quantites.push(ing);
+          }
+        });
+      });
+
+      return quantites.length > 0 ? quantites.join(" + ") : "Quantité nécessaire (menu)";
+    }
+
+    const STORAGE_KEY = "chef-raphael-touati-v1";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
-    function persister() { safeSet({ menuSemaine, stockPlacard, joursSelectionnes, jourActiveIndex }); }
+    function persister() { safeSet({ menuSemaine, stockPlacard, me-custom-items: customItems, joursSelectionnes, jourActiveIndex }); }
 
     const saisonActuelle = obtenirSaisonActuelle();
     const poolRecettesSaison = catalogueSaisons[saisonActuelle] || catalogueSaisons["printemps"];
@@ -320,11 +337,12 @@
       });
     }
 
-    let menuSemaine, stockPlacard, joursSelectionnes, jourActiveIndex;
+    let menuSemaine, stockPlacard, customItems, joursSelectionnes, jourActiveIndex;
     const sauvegarde = safeGet();
     if (sauvegarde && Array.isArray(sauvegarde.menuSemaine) && sauvegarde.menuSemaine.length) {
       menuSemaine = sauvegarde.menuSemaine;
       stockPlacard = sauvegarde.stockPlacard || {};
+      customItems = sauvegarde['me-custom-items'] || [];
       joursSelectionnes = sauvegarde.joursSelectionnes || [0, 1, 2, 3, 4, 5, 6];
       jourActiveIndex = sauvegarde.jourActiveIndex !== undefined ? sauvegarde.jourActiveIndex : meGetJourActuelIndex();
     } else {
@@ -333,6 +351,7 @@
         "Huile d'olive": { enStock: true, qte: "1 bouteille", date: "En stock" },
         "Sel & Poivre": { enStock: true, qte: "Stock permanent", date: "" }
       };
+      customItems = [];
       joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
       jourActiveIndex = meGetJourActuelIndex();
     }
@@ -514,11 +533,10 @@
     }
 
     function rendreInventaire() {
-      // Fusionner les ingrédients du menu et les ajouts personnalisés du placard
       const ingredientsMenu = [];
       menuSemaine.forEach(m => ingredientsMenu.push(...ingredientsDuJour(m)));
       
-      const tousIngs = [...new Set([...ingredientsMenu, ...Object.keys(stockPlacard)])];
+      const tousIngs = [...new Set([...ingredientsMenu, ...customItems, ...Object.keys(stockPlacard)])];
 
       const groupes = {};
       tousIngs.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
@@ -533,6 +551,7 @@
               ${groupes[r].map(ing => {
                 const item = stockPlacard[ing] || { enStock: false, qte: "", date: "" };
                 const estStock = item.enStock;
+                const estCustom = customItems.includes(ing);
                 return `
                   <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 gap-2">
                     <label class="flex items-center gap-2.5 cursor-pointer min-w-0">
@@ -540,9 +559,9 @@
                       <span class="text-xs font-bold ${estStock ? 'text-emerald-800' : 'text-slate-600'}">${ing}</span>
                     </label>
                     <div class="flex items-center gap-2 pl-6 sm:pl-0 text-xs">
-                      <input type="text" data-update-qte="${ing}" value="${item.qte || ''}" placeholder="Quantité (ex: 200g)" class="w-28 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                      <input type="text" data-update-date="${ing}" value="${item.date || ''}" placeholder="Date / Péremption" class="w-28 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                      <button data-remove-custom="${ing}" class="text-slate-300 hover:text-rose-500 p-1 text-xs" title="Supprimer">✕</button>
+                      <input type="text" data-update-qte="${ing}" value="${item.qte || ''}" placeholder="Quantité" class="w-28 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                      <input type="text" data-update-date="${ing}" value="${item.date || ''}" placeholder="Péremption" class="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                      ${estCustom ? `<button data-remove-custom="${ing}" class="text-slate-300 hover:text-rose-500 p-1 text-xs" title="Supprimer">✕</button>` : ''}
                     </div>
                   </div>`;
               }).join('')}
@@ -552,7 +571,15 @@
 
     function toggleStock(ing) {
       if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: false, qte: "", date: "" };
-      stockPlacard[ing].enStock = !stockPlacard[ing].enStock;
+      
+      const etat = !stockPlacard[ing].enStock;
+      stockPlacard[ing].enStock = etat;
+      
+      // Calcule et attribue automatiquement la quantité nécessaire si elle n'a pas été saisie à la main
+      if (etat && !stockPlacard[ing].qte) {
+        stockPlacard[ing].qte = obtenirQuantiteMenu(ing);
+      }
+
       persister();
       rendreVueJour();
       rendreCourses();
@@ -572,7 +599,7 @@
     }
 
     function rendreMenuComplet() {
-      document.getElementById("header-saison").innerText = `Chef Personnel • ${cap(saisonActuelle)}`;
+      document.getElementById("header-saison").innerText = `Assistant Personnel • ${cap(saisonActuelle)}`;
       rendreVueJour();
       rendreVueSemaine();
       rendreFiltresJours();
@@ -644,19 +671,33 @@
       rendreMenuComplet();
     }
 
-    // GESTION DU FORMULAIRE ET DES ÉVÉNEMENTS
+    // FORMULAIRE ET ÉVÉNEMENTS
     document.getElementById("form-add-custom-item").addEventListener("submit", (e) => {
       e.preventDefault();
-      const nom = document.getElementById("custom-nom").value.trim();
-      const qte = document.getElementById("custom-qte").value.trim();
-      const date = document.getElementById("custom-date").value.trim();
+      const nomInput = document.getElementById("custom-nom");
+      const qteInput = document.getElementById("custom-qte");
+      const dateInput = document.getElementById("custom-date");
+
+      const nom = nomInput.value.trim();
+      const qteSaisie = qteInput.value.trim();
+      const date = dateInput.value.trim();
 
       if (nom) {
-        stockPlacard[nom] = { enStock: true, qte: qte, date: date };
+        // Enregistrer dans la liste globale des ajouts libres
+        if (!customItems.includes(nom)) {
+          customItems.push(nom);
+        }
+        
+        // Calcul automatique si la quantité n'est pas renseignée
+        const qteFinale = qteSaisie !== "" ? qteSaisie : obtenirQuantiteMenu(nom);
+
+        stockPlacard[nom] = { enStock: true, qte: qteFinale, date: date };
+        
         persister();
-        document.getElementById("custom-nom").value = "";
-        document.getElementById("custom-qte").value = "";
-        document.getElementById("custom-date").value = "";
+        nomInput.value = "";
+        qteInput.value = "";
+        dateInput.value = "";
+        
         rendreMenuComplet();
       }
     });
@@ -670,7 +711,7 @@
       const updateQte = e.target.closest("[data-update-qte]");
       if (updateQte) {
         const ing = updateQte.dataset.updateQte;
-        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: false, qte: "", date: "" };
+        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: true, qte: "", date: "" };
         stockPlacard[ing].qte = updateQte.value;
         persister();
         return;
@@ -678,7 +719,7 @@
       const updateDate = e.target.closest("[data-update-date]");
       if (updateDate) {
         const ing = updateDate.dataset.updateDate;
-        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: false, qte: "", date: "" };
+        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: true, qte: "", date: "" };
         stockPlacard[ing].date = updateDate.value;
         persister();
         return;
@@ -708,7 +749,9 @@
 
       const removeCustom = e.target.closest("[data-remove-custom]");
       if (removeCustom) {
-        delete stockPlacard[removeCustom.dataset.removeCustom];
+        const ing = removeCustom.dataset.removeCustom;
+        customItems = customItems.filter(i => i !== ing);
+        delete stockPlacard[ing];
         persister();
         rendreMenuComplet();
         return;
@@ -745,7 +788,7 @@
     });
 
     document.getElementById("btn-reset-all").addEventListener("click", () => {
-      if (confirm("Générer une toute nouvelle semaine ? L'inventaire sera conservé.")) {
+      if (confirm("Générer une toute nouvelle semaine ? L'inventaire personnel sera conservé.")) {
         menuSemaine = genererMenuSemaineDynamique();
         jourActiveIndex = meGetJourActuelIndex();
         persister();
