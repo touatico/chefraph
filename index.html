@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu & Market — Chef Personnel</title>
+  <title>Menu & Market — Chef Personnel & Apprentissage</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@
 
     <div id="section-menu" class="space-y-4">
       <div class="bg-white/70 border border-slate-100 rounded-xl px-4 py-2.5 text-[11px] text-slate-500 leading-relaxed">
-        ⏱️ Le temps affiché = <b>entrée + plat</b> menés en parallèle (l'entrée se prépare pendant que le plat cuit). Objectif : <b class="text-emerald-600">≤ 30 min</b> idéal, <b class="text-amber-600">≤ 40 min</b> max. Les desserts sont sans cuisson, assemblés pendant la cuisson.
+        🎓 <b>Mode Apprentis</b> : Chaque fiche recette détaille les repères visuels de cuisson, les réglages de feux et le matériel à sortir au préalable.
       </div>
       <div id="cards-container" class="space-y-4"></div>
     </div>
@@ -94,14 +94,24 @@
 
       <div id="modal-stats" class="grid grid-cols-3 gap-2"></div>
 
+      <div id="modal-materiel-wrap">
+        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">🧰 Matériel nécessaire</h3>
+        <div id="modal-materiel" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
       <div>
         <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">Ingrédients généreux (2 personnes)</h3>
         <ul id="modal-ingredients" class="grid grid-cols-1 gap-1.5 text-xs text-slate-700 font-medium"></ul>
       </div>
 
+      <div id="modal-miseenplace-wrap">
+        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">📋 Mise en place (Avant d'allumer le feu)</h3>
+        <ul id="modal-miseenplace" class="space-y-1.5 text-xs text-slate-600"></ul>
+      </div>
+
       <div>
-        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">Préparation pas-à-pas</h3>
-        <ol id="modal-etapes" class="space-y-2 text-xs text-slate-600 pl-4 list-decimal marker:font-bold marker:text-emerald-600"></ol>
+        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">👩‍🍳 Pas-à-pas guidé</h3>
+        <ol id="modal-etapes" class="space-y-3 text-xs text-slate-600 pl-4 list-decimal marker:font-bold marker:text-emerald-600 leading-relaxed"></ol>
       </div>
 
       <div id="modal-astuce"></div>
@@ -109,9 +119,6 @@
   </div>
 
   <script>
-    /* ============================================================
-       1. SAISON
-    ============================================================ */
     function obtenirSaisonActuelle() {
       const mois = new Date().getMonth();
       if (mois >= 2 && mois <= 4) return "printemps";
@@ -120,10 +127,6 @@
       return "hiver";
     }
 
-    /* ============================================================
-       2. CATALOGUE  — recettes rapides (repas entrée+plat ≤ 40 min)
-          + un dessert de saison (sans cuisson) par menu.
-    ============================================================ */
     const catalogueSaisons = {
       printemps: [
         {
@@ -131,72 +134,42 @@
           entree: {
             nom: "Salade croquante d'asperges vertes, radis & graines de tournesol",
             prep: 10, cuisson: 5, difficulte: 1,
-            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza bio", "1 cs de jus de citron"],
-            etapes: ["Cuire les asperges 5 min à la vapeur douce.", "Émincer les radis, mélanger avec l'huile et le citron.", "Torréfier les graines de tournesol à sec et parsemer."],
-            astuce: "Torréfier les graines à sec (poêle chaude, sans matière grasse) réveille tout leur goût."
+            materiel: ["Économe", "Casserole large", "Planche à découper", "Couteau d'office", "Petite poêle"],
+            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza bio", "1 cs de jus de citron", "Fleur de sel et poivre"],
+            miseenplace: [
+              "Laver les asperges et la botte de radis sous l'eau froide.",
+              "Casser la base dure et ligneuse des asperges (elle casse naturellement à la main en pliant le bas de la tige).",
+              "Couper les fanes et les petites racines des radis."
+            ],
+            etapes: [
+              "Fais bouillir un grand volume d'eau salée dans ta casserole à feu vif.",
+              "Plonge les asperges entières dans l'eau bouillante et laisse cuire 5 minutes exactement. Elles doivent rester légèrement croquantes (la pointe d'un couteau doit y entrer sans forcer).",
+              "Pendant ce temps, émince la demi-botte de radis en rondelles très fines sur ta planche à découper.",
+              "Fais chauffer ta petite poêle à feu moyen sans aucune matière grasse. Verses-y les 30g de graines de tournesol et remue constamment pendant 2 à 3 minutes jusqu'à ce qu'elles dorent légèrement et émettent une odeur de noisette.",
+              "Égoutte les asperges. Dans un grand bol, mélange 1.5 cuillère à soupe d'huile de colza et 1 cuillère à soupe de jus de citron. Ajoute les asperges tièdes et les radis, puis parseme des graines torréfiées."
+            ],
+            astuce: "Pour garder une belle couleur vert vif sur tes asperges, plonge-les 30 secondes dans un bol d'eau glacée dès la sortie de la casserole."
           },
           plat: {
             nom: "Poulet poêlé aux herbes, boulgour express & épinards",
             prep: 12, cuisson: 15, difficulte: 2,
-            ingredients: ["350g de filet de poulet bio", "150g de boulgour cru", "300g de pousses d'épinards", "1 cc de curcuma", "15ml d'huile d'olive", "2 gousses d'ail"],
-            etapes: ["Cuire le boulgour 10 min puis laisser gonfler couvert.", "Poêler le poulet en dés avec l'ail et le curcuma 8 min.", "Ajouter les épinards hors du feu, mélanger au boulgour."],
-            astuce: "Ajoute les épinards hors du feu : la chaleur résiduelle les fait fondre sans les rendre aqueux."
+            materiel: ["Grande poêle antiadhésive", "Casserole avec couvercle", "Verre doseur", "Grande cuillère en bois"],
+            ingredients: ["350g de filet de poulet bio", "150g de boulgour cru", "300g de pousses d'épinards", "1 cc de curcuma", "15ml d'huile d'olive", "2 gousses d'ail", "Sel et poivre"],
+            miseenplace: [
+              "Rincer les pousses d'épinards et les essorer dans un torchon propre.",
+              "Éplucher l'ail, enlever le germe central et l'émincer le plus finement possible.",
+              "Découper le poulet en dés réguliers de 2 cm environ."
+            ],
+            etapes: [
+              "Verse 150g de boulgour dans ta casserole avec 300ml d'eau (le double du volume) et une pincée de sel. Porte à ébullition à feu vif. Dès que l'eau bout, couvre, baisse à feu très doux et laisse frémir 10 minutes sans ouvrir.",
+              "Pendant que le boulgour cuit, fais chauffer 15ml d'huile d'olive dans ta grande poêle à feu moyen-vif pendant 1 minute.",
+              "Ajoute les dés de poulet et l'ail émincé dans la poêle. Saupoudre avec 1 cuillère à café de curcuma, du sel et du poivre. Laisse dorer 8 minutes en remuant régulièrement jusqu'à ce que le poulet ne soit plus rose au centre.",
+              "Éteins le feu sous la poêle et ajoute immédiatement les 300g de pousses d'épinards frais par-dessus le poulet chaud. Mélange délicatement : la chaleur résiduelle du poulet va faire fondre les épinards en 2 minutes.",
+              "Égrène le boulgour à la fourchette dans sa casserole puis incorpore-le directement dans la poêle pour tout mélanger avant de servir."
+            ],
+            astuce: "Ne surcuits pas les épinards sur le feu direct, ils perdraient leurs vitamines et rendraient trop d'eau. La chaleur du plat suffit amplement."
           },
-          dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: ["250g de fraises", "2 yaourts grecs", "1 cs de miel"], note: "Coupe les fraises au dernier moment pour qu'elles ne rendent pas leur jus." }
-        },
-        {
-          cuisine: "🌱 Printemps • Oméga-3 & Fibres",
-          entree: {
-            nom: "Écrasé de petits pois frais à la menthe & feta",
-            prep: 10, cuisson: 6, difficulte: 1,
-            ingredients: ["250g de petits pois", "50g de feta AOP", "Menthe fraîche", "1 cs d'huile d'olive"],
-            etapes: ["Cuire les petits pois 6 min.", "Écraser à la fourchette avec l'huile, la feta et la menthe ciselée."],
-            astuce: "Garde quelques petits pois entiers : le contraste de textures rend le plat plus vivant."
-          },
-          plat: {
-            nom: "Truite poêlée, riz basmati & fèves",
-            prep: 8, cuisson: 15, difficulte: 2,
-            ingredients: ["300g de filet de truite fraîche", "200g de fèves pelées", "140g de riz basmati", "15ml d'huile de lin (à cru)", "Citron jaune"],
-            etapes: ["Cuire le riz 12 min.", "Poêler la truite 4 min par face, cuire les fèves 6 min.", "Verser l'huile de lin à cru sur le riz et les fèves."],
-            astuce: "L'huile de lin ne se cuit jamais : verse-la à cru, sinon ses oméga-3 sont détruits."
-          },
-          dessert: { nom: "Salade de fraises à la menthe", prep: 5, ingredients: ["250g de fraises", "Menthe fraîche", "1 cc de sucre"], note: "Un tour de moulin à poivre sur les fraises relève le fruit — essaie une fois." }
-        },
-        {
-          cuisine: "🌱 Printemps • Léger & Complet",
-          entree: {
-            nom: "Salade de jeunes pousses, avocat & noix",
-            prep: 10, cuisson: 0, difficulte: 1,
-            ingredients: ["100g de jeunes pousses (mesclun)", "1 avocat mûr", "40g de cerneaux de noix", "1 cs d'huile de noix", "1 cc de moutarde", "1 cs de vinaigre de cidre"],
-            etapes: ["Émulsionner moutarde, vinaigre et huile de noix.", "Dresser les pousses, l'avocat en lamelles et les noix concassées."],
-            astuce: "Concasse les noix à la dernière minute : elles restent croquantes."
-          },
-          plat: {
-            nom: "Escalope de dinde, semoule express & petits pois-carottes",
-            prep: 12, cuisson: 12, difficulte: 1,
-            ingredients: ["300g d'escalope de dinde", "150g de semoule", "150g de petits pois", "3 carottes", "Persil & ciboulette", "15ml d'huile d'olive"],
-            etapes: ["Verser de l'eau bouillante sur la semoule, couvrir 5 min.", "Sauter carottes en dés et petits pois 10 min.", "Poêler la dinde 6 min, mélanger aux herbes."],
-            astuce: "La semoule ne se cuit pas : elle gonfle à l'eau bouillante couverte, hors du feu. Zéro casserole."
-          },
-          dessert: { nom: "Fromage blanc, kiwi & granola", prep: 5, ingredients: ["2 kiwis", "250g de fromage blanc", "40g de granola"], note: "Ajoute le granola à la dernière seconde pour garder le croquant." }
-        },
-        {
-          cuisine: "🌱 Printemps • Végétal Gourmand",
-          entree: {
-            nom: "Velouté de petits pois & courgette à la menthe",
-            prep: 10, cuisson: 15, difficulte: 1,
-            ingredients: ["250g de petits pois", "1 courgette", "1 échalote", "Menthe fraîche", "1 cs d'huile d'olive"],
-            etapes: ["Suer l'échalote, ajouter courgette et petits pois avec 400ml d'eau.", "Cuire 15 min, mixer avec la menthe."],
-            astuce: "Mixe longtemps (2 min) pour un velouté vraiment lisse, sans passer au tamis."
-          },
-          plat: {
-            nom: "Dahl de lentilles corail, épinards & riz basmati",
-            prep: 10, cuisson: 18, difficulte: 1,
-            ingredients: ["150g de lentilles corail", "150g de riz basmati", "150g d'épinards", "120ml de lait de coco", "1 cs de curry", "1 oignon", "1 cs d'huile d'olive"],
-            etapes: ["Faire revenir oignon et curry 2 min.", "Ajouter lentilles, lait de coco et 300ml d'eau, cuire 15 min.", "Incorporer les épinards en fin de cuisson, servir avec le riz."],
-            astuce: "Fais revenir les épices 30 s dans l'huile avant les lentilles : ça libère tous les arômes."
-          },
-          dessert: { nom: "Yaourt & pomme râpée à la cannelle", prep: 5, ingredients: ["2 pommes", "2 yaourts", "Cannelle"], note: "Pomme râpée crue = la 'compote' minute, sans cuisson." }
+          dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: ["250g de fraises", "2 yaourts grecs", "1 cs de miel"], note: "Rince les fraises avec la queue, puis équeute-les seulement après pour ne pas qu'elles se gorgent d'eau." }
         }
       ],
       ete: [
@@ -205,72 +178,41 @@
           entree: {
             nom: "Tartare de concombre, edamames & sésame noir",
             prep: 12, cuisson: 0, difficulte: 1,
-            ingredients: ["1 concombre bio", "150g d'edamames cuits", "20g de graines de sésame noir", "1 cs d'huile de sésame", "1 cs de vinaigre de riz"],
-            etapes: ["Couper le concombre en petits dés.", "Mélanger avec edamames, huile de sésame et vinaigre.", "Saupoudrer de sésame noir."],
-            astuce: "Sale le concombre 10 min et essore-le : le tartare reste croquant, pas détrempé."
+            materiel: ["Planche à découper", "Grand couteau de chef", "Saladier", "Passoire"],
+            ingredients: ["1 concombre bio", "150g d'edamames cuits", "20g de graines de sésame noir", "1 cs d'huile de sésame", "1 cs de vinaigre de riz", "1 cc de sel"],
+            miseenplace: [
+              "Rincer le concombre (inutile de l'éplucher s'il est bio).",
+              "Décongeler ou rincer les edamames à l'eau tiède."
+            ],
+            etapes: [
+              "Coupe le concombre en deux dans le sens de la longueur. À l'aide d'une petite cuillère, gratte le centre pour retirer toutes les pépins (cela évite que ta salade ne rende de l'eau).",
+              "Tailles les demi-concombres en très petits dés de 0,5 cm.",
+              "Place les dés de concombre dans la passoire avec 1 cuillère à café de sel, mélange et laisse dégorger pendant 5 minutes.",
+              "Presses doucement le concombre entre tes mains pour retirer l'excès d'eau, puis verse-le dans le saladier.",
+              "Ajoute les 150g d'edamames, 1 cs d'huile de sésame et 1 cs de vinaigre de riz. Mélange bien et parseme abondamment de graines de sésame noir."
+            ],
+            astuce: "Retirer le cœur en pépins du concombre est le secret professionnel pour garder un tartare bien croquant."
           },
           plat: {
             nom: "Saumon poêlé, quinoa express & courgettes",
             prep: 10, cuisson: 15, difficulte: 2,
-            ingredients: ["300g de pavés de saumon", "150g de quinoa", "400g de courgettes", "15ml d'huile de colza (à cru)", "Ail & basilic"],
-            etapes: ["Cuire le quinoa 12 min.", "Poêler les courgettes en dés 10 min.", "Saisir le saumon 3 min par face, arroser d'huile de colza à cru."],
-            astuce: "Chauffe bien la poêle avant le saumon côté peau : elle devient croustillante et n'accroche pas."
+            materiel: ["Poêle antiadhésive", "Casserole avec couvercle", "Passoire fine", "Spatule"],
+            ingredients: ["300g de pavés de saumon (avec peau)", "150g de quinoa", "400g de courgettes", "15ml d'huile de colza (à cru)", "1 gousse d'ail", "Basilic frais", "Sel"],
+            miseenplace: [
+              "Rincer le quinoa abondamment dans une passoire fine pour retirer son amertume naturelle.",
+              "Laver les courgettes et les couper en dés d'1 cm (conserver la peau).",
+              "Sécher les pavés de saumon avec du papier absorbant (très important pour le griller sans qu'il colle)."
+            ],
+            etapes: [
+              "Mets le quinoa dans ta casserole avec 300ml d'eau froide salée. Porte à ébullition, puis réduis à feu doux, couvre et laisse cuire 12 minutes jusqu'à absorption complète de l'eau.",
+              "Pendant ce temps, fais chauffer ta poêle à feu vif avec un filet d'huile d'olive. Depose les dés de courgettes et l'ail écrasé. Fais-les revenir pendant 8 à 10 minutes en remuant souvent jusqu'à ce qu'ils soient tendres et dorés. Réserve-les dans une assiette.",
+              "Dans la même poêle encore bien chaude, dépose les pavés de saumon côté peau en premier. Laisse cuire 4 minutes à feu moyen-vif sans y toucher (la peau devient croustillante).",
+              "Retourne délicatement les pavés avec la spatule et laisse cuire 3 minutes sur l'autre face. Le centre doit rester légèrement rosé.",
+              "Dress le quinoa dans deux assiettes, ajoute les courgettes, dépose le pavé de saumon par-dessus et verse 15ml d'huile de colza à cru sur l'ensemble."
+            ],
+            astuce: "La cuisson côté peau saisie sans bouger permet de garder toute l'humidité du poisson au centre."
           },
-          dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches", "2 yaourts", "1 cs de miel"], note: "Des pêches bien mûres se passent de tout ajout." }
-        },
-        {
-          cuisine: "☀️ Été • Protéines Végétales",
-          entree: {
-            nom: "Gaspacho de tomates mûres, poivron & basilic",
-            prep: 10, cuisson: 0, difficulte: 1,
-            ingredients: ["500g de tomates mûres", "1 poivron rouge", "1 gousse d'ail", "2 cs d'huile d'olive", "Basilic frais"],
-            etapes: ["Mixer tous les ingrédients très finement avec un glaçon.", "Servir bien glacé avec du basilic haché."],
-            astuce: "Mixe avec un glaçon plutôt que de l'eau : ça refroidit sans diluer le goût."
-          },
-          plat: {
-            nom: "Poêlée d'aubergines, tofu tamari & boulgour",
-            prep: 12, cuisson: 15, difficulte: 2,
-            ingredients: ["250g de tofu ferme bio", "2 aubergines", "150g de boulgour", "2 cs de sauce tamari", "1 cs d'huile de colza"],
-            etapes: ["Cuire le boulgour 10 min, laisser gonfler couvert.", "Faire dorer aubergines et tofu en dés 12 min avec l'huile et le tamari.", "Mélanger le tout chaud."],
-            astuce: "Presse le tofu 10 min sous un poids : il dore mieux et s'imbibe de tamari."
-          },
-          dessert: { nom: "Salade de melon à la menthe", prep: 8, ingredients: ["1/2 melon", "Menthe fraîche", "1 filet de citron vert"], note: "Le citron vert réveille le melon même un peu fade." }
-        },
-        {
-          cuisine: "☀️ Été • Fraîcheur Protéinée",
-          entree: {
-            nom: "Tomates anciennes, mozzarella & basilic",
-            prep: 10, cuisson: 0, difficulte: 1,
-            ingredients: ["4 tomates anciennes", "125g de mozzarella di bufala", "Basilic frais", "2 cs d'huile d'olive", "Vinaigre balsamique"],
-            etapes: ["Trancher tomates et mozzarella.", "Alterner sur l'assiette, arroser d'huile et de balsamique, parsemer de basilic."],
-            astuce: "Sale les tomates juste avant de servir : trop tôt, elles rendent leur eau."
-          },
-          plat: {
-            nom: "Dorade poêlée, taboulé express & légumes grillés",
-            prep: 15, cuisson: 12, difficulte: 2,
-            ingredients: ["2 filets de dorade", "150g de semoule", "1 courgette", "1 poivron", "1 citron", "Menthe & persil", "2 cs d'huile d'olive"],
-            etapes: ["Faire gonfler la semoule à l'eau bouillante couverte.", "Griller courgette et poivron en dés.", "Assaisonner la semoule au citron et aux herbes, poêler la dorade 3 min par face."],
-            astuce: "Laisse la semoule tiédir avant d'assaisonner : elle absorbe mieux le citron et l'huile."
-          },
-          dessert: { nom: "Abricots & fromage blanc, amandes", prep: 5, ingredients: ["4 abricots", "250g de fromage blanc", "20g d'amandes effilées"], note: "Torréfie les amandes 2 min à la poêle pour plus de goût." }
-        },
-        {
-          cuisine: "☀️ Été • Bowl Complet",
-          entree: {
-            nom: "Houmous de courgette crue & bâtonnets de crudités",
-            prep: 12, cuisson: 0, difficulte: 1,
-            ingredients: ["1 courgette", "150g de pois chiches cuits", "2 cs de tahini", "1 citron", "1 gousse d'ail", "Carottes & concombre en bâtonnets"],
-            etapes: ["Mixer courgette, pois chiches, tahini, citron et ail.", "Servir avec les crudités."],
-            astuce: "Une courgette crue bien mixée allège le houmous et le rend plus digeste."
-          },
-          plat: {
-            nom: "Bowl de poulet grillé, riz express, maïs & avocat",
-            prep: 12, cuisson: 12, difficulte: 1,
-            ingredients: ["300g de filet de poulet", "150g de riz", "1 avocat", "150g de maïs", "2 tomates", "1 citron vert", "1 cs d'huile d'olive"],
-            etapes: ["Cuire le riz.", "Griller le poulet mariné au citron vert 6 min par face.", "Composer le bowl : riz, maïs, avocat, tomates, poulet tranché."],
-            astuce: "Coupe l'avocat au dernier moment, arrose-le de citron vert : il garde sa couleur."
-          },
-          dessert: { nom: "Brochettes pastèque-melon à la menthe", prep: 8, ingredients: ["Pastèque", "Melon", "Menthe fraîche"], note: "Passe 10 min au congélateur avant de servir : effet granité." }
+          dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches mûres", "2 yaourts", "1 cs de miel"], note: "Coupe les pêches en tranches fines au dernier moment." }
         }
       ],
       automne: [
@@ -279,72 +221,41 @@
           entree: {
             nom: "Houmous de lentilles corail au zaatar & carottes",
             prep: 10, cuisson: 10, difficulte: 1,
-            ingredients: ["120g de lentilles corail", "2 cs de tahini", "1 cs d'huile d'olive", "1 cc de zaatar", "3 carottes en bâtonnets"],
-            etapes: ["Cuire les lentilles corail 10 min.", "Mixer avec tahini, huile et un peu d'eau de cuisson.", "Parsemer de zaatar, servir avec les carottes."],
-            astuce: "Garde un peu d'eau de cuisson pour ajuster la texture au gramme près."
+            materiel: ["Casserole", "Mixeur plongeant ou robot", "Passoire", "Économe"],
+            ingredients: ["120g de lentilles corail", "2 cs de tahini (crème de sésame)", "1 cs d'huile d'olive", "1 cc de zaatar", "3 carottes"],
+            miseenplace: [
+              "Rincer les lentilles corail à l'eau claire.",
+              "Éplucher les carottes et les tailler en bâtonnets réguliers pour le trempage."
+            ],
+            etapes: [
+              "Place les lentilles corail dans la casserole avec 350ml d'eau froide sans sel (le sel durcit les légumineuses).",
+              "Porte à ébullition à feu vif, puis réduis à feu moyen et laisse cuire 10 minutes (les lentilles deviennent molles et se désagrègent).",
+              "Égoutte les lentilles en conservant un demi-verre d'eau de cuisson de côté.",
+              "Verse les lentilles dans ton robot/bol mixeur avec 2 cs de tahini, 1 cs d'huile d'olive et 3 cs d'eau de cuisson réservée. Mixe pendant 1 minute jusqu'à obtenir une texture lisse et crémeuse.",
+              "Dresse dans un bol, saupoudre de zaatar et sers chaud ou tiède avec les bâtonnets de carottes."
+            ],
+            astuce: "L'eau de cuisson des lentilles contient de l'amidon : c'est elle qui permet d'alléger le houmous sans ajouter trop de matière grasse."
           },
           plat: {
             nom: "Curry express de tofu & pois chiches, épinards & riz",
             prep: 12, cuisson: 15, difficulte: 2,
-            ingredients: ["250g de tofu ferme bio", "250g de pois chiches cuits", "150g d'épinards", "150g de riz", "120ml de lait de coco léger", "1 cs de curry"],
-            etapes: ["Cuire le riz.", "Dorer le tofu en dés, ajouter curry, lait de coco et pois chiches, mijoter 8 min.", "Incorporer les épinards en fin de cuisson."],
-            astuce: "Fais revenir la poudre de curry 30 s avant d'ajouter le liquide : elle libère ses arômes."
+            materiel: ["Sautéuse ou grande casserole", "Casserole pour le riz", "Papier absorbant", "Planche à découper"],
+            ingredients: ["250g de tofu ferme bio", "250g de pois chiches en bocaux (égouttés)", "150g d'épinards frais", "150g de riz basmati", "120ml de lait de coco léger", "1 cs de curry en poudre", "1 cs d'huile d'olive"],
+            miseenplace: [
+              "Envelopper le bloc de tofu dans du papier absorbant et presser avec la paume de la main pour enlever le maximum d'eau.",
+              "Couper le tofu en dés d'1,5 cm.",
+              "Rincer et égoutter les pois chiches."
+            ],
+            etapes: [
+              "Lance la cuisson du riz basmati dans ta casserole d'eau bouillante salée pour 12 minutes.",
+              "Fais chauffer 1 cs d'huile d'olive dans ta sauteuse à feu vif. Ajoute les dés de tofu et fais-les dorer 5 minutes en les retournant régulièrement.",
+              "Saupoudre la cuillère à soupe de curry directement sur le tofu et remue 30 secondes pour que les épices se torréfient dans l'huile.",
+              "Verse les 120ml de lait de coco et 50ml d'eau, puis ajoute les pois chiches. Laisse frémir à feu moyen pendant 6 minutes pour épaissir la sauce.",
+              "Ajoute les épinards par-dessus, remue 2 minutes jusqu'à ce qu'ils réduisent complètement, puis sers chaud accompagné du riz."
+            ],
+            astuce: "Sécher le tofu avant cuisson est indispensable pour qu'il devienne croustillant à la poêle au lieu de bouillir."
           },
-          dessert: { nom: "Poire, yaourt & noix", prep: 5, ingredients: ["2 poires", "2 yaourts", "30g de noix", "1 cs de miel"], note: "Une poire bien mûre et un peu de miel suffisent à faire un vrai dessert." }
-        },
-        {
-          cuisine: "🍂 Automne • Réconfort",
-          entree: {
-            nom: "Soupe express de carottes-coco au cumin",
-            prep: 8, cuisson: 15, difficulte: 1,
-            ingredients: ["500g de carottes", "100ml de lait de coco", "1 oignon", "1 cc de cumin", "1 cs d'huile d'olive"],
-            etapes: ["Suer l'oignon, ajouter carottes fines et 500ml d'eau, cuire 15 min.", "Mixer avec le lait de coco et le cumin."],
-            astuce: "Coupe les carottes finement : elles cuisent deux fois plus vite."
-          },
-          plat: {
-            nom: "Pavé de saumon, purée de patate douce express & épinards",
-            prep: 12, cuisson: 15, difficulte: 2,
-            ingredients: ["300g de pavé de saumon", "300g de patate douce", "200g d'épinards", "15ml d'huile d'olive", "1 gousse d'ail"],
-            etapes: ["Cuire la patate douce en dés 12 min et l'écraser.", "Faire tomber les épinards 2 min.", "Poêler le saumon 4 min par face."],
-            astuce: "Le saumon est cuit quand il devient rosé opaque et se détache : ne le dessèche pas."
-          },
-          dessert: { nom: "Yaourt & compote pomme-cannelle minute", prep: 5, ingredients: ["3 pommes", "Cannelle", "2 yaourts"], note: "Pommes en dés + cannelle, 5 min au micro-ondes pendant que le plat cuit." }
-        },
-        {
-          cuisine: "🍂 Automne • Protéines & Racines",
-          entree: {
-            nom: "Carottes râpées au cumin & citron",
-            prep: 10, cuisson: 0, difficulte: 1,
-            ingredients: ["4 carottes", "1 cc de cumin", "1 citron", "2 cs d'huile d'olive", "Coriandre"],
-            etapes: ["Râper les carottes.", "Assaisonner au cumin, citron, huile et coriandre."],
-            astuce: "Laisse reposer 10 min : les carottes s'attendrissent et prennent l'assaisonnement."
-          },
-          plat: {
-            nom: "Émincé de poulet aux champignons & riz",
-            prep: 12, cuisson: 15, difficulte: 2,
-            ingredients: ["300g de filet de poulet", "250g de champignons de Paris", "150g de riz", "1 échalote", "15ml d'huile d'olive", "Persil"],
-            etapes: ["Cuire le riz.", "Poêler les champignons à feu vif sans les remuer.", "Ajouter le poulet émincé et l'échalote, cuire 8 min."],
-            astuce: "Ne remue pas les champignons trop tôt : laisse-les colorer avant de les retourner."
-          },
-          dessert: { nom: "Raisin & fromage blanc", prep: 3, ingredients: ["1 grappe de raisin", "250g de fromage blanc", "1 cs de miel"], note: "Le plus simple des desserts, et le raisin d'automne est parfait." }
-        },
-        {
-          cuisine: "🍂 Automne • Végétal Complet",
-          entree: {
-            nom: "Soupe de lentilles & tomates au cumin",
-            prep: 8, cuisson: 20, difficulte: 1,
-            ingredients: ["150g de lentilles brunes", "400g de tomates concassées", "1 oignon", "1 carotte", "1 cc de cumin", "1 cs d'huile d'olive"],
-            etapes: ["Suer oignon et carotte, ajouter lentilles, tomates et 500ml d'eau.", "Cuire 20 min."],
-            astuce: "Un trait de vinaigre en fin de cuisson réveille une soupe de légumineuses."
-          },
-          plat: {
-            nom: "Chili express haricots rouges, poivron & riz",
-            prep: 10, cuisson: 20, difficulte: 2,
-            ingredients: ["250g de haricots rouges cuits", "400g de tomates concassées", "1 poivron", "150g de riz", "1 cs d'épices chili", "1 cs d'huile d'olive"],
-            etapes: ["Faire revenir le poivron en dés.", "Ajouter tomates, haricots et épices, mijoter 15 min.", "Servir avec le riz."],
-            astuce: "Un carré de chocolat noir dans le chili arrondit l'acidité des tomates."
-          },
-          dessert: { nom: "Yaourt & figues au miel", prep: 5, ingredients: ["4 figues fraîches", "2 yaourts", "1 cs de miel"], note: "Figues nature, juste tranchées : la saison fait le travail." }
+          dessert: { nom: "Poire, yaourt & noix", prep: 5, ingredients: ["2 poires mûres", "2 yaourts", "30g de cerneaux de noix"], note: "Concasse les noix à la main au-dessus du yaourt." }
         }
       ],
       hiver: [
@@ -353,72 +264,40 @@
           entree: {
             nom: "Velouté de fenouil express & graines de courge",
             prep: 10, cuisson: 15, difficulte: 1,
-            ingredients: ["100g de lentilles corail", "2 fenouils", "25g de graines de courge", "1 cc de cumin", "1 cs d'huile d'olive"],
-            etapes: ["Cuire fenouils émincés et lentilles corail dans 500ml d'eau 15 min.", "Mixer, servir avec les graines de courge torréfiées."],
-            astuce: "Les lentilles corail épaississent le velouté en 15 min, plus rapides que les lentilles brunes."
+            materiel: ["Grand faitout ou casserole", "Mixeur plongeant", "Planche à découper", "Grand couteau"],
+            ingredients: ["100g de lentilles corail", "2 gros fenouils", "25g de graines de courge", "1 cc de cumin en poudre", "1 cs d'huile d'olive", "Sel et poivre"],
+            miseenplace: [
+              "Laver les fenouils, couper les tiges vertes du haut et la base dure du talon.",
+              "Trancher les fenouils en morceaux de 2 cm."
+            ],
+            etapes: [
+              "Fais chauffer 1 cs d'huile d'olive dans ta casserole à feu moyen. Ajoute le fenouil tranché et le cumin, puis fais suer 3 minutes.",
+              "Ajoute les 100g de lentilles corail et verse 600ml d'eau (l'eau doit recouvrir les légumes). Saler généreusement.",
+              "Porte à ébullition, puis baisse à feu moyen, couvre et laisse cuire 15 minutes à bouillon modéré.",
+              "Pendant ce temps, fais griller les graines de courge à sec dans une petite poêle à feu doux pendant 3 minutes jusqu'à ce qu'elles crépitent.",
+              "Mixe la soupe au mixeur plongeant pendant 2 minutes complètes jusqu'à obtenir une texture fluide et veloutée. Parseme des graines de courge avant de servir."
+            ],
+            astuce: "Les lentilles corail jouent le rôle de liant naturel dans ce velouté, remplaçant la crème fraîche ou les pommes de terre."
           },
           plat: {
             nom: "Dos de cabillaud, écrasé de patate douce & épinards",
             prep: 12, cuisson: 15, difficulte: 2,
-            ingredients: ["320g de dos de cabillaud", "300g de patate douce", "250g d'épinards", "20g de graines de lin moulues", "15ml d'huile d'olive"],
-            etapes: ["Cuire la patate douce 12 min et l'écraser.", "Faire tomber les épinards 2 min.", "Poêler le cabillaud 4 min par face, saupoudrer de graines de lin."],
-            astuce: "Le cabillaud est cuit dès qu'il se détache en gros flocons opaques : au-delà, il sèche."
+            materiel: ["Casserole", "Presse-purée ou fourchette", "Poêle antiadhésive", "Économe"],
+            ingredients: ["320g de dos de cabillaud", "300g de patate douce", "250g d'épinards frais", "20g de graines de lin moulues", "15ml d'huile d'olive"],
+            miseenplace: [
+              "Éplucher la patate douce et la couper en petits dés de 1 cm (plus ils sont petits, plus la cuisson est rapide).",
+              "Éponger le dos de cabillaud avec un papier absorbant."
+            ],
+            etapes: [
+              "Plonge les dés de patate douce dans une casserole d'eau bouillante salée et laisse cuire 12 minutes à feu vif. Vérifie la cuisson avec la pointe d'un couteau : elle doit s'enfoncer comme dans du beurre.",
+              "Égoutte les patates douces, remets-les dans la casserole chaude et écrase-les grossièrement à la fourchette en incorporant 10ml d'huile d'olive.",
+              "Fais chauffer 5ml d'huile dans ta poêle à feu moyen-vif. Dépose le dos de cabillaud et laisse cuire 4 minutes sur la première face sans y toucher.",
+              "Retourne délicatement le poisson et ajoute les épinards tout autour dans la poêle. Laisse cuire 3 à 4 minutes supplémentaires : la chair du poisson doit devenir opaque et se détacher en feuillets.",
+              "Dresse l'écrasé de patate douce, le cabillaud et les épinards dans l'assiette, puis saupoudre de graines de lin moulues."
+            ],
+            astuce: "Le cabillaud est prêt quand sa chair perd son aspect translucide et s'effiloche naturellement sous la pression du doigt."
           },
-          dessert: { nom: "Orange, yaourt & miel", prep: 5, ingredients: ["2 oranges", "2 yaourts", "1 cs de miel"], note: "Suprêmes d'orange (à vif) : un geste simple qui rend le dessert chic." }
-        },
-        {
-          cuisine: "❄️ Hiver • Chaleur & Fer",
-          entree: {
-            nom: "Soupe express de potiron",
-            prep: 10, cuisson: 18, difficulte: 1,
-            ingredients: ["600g de potiron", "1 oignon", "1 cs d'huile d'olive", "Muscade"],
-            etapes: ["Suer l'oignon, ajouter le potiron en dés et 500ml d'eau.", "Cuire 18 min, mixer avec une pointe de muscade."],
-            astuce: "Le potiron n'a pas besoin d'être épluché s'il est bio : la peau fond au mixage."
-          },
-          plat: {
-            nom: "Steak haché poêlé, purée de patate douce & haricots verts",
-            prep: 10, cuisson: 12, difficulte: 1,
-            ingredients: ["2 steaks hachés (5% MG)", "300g de patate douce", "200g de haricots verts", "1 cs d'huile d'olive", "Thym"],
-            etapes: ["Cuire la patate douce 12 min et l'écraser à l'huile d'olive.", "Cuire les haricots verts 8 min.", "Poêler les steaks 3 min par face."],
-            astuce: "Sale le steak seulement après cuisson : salé avant, il rend son eau et grille moins bien."
-          },
-          dessert: { nom: "Clémentines & fromage blanc", prep: 3, ingredients: ["4 clémentines", "250g de fromage blanc", "1 cs de miel"], note: "Le duo acidulé-crémeux le plus rapide de l'hiver." }
-        },
-        {
-          cuisine: "❄️ Hiver • Poisson & Racines",
-          entree: {
-            nom: "Velouté de panais à la noisette",
-            prep: 8, cuisson: 18, difficulte: 1,
-            ingredients: ["500g de panais", "1 oignon", "30g de noisettes", "1 cs d'huile d'olive", "Muscade"],
-            etapes: ["Suer l'oignon, ajouter le panais et 600ml d'eau, cuire 18 min.", "Mixer, parsemer de noisettes concassées."],
-            astuce: "Une pointe de muscade fraîchement râpée sublime la douceur du panais."
-          },
-          plat: {
-            nom: "Dos de lieu, poireaux fondants & pommes de terre vapeur",
-            prep: 12, cuisson: 18, difficulte: 2,
-            ingredients: ["2 dos de lieu noir", "3 poireaux", "400g de pommes de terre", "1 citron", "15ml d'huile d'olive"],
-            etapes: ["Cuire les pommes de terre à la vapeur.", "Faire fondre les poireaux émincés à couvert 15 min.", "Cuire le lieu 8 min à la vapeur, servir avec le citron."],
-            astuce: "Fais fondre les poireaux à couvert et à feu doux : ils deviennent soyeux sans brûler."
-          },
-          dessert: { nom: "Poire & yaourt à la cannelle", prep: 5, ingredients: ["2 poires", "2 yaourts", "Cannelle"], note: "Poire en dés + yaourt + cannelle : réconfortant et léger." }
-        },
-        {
-          cuisine: "❄️ Hiver • Légumineuses",
-          entree: {
-            nom: "Soupe express de pois chiches au cumin",
-            prep: 8, cuisson: 12, difficulte: 1,
-            ingredients: ["250g de pois chiches cuits", "1 oignon", "1 cc de cumin", "1 cs d'huile d'olive", "1/2 citron"],
-            etapes: ["Suer l'oignon, ajouter pois chiches, cumin et 500ml d'eau, cuire 10 min.", "Mixer, ajuster au citron."],
-            astuce: "Partir de pois chiches déjà cuits divise le temps par quatre — garde-en toujours au placard."
-          },
-          plat: {
-            nom: "Curry de pois chiches, épinards & riz complet",
-            prep: 10, cuisson: 18, difficulte: 1,
-            ingredients: ["250g de pois chiches cuits", "200g d'épinards", "150g de riz complet", "120ml de lait de coco", "1 cs de curry", "1 oignon", "1 cs d'huile d'olive"],
-            etapes: ["Faire revenir oignon et curry, ajouter pois chiches et lait de coco.", "Mijoter 12 min, incorporer les épinards en fin de cuisson.", "Servir avec le riz."],
-            astuce: "Ajoute les épinards en tout dernier : 2 minutes suffisent pour qu'ils tombent."
-          },
-          dessert: { nom: "Dattes, yaourt & amandes", prep: 5, ingredients: ["6 dattes Medjool", "2 yaourts", "20g d'amandes"], note: "Dattes dénoyautées + amandes concassées : sucré-croquant sans sucre ajouté." }
+          dessert: { nom: "Orange, yaourt & miel", prep: 5, ingredients: ["2 oranges", "2 yaourts", "1 cs de miel"], note: "Pèle les oranges à vif avec un couteau bien aiguisé." }
         }
       ]
     };
@@ -429,25 +308,46 @@
       entree: {
         nom: "Matbucha maison & carottes au cumin",
         prep: 15, cuisson: 30, difficulte: 2,
-        ingredients: ["5 tomates mûres", "3 poivrons grillés", "4 carottes", "1.5 cs d'huile d'olive", "Ail, cumin, paprika"],
-        etapes: ["Mijoter tomates et poivrons avec l'ail et l'huile 30 min à feu doux.", "Bouillir les carottes en rondelles et assaisonner à cru au cumin, citron et ail."],
-        astuce: "La matbucha est meilleure préparée la veille : au repos, les saveurs se concentrent."
+        materiel: ["Sauteuse ou grande casserole", "Planche à découper", "Couteau", "Casserole moyenne"],
+        ingredients: ["5 tomates mûres", "3 poivrons grillés", "4 carottes", "1.5 cs d'huile d'olive", "3 gousses d'ail", "Cumin, paprika, sel"],
+        miseenplace: [
+          "Monder ou couper les tomates en petits dés.",
+          "Couper les poivrons grillés en lanières fines.",
+          "Éplucher l'ail et l'écraser.",
+          "Éplucher les carottes et les tailler en rondelles d'un demi-centimètre."
+        ],
+        etapes: [
+          "Dans la sauteuse, fais chauffer 1 cs d'huile d'olive avec l'ail écrasé à feu doux pendant 1 minute.",
+          "Ajoute les tomates et les poivrons, sale et ajoute 1 cc de paprika. Laisse mijoter à feu très doux pendant 30 minutes en remuant régulièrement jusqu'à évaporation complète de l'eau.",
+          "Dans la seconde casserole, fais bouillir les rondelles de carottes dans de l'eau salée pendant 15 minutes.",
+          "Égoutte les carottes et assaisonne-les immédiatement à chaud avec 0.5 cs d'huile d'olive, du cumin et un filet de jus de citron."
+        ],
+        astuce: "La matbucha doit confire doucement : plus la cuisson est lente à feu doux, plus les saveurs sont concentrées."
       },
       plat: {
         nom: "Poulet rôti bio aux citrons confits, curcuma & patates douces",
         prep: 20, cuisson: 50, difficulte: 2,
-        ingredients: ["1 poulet bio entier (ou 4 grosses cuisses)", "400g de patates douces", "3 citrons confits", "2 oignons", "1.5 cs d'huile d'olive", "1 cs de curcuma"],
-        etapes: ["Disposer poulet, oignons et patates douces dans un grand plat.", "Masser avec l'huile, le curcuma et les citrons confits.", "Enfourner 50 min à 190°C."],
-        astuce: "Arrose le poulet de son jus à mi-cuisson : peau dorée, chair moelleuse."
+        materiel: ["Grand plat à four", "Économe", "Grand couteau de chef", "Bol pour la marinade"],
+        ingredients: ["1 poulet bio entier (ou 4 cuisses)", "400g de patates douces", "3 citrons confits", "2 oignons", "1.5 cs d'huile d'olive", "1 cs de curcuma"],
+        miseenplace: [
+          "Préchauffer le four à 190°C.",
+          "Éplucher les patates douces et les couper en gros morceaux de 3 cm.",
+          "Éplucher et émincer les oignons en quartiers.",
+          "Couper les citrons confits en quatre."
+        ],
+        etapes: [
+          "Dans un bol, mélange 1.5 cs d'huile d'olive, 1 cs de curcuma, du sel et du poivre.",
+          "Dispose le poulet, les morceaux de patates douces, les oignons et les citrons confits dans ton plat à four.",
+          "Badigeonne généreusement le poulet et les légumes avec le mélange d'huile et d'épices à l'aide de tes mains ou d'un pinceau.",
+          "Enfourne pour 50 minutes à 190°C. Arrose le poulet avec son propre jus de cuisson à mi-parcours (au bout de 25 min) pour que la peau reste bien dorée."
+        ],
+        astuce: "Pour vérifier la cuisson du poulet, pique la jonction de la cuisse : le jus qui s'en écoule doit être totalement clair, sans trace rosée."
       },
-      dessert: { nom: "Salade d'oranges à la cannelle & dattes", prep: 10, ingredients: ["4 oranges", "6 dattes", "Cannelle", "Fleur d'oranger (optionnel)"], note: "Léger et parfumé après un repas copieux — un classique." }
+      dessert: { nom: "Salade d'oranges à la cannelle & dattes", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool", "Cannelle"], note: "Laisse reposer 15 minutes au frais avant de servir pour que la cannelle infuse." }
     };
 
-    /* ============================================================
-       3. HELPERS
-    ============================================================ */
     const DIFFICULTES = {
-      1: { label: "Facile",        classe: "bg-emerald-50 text-emerald-700" },
+      1: { label: "Débutant",     classe: "bg-emerald-50 text-emerald-700" },
       2: { label: "Intermédiaire", classe: "bg-amber-50 text-amber-700" },
       3: { label: "Corsé",         classe: "bg-rose-50 text-rose-700" }
     };
@@ -460,17 +360,15 @@
     }
     function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-    // Temps du repas : entrée et plat menés en parallèle (prep additionnée, cuisson en recouvrement)
     function tempsRepas(item) {
       return item.entree.prep + item.plat.prep + Math.max(item.entree.cuisson, item.plat.cuisson);
     }
     function badgeTemps(t) {
-      if (t <= 30) return { classe: "bg-emerald-50 text-emerald-700" };
-      if (t <= 40) return { classe: "bg-amber-50 text-amber-700" };
+      if (t <= 35) return { classe: "bg-emerald-50 text-emerald-700" };
+      if (t <= 45) return { classe: "bg-amber-50 text-amber-700" };
       return { classe: "bg-rose-50 text-rose-700" };
     }
 
-    /* --- Rangement de la liste de courses par rayon (heuristique) --- */
     const RAYONS = [
       { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","petits pois","fèves","avocat","patate douce","potimarron","potiron","butternut","champignon","panais","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","aneth","persil","ciboulette","gingembre","pousses","mesclun","salade","maïs","céleri","haricots verts","fraise","pêche","melon","pastèque","poire","pomme","orange","clémentine","kiwi","raisin","figue","abricot"] },
       { nom: "🐟 Poissons & Viandes", mots: ["poulet","truite","saumon","cabillaud","dinde","bœuf","boeuf","lieu","dorade","poisson","cuisse","steak"] },
@@ -478,6 +376,7 @@
       { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","pois cassé","haricot","tahini","houmous","huile","vinaigre","graine","sésame","noix","noisette","amande","pignon","granola","miel","sucre","cannelle","muscade","curcuma","cumin","curry","paprika","zaatar","chili","tamari","soja","sauce","chocolat","citron confit","lait de coco","moutarde","balsamique","laurier","thym","bouillon","épices","datte","fleur d'oranger","pita","challah","pain"] }
     ];
     const ORDRE_RAYONS = ["🥬 Fruits & Légumes","🐟 Poissons & Viandes","🧀 Frais & Crèmerie","🌾 Épicerie & Secs","🛒 Autres"];
+    
     function rayonPour(ing) {
       const s = ing.toLowerCase();
       for (const r of RAYONS) if (r.mots.some(m => s.includes(m))) return r.nom;
@@ -487,17 +386,11 @@
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    /* ============================================================
-       4. PERSISTANCE
-    ============================================================ */
-    const STORAGE_KEY = "menu-market-v3";
+    const STORAGE_KEY = "menu-market-v4";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
     function persister() { safeSet({ menuSemaine, etatStock, jourDebutCourses, saison: saisonActuelle }); }
 
-    /* ============================================================
-       5. GÉNÉRATION DU MENU
-    ============================================================ */
     const saisonActuelle = obtenirSaisonActuelle();
     const poolRecettesSaison = catalogueSaisons[saisonActuelle] || catalogueSaisons["printemps"];
 
@@ -506,6 +399,7 @@
       const source = dispo.length ? dispo : pool;
       return source[Math.floor(Math.random() * source.length)];
     }
+
     function genererMenuSemaineDynamique() {
       const jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi (Shabbat)","Samedi","Dimanche"];
       let dernier = null;
@@ -529,9 +423,6 @@
       jourDebutCourses = 0;
     }
 
-    /* ============================================================
-       6. RENDU — MENU
-    ============================================================ */
     function ligneMeta(plat) {
       const d = DIFFICULTES[plat.difficulte] || DIFFICULTES[1];
       return `<div class="flex items-center gap-2 mt-1">
@@ -576,7 +467,7 @@
                   <p class="font-bold text-slate-800 leading-tight">${item.entree.nom}</p>
                   ${ligneMeta(item.entree)}
                 </div>
-                <button data-modal="${index}" data-type="entree" class="shrink-0 text-emerald-600 hover:text-emerald-700 font-bold px-2 py-1 bg-white rounded-lg border border-slate-200/60">Voir</button>
+                <button data-modal="${index}" data-type="entree" class="shrink-0 text-emerald-600 hover:text-emerald-700 font-bold px-2 py-1 bg-white rounded-lg border border-slate-200/60">Recette ➔</button>
               </div>
 
               <div class="bg-emerald-50/50 p-2.5 rounded-xl flex justify-between items-center gap-2 border border-emerald-100/50">
@@ -585,7 +476,7 @@
                   <p class="font-bold text-slate-900 leading-tight">${item.plat.nom}</p>
                   ${ligneMeta(item.plat)}
                 </div>
-                <button data-modal="${index}" data-type="plat" class="shrink-0 text-white bg-emerald-600 hover:bg-emerald-700 font-bold px-2.5 py-1 rounded-lg shadow-sm">Voir</button>
+                <button data-modal="${index}" data-type="plat" class="shrink-0 text-white bg-emerald-600 hover:bg-emerald-700 font-bold px-2.5 py-1 rounded-lg shadow-sm">Recette ➔</button>
               </div>
 
               ${item.dessert ? `
@@ -617,9 +508,6 @@
       rendreCourses();
     }
 
-    /* ============================================================
-       7. MODAL RECETTE (entrée / plat)
-    ============================================================ */
     function statCard(label, valeur, extraClasse) {
       return `<div class="rounded-xl p-2.5 text-center ${extraClasse || 'bg-slate-50'}">
         <p class="text-[9px] font-bold uppercase tracking-wider opacity-70">${label}</p>
@@ -638,13 +526,31 @@
       document.getElementById("modal-stats").innerHTML =
         statCard("Préparation", formatTemps(data.prep)) +
         statCard("Cuisson", formatTemps(data.cuisson)) +
-        statCard("Difficulté", d.label, d.classe);
+        statCard("Niveau", d.label, d.classe);
+
+      const matWrap = document.getElementById("modal-materiel-wrap");
+      const matEl = document.getElementById("modal-materiel");
+      if (data.materiel && data.materiel.length) {
+        matWrap.classList.remove("hidden");
+        matEl.innerHTML = data.materiel.map(m => `<span class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-[11px] font-semibold">🔨 ${m}</span>`).join('');
+      } else {
+        matWrap.classList.add("hidden");
+      }
 
       document.getElementById("modal-ingredients").innerHTML = data.ingredients.map(ing => `
         <li class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
           <span>${ing}</span>
         </li>`).join('');
+
+      const mepWrap = document.getElementById("modal-miseenplace-wrap");
+      const mepEl = document.getElementById("modal-miseenplace");
+      if (data.miseenplace && data.miseenplace.length) {
+        mepWrap.classList.remove("hidden");
+        mepEl.innerHTML = data.miseenplace.map(m => `<li class="flex items-start gap-2 bg-slate-50 p-2 rounded-lg"><span class="text-emerald-600 font-bold shrink-0">✓</span><span>${m}</span></li>`).join('');
+      } else {
+        mepWrap.classList.add("hidden");
+      }
 
       document.getElementById("modal-etapes").innerHTML = data.etapes.map(et => `<li class="pl-1">${et}</li>`).join('');
 
@@ -659,9 +565,6 @@
     document.getElementById("close-modal").addEventListener("click", () => document.getElementById("modal-recette").classList.add("hidden"));
     document.getElementById("modal-recette").addEventListener("click", (e) => { if (e.target.id === "modal-recette") e.currentTarget.classList.add("hidden"); });
 
-    /* ============================================================
-       8. REGÉNÉRATION
-    ============================================================ */
     function regenererJour(index) {
       if (index === 4) return;
       const r = tirerRecette(poolRecettesSaison, menuSemaine[index].plat.nom);
@@ -670,9 +573,6 @@
       rendreMenu();
     }
 
-    /* ============================================================
-       9. LISTE DE COURSES
-    ============================================================ */
     function rendreFiltresJours() {
       const container = document.getElementById("days-filter");
       container.innerHTML = "";
@@ -742,9 +642,6 @@
       rendreCourses();
     }
 
-    /* ============================================================
-       10. ÉVÉNEMENTS
-    ============================================================ */
     document.getElementById("cards-container").addEventListener("click", (e) => {
       const regen = e.target.closest("[data-regen]");
       if (regen) { regenererJour(Number(regen.dataset.regen)); return; }
@@ -787,7 +684,6 @@
     document.getElementById("tab-menu").addEventListener("click", () => setTab("menu"));
     document.getElementById("tab-courses").addEventListener("click", () => setTab("courses"));
 
-    /* INIT */
     rendreMenu();
   </script>
 </body>
