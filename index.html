@@ -1,690 +1,390 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu & Market — Chef Personnel & Apprentissage</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
-    .custom-shadow { box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04); }
-    .badge-shabbat { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); color: #92400E; }
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificateur de Repas de Saison</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --primary: #0F172A;
+            --primary-muted: #475569;
+            --accent: #10B981;
+            --accent-hover: #059669;
+            --accent-light: #ECFDF5;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -4px rgba(0,0,0,0.05);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            line-height: 1.5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            color: var(--primary-muted);
+            font-size: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            max-width: 450px;
+            margin: 0 auto 40px auto;
+        }
+
+        select {
+            appearance: none;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--primary);
+            cursor: pointer;
+            outline: none;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--accent);
+        }
+
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 20px;
+            margin-bottom: 48px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .meal-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .meal-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .meal-type {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            color: var(--primary-muted);
+        }
+
+        .meal-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            background: var(--bg);
+            color: var(--primary-muted);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .courses-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .courses-grid li {
+            background: var(--bg);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .courses-grid li:hover {
+            border-color: var(--border);
+        }
+
+        .courses-grid input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body class="text-slate-800 pb-28 antialiased">
+<body>
 
-  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-slate-100 px-5 py-4">
-    <div class="max-w-md mx-auto flex justify-between items-center">
-      <div>
-        <p id="header-saison" class="text-xs font-semibold text-emerald-600 tracking-wider uppercase">Chef Personnel</p>
-        <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Menu & Market</h1>
-      </div>
-      <button id="btn-reset-all" class="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 transition border border-slate-200/60 active:scale-95" title="Générer une nouvelle semaine">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-      </button>
-    </div>
-  </header>
-
-  <main class="max-w-md mx-auto px-4 pt-5 space-y-5">
-
-    <div class="bg-slate-200/60 p-1 rounded-2xl flex text-xs font-bold shadow-inner">
-      <button id="tab-menu" class="w-1/2 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200">📅 Menu Semaine</button>
-      <button id="tab-courses" class="w-1/2 py-2.5 rounded-xl text-slate-500 hover:text-slate-700 transition-all duration-200">🛒 Liste de courses</button>
-    </div>
-
-    <div id="section-menu" class="space-y-4">
-      <div class="bg-white/70 border border-slate-100 rounded-xl px-4 py-2.5 text-[11px] text-slate-500 leading-relaxed">
-        🎓 <b>Mode Apprentis</b> : Chaque fiche recette détaille les repères visuels de cuisson, les réglages de feux et le matériel à sortir au préalable.
-      </div>
-      <div id="cards-container" class="space-y-4"></div>
-    </div>
-
-    <div id="section-courses" class="hidden space-y-5">
-
-      <div class="bg-white p-4 rounded-2xl custom-shadow border border-slate-100 space-y-3">
-        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">🎯 À partir de quel jour faire les courses ?</label>
-        <div id="days-filter" class="flex gap-1.5 overflow-x-auto hide-scrollbar py-1"></div>
-        <div class="pt-1">
-          <div class="flex justify-between items-center text-[11px] font-semibold text-slate-500 mb-1">
-            <span id="progress-label">0 / 0 achetés</span>
-            <span id="active-days-tag" class="bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-lg"></span>
-          </div>
-          <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-            <div id="progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width:0%"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white p-5 rounded-2xl custom-shadow border border-slate-100 space-y-4">
-        <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2 border-b border-slate-100 pb-3">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-          À acheter (<span id="count-a-acheter">0</span>)
-        </h2>
-        <div id="list-a-acheter" class="space-y-4"></div>
-      </div>
-
-      <div class="bg-white p-5 rounded-2xl custom-shadow border border-slate-100 space-y-4">
-        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-          <h2 class="font-bold text-slate-400 text-sm flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
-            Dans le panier
-          </h2>
-          <button id="btn-vider-panier" class="text-[11px] font-bold text-slate-400 hover:text-rose-500 transition">Tout décocher</button>
-        </div>
-        <div id="list-en-stock" class="space-y-1 divide-y divide-slate-50 text-slate-400"></div>
-      </div>
-
-    </div>
-  </main>
-
-  <div id="modal-recette" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-end sm:items-center justify-center transition-opacity">
-    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[88vh] overflow-y-auto p-6 space-y-5 shadow-2xl relative">
-      <div class="sticky top-0 bg-white z-10 -mx-6 -mt-6 p-6 pb-4 border-b border-slate-100 flex justify-between items-start">
-        <div>
-          <span id="modal-badge" class="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full bg-slate-100 text-slate-600"></span>
-          <h2 id="modal-title" class="text-lg font-bold text-slate-900 mt-1"></h2>
-        </div>
-        <button id="close-modal" class="p-2 -mr-2 rounded-full text-slate-400 hover:bg-slate-100 transition">✕</button>
-      </div>
-
-      <div id="modal-stats" class="grid grid-cols-3 gap-2"></div>
-
-      <div id="modal-materiel-wrap">
-        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">🧰 Matériel nécessaire</h3>
-        <div id="modal-materiel" class="flex flex-wrap gap-1.5"></div>
-      </div>
-
-      <div>
-        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">Ingrédients généreux (2 personnes)</h3>
-        <ul id="modal-ingredients" class="grid grid-cols-1 gap-1.5 text-xs text-slate-700 font-medium"></ul>
-      </div>
-
-      <div id="modal-miseenplace-wrap">
-        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">📋 Mise en place (Avant d'allumer le feu)</h3>
-        <ul id="modal-miseenplace" class="space-y-1.5 text-xs text-slate-600"></ul>
-      </div>
-
-      <div>
-        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">👩‍🍳 Pas-à-pas guidé</h3>
-        <ol id="modal-etapes" class="space-y-3 text-xs text-slate-600 pl-4 list-decimal marker:font-bold marker:text-emerald-600 leading-relaxed"></ol>
-      </div>
-
-      <div id="modal-astuce"></div>
-    </div>
-  </div>
-
-  <script>
-    function obtenirSaisonActuelle() {
-      const mois = new Date().getMonth();
-      if (mois >= 2 && mois <= 4) return "printemps";
-      if (mois >= 5 && mois <= 7) return "ete";
-      if (mois >= 8 && mois <= 10) return "automne";
-      return "hiver";
-    }
-
-    const catalogueSaisons = {
-      printemps: [
-        {
-          cuisine: "🌱 Printemps • Haute Protéine",
-          entree: {
-            nom: "Salade croquante d'asperges vertes, radis & graines de tournesol",
-            prep: 10, cuisson: 5, difficulte: 1,
-            materiel: ["Économe", "Casserole large", "Planche à découper", "Couteau d'office", "Petite poêle"],
-            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza bio", "1 cs de jus de citron", "Fleur de sel et poivre"],
-            miseenplace: [
-              "Laver les asperges et la botte de radis sous l'eau froide.",
-              "Casser la base dure et ligneuse des asperges (elle casse naturellement à la main en pliant le bas de la tige).",
-              "Couper les fanes et les petites racines des radis."
-            ],
-            etapes: [
-              "Fais bouillir un grand volume d'eau salée dans ta casserole à feu vif.",
-              "Plonge les asperges entières dans l'eau bouillante et laisse cuire 5 minutes exactement. Elles doivent rester légèrement croquantes (la pointe d'un couteau doit y entrer sans forcer).",
-              "Pendant ce temps, émince la demi-botte de radis en rondelles très fines sur ta planche à découper.",
-              "Fais chauffer ta petite poêle à feu moyen sans aucune matière grasse. Verses-y les 30g de graines de tournesol et remue constamment pendant 2 à 3 minutes jusqu'à ce qu'elles dorent légèrement et émettent une odeur de noisette.",
-              "Égoutte les asperges. Dans un grand bol, mélange 1.5 cuillère à soupe d'huile de colza et 1 cuillère à soupe de jus de citron. Ajoute les asperges tièdes et les radis, puis parseme des graines torréfiées."
-            ],
-            astuce: "Pour garder une belle couleur vert vif sur tes asperges, plonge-les 30 secondes dans un bol d'eau glacée dès la sortie de la casserole."
-          },
-          plat: {
-            nom: "Poulet poêlé aux herbes, boulgour express & épinards",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Grande poêle antiadhésive", "Casserole avec couvercle", "Verre doseur", "Grande cuillère en bois"],
-            ingredients: ["350g de filet de poulet bio", "150g de boulgour cru", "300g de pousses d'épinards", "1 cc de curcuma", "15ml d'huile d'olive", "2 gousses d'ail", "Sel et poivre"],
-            miseenplace: [
-              "Rincer les pousses d'épinards et les essorer dans un torchon propre.",
-              "Éplucher l'ail, enlever le germe central et l'émincer le plus finement possible.",
-              "Découper le poulet en dés réguliers de 2 cm environ."
-            ],
-            etapes: [
-              "Verse 150g de boulgour dans ta casserole avec 300ml d'eau (le double du volume) et une pincée de sel. Porte à ébullition à feu vif. Dès que l'eau bout, couvre, baisse à feu très doux et laisse frémir 10 minutes sans ouvrir.",
-              "Pendant que le boulgour cuit, fais chauffer 15ml d'huile d'olive dans ta grande poêle à feu moyen-vif pendant 1 minute.",
-              "Ajoute les dés de poulet et l'ail émincé dans la poêle. Saupoudre avec 1 cuillère à café de curcuma, du sel et du poivre. Laisse dorer 8 minutes en remuant régulièrement jusqu'à ce que le poulet ne soit plus rose au centre.",
-              "Éteins le feu sous la poêle et ajoute immédiatement les 300g de pousses d'épinards frais par-dessus le poulet chaud. Mélange délicatement : la chaleur résiduelle du poulet va faire fondre les épinards en 2 minutes.",
-              "Égrène le boulgour à la fourchette dans sa casserole puis incorpore-le directement dans la poêle pour tout mélanger avant de servir."
-            ],
-            astuce: "Ne surcuits pas les épinards sur le feu direct, ils perdraient leurs vitamines et rendraient trop d'eau. La chaleur du plat suffit amplement."
-          },
-          dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: ["250g de fraises", "2 yaourts grecs", "1 cs de miel"], note: "Rince les fraises avec la queue, puis équeute-les seulement après pour ne pas qu'elles se gorgent d'eau." }
-        }
-      ],
-      ete: [
-        {
-          cuisine: "☀️ Été • Oméga-3 & Produits Frais",
-          entree: {
-            nom: "Tartare de concombre, edamames & sésame noir",
-            prep: 12, cuisson: 0, difficulte: 1,
-            materiel: ["Planche à découper", "Grand couteau de chef", "Saladier", "Passoire"],
-            ingredients: ["1 concombre bio", "150g d'edamames cuits", "20g de graines de sésame noir", "1 cs d'huile de sésame", "1 cs de vinaigre de riz", "1 cc de sel"],
-            miseenplace: [
-              "Rincer le concombre (inutile de l'éplucher s'il est bio).",
-              "Décongeler ou rincer les edamames à l'eau tiède."
-            ],
-            etapes: [
-              "Coupe le concombre en deux dans le sens de la longueur. À l'aide d'une petite cuillère, gratte le centre pour retirer toutes les pépins (cela évite que ta salade ne rende de l'eau).",
-              "Tailles les demi-concombres en très petits dés de 0,5 cm.",
-              "Place les dés de concombre dans la passoire avec 1 cuillère à café de sel, mélange et laisse dégorger pendant 5 minutes.",
-              "Presses doucement le concombre entre tes mains pour retirer l'excès d'eau, puis verse-le dans le saladier.",
-              "Ajoute les 150g d'edamames, 1 cs d'huile de sésame et 1 cs de vinaigre de riz. Mélange bien et parseme abondamment de graines de sésame noir."
-            ],
-            astuce: "Retirer le cœur en pépins du concombre est le secret professionnel pour garder un tartare bien croquant."
-          },
-          plat: {
-            nom: "Saumon poêlé, quinoa express & courgettes",
-            prep: 10, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle antiadhésive", "Casserole avec couvercle", "Passoire fine", "Spatule"],
-            ingredients: ["300g de pavés de saumon (avec peau)", "150g de quinoa", "400g de courgettes", "15ml d'huile de colza (à cru)", "1 gousse d'ail", "Basilic frais", "Sel"],
-            miseenplace: [
-              "Rincer le quinoa abondamment dans une passoire fine pour retirer son amertume naturelle.",
-              "Laver les courgettes et les couper en dés d'1 cm (conserver la peau).",
-              "Sécher les pavés de saumon avec du papier absorbant (très important pour le griller sans qu'il colle)."
-            ],
-            etapes: [
-              "Mets le quinoa dans ta casserole avec 300ml d'eau froide salée. Porte à ébullition, puis réduis à feu doux, couvre et laisse cuire 12 minutes jusqu'à absorption complète de l'eau.",
-              "Pendant ce temps, fais chauffer ta poêle à feu vif avec un filet d'huile d'olive. Depose les dés de courgettes et l'ail écrasé. Fais-les revenir pendant 8 à 10 minutes en remuant souvent jusqu'à ce qu'ils soient tendres et dorés. Réserve-les dans une assiette.",
-              "Dans la même poêle encore bien chaude, dépose les pavés de saumon côté peau en premier. Laisse cuire 4 minutes à feu moyen-vif sans y toucher (la peau devient croustillante).",
-              "Retourne délicatement les pavés avec la spatule et laisse cuire 3 minutes sur l'autre face. Le centre doit rester légèrement rosé.",
-              "Dress le quinoa dans deux assiettes, ajoute les courgettes, dépose le pavé de saumon par-dessus et verse 15ml d'huile de colza à cru sur l'ensemble."
-            ],
-            astuce: "La cuisson côté peau saisie sans bouger permet de garder toute l'humidité du poisson au centre."
-          },
-          dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches mûres", "2 yaourts", "1 cs de miel"], note: "Coupe les pêches en tranches fines au dernier moment." }
-        }
-      ],
-      automne: [
-        {
-          cuisine: "🍂 Automne • Densité Micronutritionnelle",
-          entree: {
-            nom: "Houmous de lentilles corail au zaatar & carottes",
-            prep: 10, cuisson: 10, difficulte: 1,
-            materiel: ["Casserole", "Mixeur plongeant ou robot", "Passoire", "Économe"],
-            ingredients: ["120g de lentilles corail", "2 cs de tahini (crème de sésame)", "1 cs d'huile d'olive", "1 cc de zaatar", "3 carottes"],
-            miseenplace: [
-              "Rincer les lentilles corail à l'eau claire.",
-              "Éplucher les carottes et les tailler en bâtonnets réguliers pour le trempage."
-            ],
-            etapes: [
-              "Place les lentilles corail dans la casserole avec 350ml d'eau froide sans sel (le sel durcit les légumineuses).",
-              "Porte à ébullition à feu vif, puis réduis à feu moyen et laisse cuire 10 minutes (les lentilles deviennent molles et se désagrègent).",
-              "Égoutte les lentilles en conservant un demi-verre d'eau de cuisson de côté.",
-              "Verse les lentilles dans ton robot/bol mixeur avec 2 cs de tahini, 1 cs d'huile d'olive et 3 cs d'eau de cuisson réservée. Mixe pendant 1 minute jusqu'à obtenir une texture lisse et crémeuse.",
-              "Dresse dans un bol, saupoudre de zaatar et sers chaud ou tiède avec les bâtonnets de carottes."
-            ],
-            astuce: "L'eau de cuisson des lentilles contient de l'amidon : c'est elle qui permet d'alléger le houmous sans ajouter trop de matière grasse."
-          },
-          plat: {
-            nom: "Curry express de tofu & pois chiches, épinards & riz",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Sautéuse ou grande casserole", "Casserole pour le riz", "Papier absorbant", "Planche à découper"],
-            ingredients: ["250g de tofu ferme bio", "250g de pois chiches en bocaux (égouttés)", "150g d'épinards frais", "150g de riz basmati", "120ml de lait de coco léger", "1 cs de curry en poudre", "1 cs d'huile d'olive"],
-            miseenplace: [
-              "Envelopper le bloc de tofu dans du papier absorbant et presser avec la paume de la main pour enlever le maximum d'eau.",
-              "Couper le tofu en dés d'1,5 cm.",
-              "Rincer et égoutter les pois chiches."
-            ],
-            etapes: [
-              "Lance la cuisson du riz basmati dans ta casserole d'eau bouillante salée pour 12 minutes.",
-              "Fais chauffer 1 cs d'huile d'olive dans ta sauteuse à feu vif. Ajoute les dés de tofu et fais-les dorer 5 minutes en les retournant régulièrement.",
-              "Saupoudre la cuillère à soupe de curry directement sur le tofu et remue 30 secondes pour que les épices se torréfient dans l'huile.",
-              "Verse les 120ml de lait de coco et 50ml d'eau, puis ajoute les pois chiches. Laisse frémir à feu moyen pendant 6 minutes pour épaissir la sauce.",
-              "Ajoute les épinards par-dessus, remue 2 minutes jusqu'à ce qu'ils réduisent complètement, puis sers chaud accompagné du riz."
-            ],
-            astuce: "Sécher le tofu avant cuisson est indispensable pour qu'il devienne croustillant à la poêle au lieu de bouillir."
-          },
-          dessert: { nom: "Poire, yaourt & noix", prep: 5, ingredients: ["2 poires mûres", "2 yaourts", "30g de cerneaux de noix"], note: "Concasse les noix à la main au-dessus du yaourt." }
-        }
-      ],
-      hiver: [
-        {
-          cuisine: "❄️ Hiver • Énergie & Vitalité",
-          entree: {
-            nom: "Velouté de fenouil express & graines de courge",
-            prep: 10, cuisson: 15, difficulte: 1,
-            materiel: ["Grand faitout ou casserole", "Mixeur plongeant", "Planche à découper", "Grand couteau"],
-            ingredients: ["100g de lentilles corail", "2 gros fenouils", "25g de graines de courge", "1 cc de cumin en poudre", "1 cs d'huile d'olive", "Sel et poivre"],
-            miseenplace: [
-              "Laver les fenouils, couper les tiges vertes du haut et la base dure du talon.",
-              "Trancher les fenouils en morceaux de 2 cm."
-            ],
-            etapes: [
-              "Fais chauffer 1 cs d'huile d'olive dans ta casserole à feu moyen. Ajoute le fenouil tranché et le cumin, puis fais suer 3 minutes.",
-              "Ajoute les 100g de lentilles corail et verse 600ml d'eau (l'eau doit recouvrir les légumes). Saler généreusement.",
-              "Porte à ébullition, puis baisse à feu moyen, couvre et laisse cuire 15 minutes à bouillon modéré.",
-              "Pendant ce temps, fais griller les graines de courge à sec dans une petite poêle à feu doux pendant 3 minutes jusqu'à ce qu'elles crépitent.",
-              "Mixe la soupe au mixeur plongeant pendant 2 minutes complètes jusqu'à obtenir une texture fluide et veloutée. Parseme des graines de courge avant de servir."
-            ],
-            astuce: "Les lentilles corail jouent le rôle de liant naturel dans ce velouté, remplaçant la crème fraîche ou les pommes de terre."
-          },
-          plat: {
-            nom: "Dos de cabillaud, écrasé de patate douce & épinards",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Casserole", "Presse-purée ou fourchette", "Poêle antiadhésive", "Économe"],
-            ingredients: ["320g de dos de cabillaud", "300g de patate douce", "250g d'épinards frais", "20g de graines de lin moulues", "15ml d'huile d'olive"],
-            miseenplace: [
-              "Éplucher la patate douce et la couper en petits dés de 1 cm (plus ils sont petits, plus la cuisson est rapide).",
-              "Éponger le dos de cabillaud avec un papier absorbant."
-            ],
-            etapes: [
-              "Plonge les dés de patate douce dans une casserole d'eau bouillante salée et laisse cuire 12 minutes à feu vif. Vérifie la cuisson avec la pointe d'un couteau : elle doit s'enfoncer comme dans du beurre.",
-              "Égoutte les patates douces, remets-les dans la casserole chaude et écrase-les grossièrement à la fourchette en incorporant 10ml d'huile d'olive.",
-              "Fais chauffer 5ml d'huile dans ta poêle à feu moyen-vif. Dépose le dos de cabillaud et laisse cuire 4 minutes sur la première face sans y toucher.",
-              "Retourne délicatement le poisson et ajoute les épinards tout autour dans la poêle. Laisse cuire 3 à 4 minutes supplémentaires : la chair du poisson doit devenir opaque et se détacher en feuillets.",
-              "Dresse l'écrasé de patate douce, le cabillaud et les épinards dans l'assiette, puis saupoudre de graines de lin moulues."
-            ],
-            astuce: "Le cabillaud est prêt quand sa chair perd son aspect translucide et s'effiloche naturellement sous la pression du doigt."
-          },
-          dessert: { nom: "Orange, yaourt & miel", prep: 5, ingredients: ["2 oranges", "2 yaourts", "1 cs de miel"], note: "Pèle les oranges à vif avec un couteau bien aiguisé." }
-        }
-      ]
-    };
-
-    const recetteShabbat = {
-      cuisine: "✡️ Shabbat Équilibré & Copieux",
-      fete: true,
-      entree: {
-        nom: "Matbucha maison & carottes au cumin",
-        prep: 15, cuisson: 30, difficulte: 2,
-        materiel: ["Sauteuse ou grande casserole", "Planche à découper", "Couteau", "Casserole moyenne"],
-        ingredients: ["5 tomates mûres", "3 poivrons grillés", "4 carottes", "1.5 cs d'huile d'olive", "3 gousses d'ail", "Cumin, paprika, sel"],
-        miseenplace: [
-          "Monder ou couper les tomates en petits dés.",
-          "Couper les poivrons grillés en lanières fines.",
-          "Éplucher l'ail et l'écraser.",
-          "Éplucher les carottes et les tailler en rondelles d'un demi-centimètre."
-        ],
-        etapes: [
-          "Dans la sauteuse, fais chauffer 1 cs d'huile d'olive avec l'ail écrasé à feu doux pendant 1 minute.",
-          "Ajoute les tomates et les poivrons, sale et ajoute 1 cc de paprika. Laisse mijoter à feu très doux pendant 30 minutes en remuant régulièrement jusqu'à évaporation complète de l'eau.",
-          "Dans la seconde casserole, fais bouillir les rondelles de carottes dans de l'eau salée pendant 15 minutes.",
-          "Égoutte les carottes et assaisonne-les immédiatement à chaud avec 0.5 cs d'huile d'olive, du cumin et un filet de jus de citron."
-        ],
-        astuce: "La matbucha doit confire doucement : plus la cuisson est lente à feu doux, plus les saveurs sont concentrées."
-      },
-      plat: {
-        nom: "Poulet rôti bio aux citrons confits, curcuma & patates douces",
-        prep: 20, cuisson: 50, difficulte: 2,
-        materiel: ["Grand plat à four", "Économe", "Grand couteau de chef", "Bol pour la marinade"],
-        ingredients: ["1 poulet bio entier (ou 4 cuisses)", "400g de patates douces", "3 citrons confits", "2 oignons", "1.5 cs d'huile d'olive", "1 cs de curcuma"],
-        miseenplace: [
-          "Préchauffer le four à 190°C.",
-          "Éplucher les patates douces et les couper en gros morceaux de 3 cm.",
-          "Éplucher et émincer les oignons en quartiers.",
-          "Couper les citrons confits en quatre."
-        ],
-        etapes: [
-          "Dans un bol, mélange 1.5 cs d'huile d'olive, 1 cs de curcuma, du sel et du poivre.",
-          "Dispose le poulet, les morceaux de patates douces, les oignons et les citrons confits dans ton plat à four.",
-          "Badigeonne généreusement le poulet et les légumes avec le mélange d'huile et d'épices à l'aide de tes mains ou d'un pinceau.",
-          "Enfourne pour 50 minutes à 190°C. Arrose le poulet avec son propre jus de cuisson à mi-parcours (au bout de 25 min) pour que la peau reste bien dorée."
-        ],
-        astuce: "Pour vérifier la cuisson du poulet, pique la jonction de la cuisse : le jus qui s'en écoule doit être totalement clair, sans trace rosée."
-      },
-      dessert: { nom: "Salade d'oranges à la cannelle & dattes", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool", "Cannelle"], note: "Laisse reposer 15 minutes au frais avant de servir pour que la cannelle infuse." }
-    };
-
-    const DIFFICULTES = {
-      1: { label: "Débutant",     classe: "bg-emerald-50 text-emerald-700" },
-      2: { label: "Intermédiaire", classe: "bg-amber-50 text-amber-700" },
-      3: { label: "Corsé",         classe: "bg-rose-50 text-rose-700" }
-    };
-
-    function formatTemps(min) {
-      if (!min || min <= 0) return "—";
-      if (min < 60) return `${min} min`;
-      const h = Math.floor(min / 60), m = min % 60;
-      return m ? `${h} h ${String(m).padStart(2, "0")}` : `${h} h`;
-    }
-    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-
-    function tempsRepas(item) {
-      return item.entree.prep + item.plat.prep + Math.max(item.entree.cuisson, item.plat.cuisson);
-    }
-    function badgeTemps(t) {
-      if (t <= 35) return { classe: "bg-emerald-50 text-emerald-700" };
-      if (t <= 45) return { classe: "bg-amber-50 text-amber-700" };
-      return { classe: "bg-rose-50 text-rose-700" };
-    }
-
-    const RAYONS = [
-      { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","petits pois","fèves","avocat","patate douce","potimarron","potiron","butternut","champignon","panais","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","aneth","persil","ciboulette","gingembre","pousses","mesclun","salade","maïs","céleri","haricots verts","fraise","pêche","melon","pastèque","poire","pomme","orange","clémentine","kiwi","raisin","figue","abricot"] },
-      { nom: "🐟 Poissons & Viandes", mots: ["poulet","truite","saumon","cabillaud","dinde","bœuf","boeuf","lieu","dorade","poisson","cuisse","steak"] },
-      { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","fromage blanc","œuf","oeuf","tofu","edamame"] },
-      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","pois cassé","haricot","tahini","houmous","huile","vinaigre","graine","sésame","noix","noisette","amande","pignon","granola","miel","sucre","cannelle","muscade","curcuma","cumin","curry","paprika","zaatar","chili","tamari","soja","sauce","chocolat","citron confit","lait de coco","moutarde","balsamique","laurier","thym","bouillon","épices","datte","fleur d'oranger","pita","challah","pain"] }
-    ];
-    const ORDRE_RAYONS = ["🥬 Fruits & Légumes","🐟 Poissons & Viandes","🧀 Frais & Crèmerie","🌾 Épicerie & Secs","🛒 Autres"];
+<div class="container">
+    <header>
+        <h1>Planificateur de Repas</h1>
+        <p class="subtitle">Organisez votre mois avec des produits frais et de saison</p>
+    </header>
     
-    function rayonPour(ing) {
-      const s = ing.toLowerCase();
-      for (const r of RAYONS) if (r.mots.some(m => s.includes(m))) return r.nom;
-      return "🛒 Autres";
-    }
-    function ingredientsDuJour(item) {
-      return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
-    }
+    <div class="controls">
+        <select id="saisonSelect">
+            <option value="printemps">🌸 Printemps</option>
+            <option value="ete" selected>☀️ Été</option>
+            <option value="automne">🍂 Automne</option>
+            <option value="hiver">❄️ Hiver</option>
+        </select>
+        <button onclick="genererPlanning()">Générer</button>
+    </div>
 
-    const STORAGE_KEY = "menu-market-v4";
-    function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
-    function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
-    function persister() { safeSet({ menuSemaine, etatStock, jourDebutCourses, saison: saisonActuelle }); }
+    <h2 class="section-title">Planning des menus</h2>
+    <div id="planning" class="grid"></div>
 
-    const saisonActuelle = obtenirSaisonActuelle();
-    const poolRecettesSaison = catalogueSaisons[saisonActuelle] || catalogueSaisons["printemps"];
+    <div class="courses-section">
+        <h2 class="section-title" style="margin-bottom: 0;">Liste de courses globale</h2>
+        <ul id="listeCourses" class="courses-grid"></ul>
+    </div>
+</div>
 
-    function tirerRecette(pool, exclureNom) {
-      const dispo = pool.filter(r => r.plat.nom !== exclureNom);
-      const source = dispo.length ? dispo : pool;
-      return source[Math.floor(Math.random() * source.length)];
-    }
+<script>
+const baseLegumes = {
+    printemps: ["Asperges", "Radis", "Petits pois", "Epinards", "Artichauts", "Carottes fanes", "Fèves"],
+    ete: ["Tomates", "Courgettes", "Poivrons", "Aubergines", "Concombres", "Haricots verts", "Maïs"],
+    automne: ["Potimarron", "Champignons", "Châtaignes", "Chou frisé", "Poireaux", "Butternut", "Brocolis"],
+    hiver: ["Endives", "Chou-fleur", "Navets", "Céleri-rave", "Panais", "Courge", "Chou de Bruxelles"]
+};
 
-    function genererMenuSemaineDynamique() {
-      const jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi (Shabbat)","Samedi","Dimanche"];
-      let dernier = null;
-      return jours.map((jour, index) => {
-        if (index === 4) return { id: index, jour, ...recetteShabbat };
-        const r = tirerRecette(poolRecettesSaison, dernier);
-        dernier = r.plat.nom;
-        return { id: index, jour, ...r };
-      });
-    }
+const baseProteines = ["Poulet", "Saumon", "Pâtes", "Riz", "Lentilles", "Quinoa", "Œufs", "Pois chiches", "Tofu", "Bœuf"];
+const baseDesserts = {
+    printemps: "Fraises", ete: "Pêches", automne: "Pommes", hiver: "Poires"
+};
 
-    let menuSemaine, etatStock, jourDebutCourses;
-    const sauvegarde = safeGet();
-    if (sauvegarde && Array.isArray(sauvegarde.menuSemaine) && sauvegarde.menuSemaine.length) {
-      menuSemaine = sauvegarde.menuSemaine;
-      etatStock = sauvegarde.etatStock || {};
-      jourDebutCourses = sauvegarde.jourDebutCourses || 0;
-    } else {
-      menuSemaine = genererMenuSemaineDynamique();
-      etatStock = {};
-      jourDebutCourses = 0;
-    }
+function construireBaseDonnees() {
+    const saisons = ["printemps", "ete", "automne", "hiver"];
+    const db = {};
 
-    function ligneMeta(plat) {
-      const d = DIFFICULTES[plat.difficulte] || DIFFICULTES[1];
-      return `<div class="flex items-center gap-2 mt-1">
-        <span class="text-[10px] font-bold text-slate-500">⏱️ ${formatTemps(plat.prep + plat.cuisson)}</span>
-        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${d.classe}">${d.label}</span>
-      </div>`;
-    }
+    saisons.forEach(saison => {
+        db[saison] = [];
+        let jourCompt = 1;
 
-    function rendreMenu() {
-      document.getElementById("header-saison").innerText = `Chef Personnel • Saison ${cap(saisonActuelle)}`;
-      const container = document.getElementById("cards-container");
-      container.innerHTML = "";
+        for (let sem = 1; sem <= 4; sem++) {
+            for (let j = 1; j <= 7; j++) {
+                const veg = baseLegumes[saison][(j - 1) % baseLegumes[saison].length];
+                const prot = baseProteines[(j + sem) % baseProteines.length];
+                const fruit = baseDesserts[saison];
 
-      menuSemaine.forEach((item, index) => {
-        const estShabbat = item.jour.includes("Vendredi");
-        const t = tempsRepas(item);
-        const bt = badgeTemps(t);
-        const chipTemps = estShabbat
-          ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">🕯️ Repas de fête</span>`
-          : `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${bt.classe}">⏱️ Repas prêt en ~${t} min</span>`;
+                db[saison].push({
+                    jour: `Jour ${jourCompt}`,
+                    semaine: `Semaine ${sem}`,
+                    entree: { 
+                        nom: `Salade de ${veg.toLowerCase()} crus`, 
+                        prep: 10, 
+                        ingredients: [`200g de ${veg.toLowerCase()}`, "Vinaigrette maison", "Huile d'olive"] 
+                    },
+                    plat: { 
+                        nom: `${prot} poêlé et ${veg.toLowerCase()}`, 
+                        prep: 25, 
+                        ingredients: [`150g de ${prot.toLowerCase()}`, `250g de ${veg.toLowerCase()}`, "Ail & herbes"] 
+                    },
+                    dessert: { 
+                        nom: `Dessert aux ${fruit.toLowerCase()}`, 
+                        prep: 15, 
+                        ingredients: [`2 ${fruit.toLowerCase()}`, "Sucre vanillé"] 
+                    }
+                });
+                jourCompt++;
+            }
+        }
+    });
+    return db;
+}
 
-        container.innerHTML += `
-          <div class="bg-white rounded-2xl p-5 custom-shadow border border-slate-100 transition duration-200">
-            <div class="flex justify-between items-start mb-3 gap-2">
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="font-extrabold text-sm text-slate-900">${item.jour}</span>
-                  ${estShabbat ? '<span class="badge-shabbat text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">Shabbat</span>' : ''}
-                </div>
-                <div class="mt-1">${chipTemps}</div>
-              </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <span class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">${item.cuisine}</span>
-                <button data-regen="${index}" class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition" title="Changer ce menu">🔄</button>
-              </div>
+const catalogueSaisons = construireBaseDonnees();
+
+function genererPlanning() {
+    const saison = document.getElementById("saisonSelect").value;
+    const mois = catalogueSaisons[saison] || [];
+    
+    const planningDiv = document.getElementById("planning");
+    const listeCoursesUl = document.getElementById("listeCourses");
+    
+    planningDiv.innerHTML = "";
+    listeCoursesUl.innerHTML = "";
+    
+    const tousLesIngredients = new Set();
+
+    mois.forEach(menu => {
+        const card = document.createElement("div");
+        card.className = "card";
+        
+        card.innerHTML = `
+            <div class="card-header">
+                <span class="card-title">${menu.jour}</span>
+                <span class="badge">${menu.semaine}</span>
             </div>
-
-            <div class="space-y-2.5 text-xs">
-              <div class="bg-slate-50 p-2.5 rounded-xl flex justify-between items-center gap-2">
-                <div class="min-w-0">
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">Entrée</span>
-                  <p class="font-bold text-slate-800 leading-tight">${item.entree.nom}</p>
-                  ${ligneMeta(item.entree)}
+            <div class="meal-group">
+                <div class="meal-item">
+                    <span class="meal-type">Entrée</span>
+                    <div class="meal-name">
+                        <span>${menu.entree.nom}</span>
+                        <span class="badge">${menu.entree.prep}m</span>
+                    </div>
                 </div>
-                <button data-modal="${index}" data-type="entree" class="shrink-0 text-emerald-600 hover:text-emerald-700 font-bold px-2 py-1 bg-white rounded-lg border border-slate-200/60">Recette ➔</button>
-              </div>
-
-              <div class="bg-emerald-50/50 p-2.5 rounded-xl flex justify-between items-center gap-2 border border-emerald-100/50">
-                <div class="min-w-0">
-                  <span class="text-[10px] font-bold text-emerald-600 uppercase">Plat principal</span>
-                  <p class="font-bold text-slate-900 leading-tight">${item.plat.nom}</p>
-                  ${ligneMeta(item.plat)}
+                <div class="meal-item">
+                    <span class="meal-type">Plat</span>
+                    <div class="meal-name">
+                        <span>${menu.plat.nom}</span>
+                        <span class="badge">${menu.plat.prep}m</span>
+                    </div>
                 </div>
-                <button data-modal="${index}" data-type="plat" class="shrink-0 text-white bg-emerald-600 hover:bg-emerald-700 font-bold px-2.5 py-1 rounded-lg shadow-sm">Recette ➔</button>
-              </div>
-
-              ${item.dessert ? `
-              <div class="bg-rose-50/40 p-2.5 rounded-xl border border-rose-100/50">
-                <div class="flex items-center gap-2">
-                  <span class="text-[10px] font-bold text-rose-500 uppercase">🍰 Dessert</span>
-                  <span class="text-[10px] font-bold text-slate-500">⏱️ ${formatTemps(item.dessert.prep)} · sans cuisson</span>
+                <div class="meal-item">
+                    <span class="meal-type">Dessert</span>
+                    <div class="meal-name">
+                        <span>${menu.dessert.nom}</span>
+                        <span class="badge">${menu.dessert.prep}m</span>
+                    </div>
                 </div>
-                <p class="font-bold text-slate-800 leading-tight mt-0.5">${item.dessert.nom}</p>
-                ${item.dessert.note ? `<p class="text-[11px] text-slate-500 mt-0.5">${item.dessert.note}</p>` : ''}
-              </div>` : ''}
             </div>
+        `;
+        
+        planningDiv.appendChild(card);
 
-            <details class="mt-3 group">
-              <summary class="text-[11px] font-bold text-slate-400 hover:text-slate-600 cursor-pointer list-none flex justify-between items-center pt-2 border-t border-slate-50">
-                <span>🛒 Ingrédients de ${item.jour.split(' ')[0]}</span>
-                <span class="transition group-open:rotate-180">▼</span>
-              </summary>
-              <div class="mt-2 text-xs bg-slate-50 p-2.5 rounded-xl">
-                <div class="flex flex-wrap gap-1">
-                  ${ingredientsDuJour(item).map(ing => `<span class="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-600 text-[11px]">${ing}</span>`).join('')}
-                </div>
-              </div>
-            </details>
-          </div>`;
-      });
-
-      rendreFiltresJours();
-      rendreCourses();
-    }
-
-    function statCard(label, valeur, extraClasse) {
-      return `<div class="rounded-xl p-2.5 text-center ${extraClasse || 'bg-slate-50'}">
-        <p class="text-[9px] font-bold uppercase tracking-wider opacity-70">${label}</p>
-        <p class="text-sm font-extrabold mt-0.5">${valeur}</p>
-      </div>`;
-    }
-
-    function ouvrirModal(jourIndex, type) {
-      const item = menuSemaine[jourIndex];
-      const data = type === "entree" ? item.entree : item.plat;
-      const d = DIFFICULTES[data.difficulte] || DIFFICULTES[1];
-
-      document.getElementById("modal-badge").innerText = `${item.jour.split(' ')[0]} • ${type === "entree" ? "Entrée" : "Plat Principal"}`;
-      document.getElementById("modal-title").innerText = data.nom;
-
-      document.getElementById("modal-stats").innerHTML =
-        statCard("Préparation", formatTemps(data.prep)) +
-        statCard("Cuisson", formatTemps(data.cuisson)) +
-        statCard("Niveau", d.label, d.classe);
-
-      const matWrap = document.getElementById("modal-materiel-wrap");
-      const matEl = document.getElementById("modal-materiel");
-      if (data.materiel && data.materiel.length) {
-        matWrap.classList.remove("hidden");
-        matEl.innerHTML = data.materiel.map(m => `<span class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-[11px] font-semibold">🔨 ${m}</span>`).join('');
-      } else {
-        matWrap.classList.add("hidden");
-      }
-
-      document.getElementById("modal-ingredients").innerHTML = data.ingredients.map(ing => `
-        <li class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-          <span>${ing}</span>
-        </li>`).join('');
-
-      const mepWrap = document.getElementById("modal-miseenplace-wrap");
-      const mepEl = document.getElementById("modal-miseenplace");
-      if (data.miseenplace && data.miseenplace.length) {
-        mepWrap.classList.remove("hidden");
-        mepEl.innerHTML = data.miseenplace.map(m => `<li class="flex items-start gap-2 bg-slate-50 p-2 rounded-lg"><span class="text-emerald-600 font-bold shrink-0">✓</span><span>${m}</span></li>`).join('');
-      } else {
-        mepWrap.classList.add("hidden");
-      }
-
-      document.getElementById("modal-etapes").innerHTML = data.etapes.map(et => `<li class="pl-1">${et}</li>`).join('');
-
-      document.getElementById("modal-astuce").innerHTML = data.astuce ? `
-        <div class="bg-amber-50 border border-amber-100 rounded-xl p-3.5">
-          <p class="text-[10px] font-extrabold text-amber-700 uppercase tracking-wider mb-1">💡 Le geste du chef</p>
-          <p class="text-xs text-amber-900 leading-relaxed">${data.astuce}</p>
-        </div>` : '';
-
-      document.getElementById("modal-recette").classList.remove("hidden");
-    }
-    document.getElementById("close-modal").addEventListener("click", () => document.getElementById("modal-recette").classList.add("hidden"));
-    document.getElementById("modal-recette").addEventListener("click", (e) => { if (e.target.id === "modal-recette") e.currentTarget.classList.add("hidden"); });
-
-    function regenererJour(index) {
-      if (index === 4) return;
-      const r = tirerRecette(poolRecettesSaison, menuSemaine[index].plat.nom);
-      menuSemaine[index] = { ...menuSemaine[index], cuisine: r.cuisine, entree: r.entree, plat: r.plat, dessert: r.dessert };
-      persister();
-      rendreMenu();
-    }
-
-    function rendreFiltresJours() {
-      const container = document.getElementById("days-filter");
-      container.innerHTML = "";
-      menuSemaine.forEach((item, idx) => {
-        const active = idx >= jourDebutCourses;
-        container.innerHTML += `
-          <button data-jour="${idx}" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${active ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">
-            ${item.jour.split(' ')[0]}
-          </button>`;
-      });
-    }
-
-    function definirJourDebut(idx) {
-      jourDebutCourses = idx;
-      persister();
-      rendreFiltresJours();
-      rendreCourses();
-    }
-
-    function itemHTML(ing, achete) {
-      return `
-        <label class="flex items-center gap-3 py-2.5 cursor-pointer group">
-          <input type="checkbox" data-ing="${ing}" ${achete ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
-          <span class="text-xs font-semibold ${achete ? 'line-through text-slate-400' : 'text-slate-700 group-hover:text-slate-900'}">${ing}</span>
-        </label>`;
-    }
-
-    function rendreCourses() {
-      const joursAffiches = menuSemaine.slice(jourDebutCourses);
-      document.getElementById("active-days-tag").innerText = `${joursAffiches[0].jour.split(' ')[0]} → ${joursAffiches[joursAffiches.length - 1].jour.split(' ')[0]}`;
-
-      const tousIngs = [];
-      joursAffiches.forEach(m => tousIngs.push(...ingredientsDuJour(m)));
-      const ingsUniques = [...new Set(tousIngs)];
-
-      const aAcheter = ingsUniques.filter(i => !etatStock[i]);
-      const achetes = ingsUniques.filter(i => etatStock[i]);
-
-      const groupes = {};
-      aAcheter.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
-
-      const listAcheter = document.getElementById("list-a-acheter");
-      listAcheter.innerHTML = ORDRE_RAYONS
-        .filter(r => groupes[r] && groupes[r].length)
-        .map(r => `
-          <div>
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">${r}</p>
-            <div class="divide-y divide-slate-50">${groupes[r].map(i => itemHTML(i, false)).join('')}</div>
-          </div>`).join('') || '<p class="text-xs text-slate-400 py-2">Tout est dans le panier ✅</p>';
-
-      const listStock = document.getElementById("list-en-stock");
-      listStock.innerHTML = achetes.length
-        ? achetes.map(i => itemHTML(i, true)).join('')
-        : '<p class="text-xs text-slate-300 py-2">Rien coché pour l\'instant.</p>';
-
-      document.getElementById("count-a-acheter").innerText = aAcheter.length;
-
-      const total = ingsUniques.length;
-      const done = achetes.length;
-      document.getElementById("progress-label").innerText = `${done} / ${total} achetés`;
-      document.getElementById("progress-bar").style.width = total ? `${Math.round(done / total * 100)}%` : "0%";
-    }
-
-    function toggleStock(ing) {
-      etatStock[ing] = !etatStock[ing];
-      persister();
-      rendreCourses();
-    }
-
-    document.getElementById("cards-container").addEventListener("click", (e) => {
-      const regen = e.target.closest("[data-regen]");
-      if (regen) { regenererJour(Number(regen.dataset.regen)); return; }
-      const modal = e.target.closest("[data-modal]");
-      if (modal) { ouvrirModal(Number(modal.dataset.modal), modal.dataset.type); }
+        menu.entree.ingredients.forEach(i => tousLesIngredients.add(i));
+        menu.plat.ingredients.forEach(i => tousLesIngredients.add(i));
+        menu.dessert.ingredients.forEach(i => tousLesIngredients.add(i));
     });
 
-    document.getElementById("days-filter").addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-jour]");
-      if (btn) definirJourDebut(Number(btn.dataset.jour));
+    Array.from(tousLesIngredients).sort().forEach(ing => {
+        const li = document.createElement("li");
+        li.innerHTML = `<input type="checkbox"> <span>${ing}</span>`;
+        listeCoursesUl.appendChild(li);
     });
+}
 
-    document.getElementById("section-courses").addEventListener("change", (e) => {
-      if (e.target.matches("input[data-ing]")) toggleStock(e.target.dataset.ing);
-    });
+document.addEventListener("DOMContentLoaded", genererPlanning);
+</script>
 
-    document.getElementById("btn-vider-panier").addEventListener("click", () => {
-      etatStock = {};
-      persister();
-      rendreCourses();
-    });
-
-    document.getElementById("btn-reset-all").addEventListener("click", () => {
-      if (confirm("Générer une toute nouvelle semaine (saison en cours) ? Ta liste de courses sera remise à zéro.")) {
-        menuSemaine = genererMenuSemaineDynamique();
-        etatStock = {};
-        jourDebutCourses = 0;
-        persister();
-        rendreMenu();
-      }
-    });
-
-    function setTab(tab) {
-      const menu = tab === "menu";
-      document.getElementById("section-menu").classList.toggle("hidden", !menu);
-      document.getElementById("section-courses").classList.toggle("hidden", menu);
-      document.getElementById("tab-menu").className = "w-1/2 py-2.5 rounded-xl transition-all duration-200 " + (menu ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700");
-      document.getElementById("tab-courses").className = "w-1/2 py-2.5 rounded-xl transition-all duration-200 " + (menu ? "text-slate-500 hover:text-slate-700" : "bg-white text-slate-900 shadow-sm");
-    }
-    document.getElementById("tab-menu").addEventListener("click", () => setTab("menu"));
-    document.getElementById("tab-courses").addEventListener("click", () => setTab("courses"));
-
-    rendreMenu();
-  </script>
 </body>
 </html>
