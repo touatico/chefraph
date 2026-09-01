@@ -40,7 +40,7 @@
   <!-- Contenu Principal -->
   <main class="max-w-2xl mx-auto px-4 pt-5 space-y-5">
 
-    <!-- Onglets de Navigation Principaux -->
+    <!-- Navigation Principale -->
     <div class="bg-slate-200/80 p-1 rounded-2xl flex text-xs font-bold shadow-inner">
       <button id="tab-jour" class="w-1/4 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-1">
         ⭐ Jour
@@ -56,19 +56,17 @@
       </button>
     </div>
 
-    <!-- VUE 1 : JOUR PAR JOUR -->
+    <!-- VUE 1 : JOUR -->
     <div id="section-jour" class="space-y-4">
       <div id="day-selector" class="flex gap-2 overflow-x-auto hide-scrollbar py-1"></div>
       <div id="card-day-focus"></div>
     </div>
 
-    <!-- VUE 2 : VUE SEMAINE -->
+    <!-- VUE 2 : SEMAINE -->
     <div id="section-semaine" class="hidden space-y-4">
-      <div class="bg-emerald-50/70 border border-emerald-200/60 rounded-2xl px-4 py-3 text-xs text-emerald-900 leading-relaxed flex items-center gap-3 shadow-sm">
+      <div class="bg-emerald-50/70 border border-emerald-200/60 rounded-2xl px-4 py-3 text-xs text-emerald-900 flex items-center gap-3 shadow-sm">
         <div class="p-2 bg-emerald-100/80 text-emerald-700 rounded-xl shrink-0">💡</div>
-        <div>
-          <strong class="font-bold">Vue globale :</strong> Cliquez sur <span class="inline-block bg-white px-1.5 py-0.5 rounded border border-emerald-200 text-[10px]">🔄</span> pour changer le menu d'une journée.
-        </div>
+        <div><strong class="font-bold">Vue globale :</strong> Cliquez sur <span class="inline-block bg-white px-1.5 py-0.5 rounded border border-emerald-200 text-[10px]">🔄</span> pour régénérer un jour.</div>
       </div>
       <div id="cards-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </div>
@@ -104,30 +102,46 @@
         <div id="list-a-acheter" class="space-y-4"></div>
       </div>
 
-      <!-- Dans le panier / En réserve -->
+      <!-- En stock / Panier -->
       <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200/60 space-y-4">
         <div class="flex justify-between items-center border-b border-slate-100 pb-3">
           <h2 class="font-bold text-slate-400 text-sm flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
             En réserve / Dans le panier
           </h2>
-          <button id="btn-vider-panier" class="text-[11px] font-bold text-slate-400 hover:text-rose-500 transition">Tout remettre en courses</button>
+          <button id="btn-vider-panier" class="text-[11px] font-bold text-slate-400 hover:text-rose-500 transition">Tout vider</button>
         </div>
         <div id="list-en-stock" class="space-y-1 divide-y divide-slate-50 text-slate-400"></div>
       </div>
     </div>
 
-    <!-- VUE 4 : INVENTAIRE DU PLACARD -->
+    <!-- VUE 4 : PLACARD & INVENTAIRE -->
     <div id="section-inventaire" class="hidden space-y-5">
+      
+      <!-- Formulaire d'ajout express -->
+      <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200/60 space-y-4">
+        <h2 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+          ➕ Ajouter un produit au placard
+        </h2>
+        <form id="form-add-custom-item" class="grid grid-cols-1 sm:grid-cols-12 gap-2 text-xs">
+          <input type="text" id="custom-nom" placeholder="Ex: Pâtes Penne, Conserve de tomates..." required class="sm:col-span-5 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="text" id="custom-qte" placeholder="Quantité (ex: 500g, 2 boîtes)" class="sm:col-span-3 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="text" id="custom-date" placeholder="Achat / Peremption (ex: 15/10)" class="sm:col-span-2 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <button type="submit" class="sm:col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl py-2.5 transition active:scale-95">Ajouter</button>
+        </form>
+      </div>
+
+      <!-- Liste de stock du placard -->
       <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200/60 space-y-4">
         <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
           <div>
-            <h2 class="font-extrabold text-slate-900 text-base">📦 Inventaire du placard</h2>
-            <p class="text-xs text-slate-500">Cochez ce que vous possédez déjà pour l'exclure automatiquement des courses.</p>
+            <h2 class="font-extrabold text-slate-900 text-base">📦 Mon Placard & Frigo</h2>
+            <p class="text-xs text-slate-500">Gérez le stock chez vous. Ce qui est "En stock" est retiré des courses.</p>
           </div>
         </div>
         <div id="inventaire-container" class="space-y-4"></div>
       </div>
+
     </div>
   </main>
 
@@ -186,61 +200,35 @@
           cuisine: "🌱 Printemps • Haute Protéine",
           entree: {
             nom: "Salade croquante d'asperges vertes & radis", prep: 10, cuisson: 5, difficulte: 1,
-            materiel: ["Économe", "Casserole large", "Planche", "Petite poêle"],
-            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza", "1 cs de jus de citron"],
-            miseenplace: ["Laver les légumes.", "Casser le bas dur des asperges.", "Émincer les radis."],
-            etapes: ["Porte de l'eau salée à ébullition.", "Cuis les asperges 5 min.", "Torréfie les graines à sec 2 min.", "Mélange le tout avec la citronnette."],
-            astuce: "Plonge les asperges dans de l'eau glacée après cuisson pour fixer le vert."
+            materiel: ["Économe", "Casserole large"],
+            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza"],
+            miseenplace: ["Laver les légumes.", "Émincer les radis."],
+            etapes: ["Porte de l'eau salée à ébullition.", "Cuis les asperges 5 min.", "Torréfie les graines.", "Assaisonne le tout."],
+            astuce: "Plonge les asperges dans l'eau glacée pour fixer le vert."
           },
           plat: {
             nom: "Poulet poêlé aux herbes, boulgour & épinards", prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle antiadhésive", "Casserole avec couvercle"],
-            ingredients: ["350g de filet de poulet bio", "150g de boulgour cru", "300g de pousses d'épinards", "1 cc de curcuma", "15ml d'huile d'olive", "2 gousses d'ail"],
-            miseenplace: ["Émincer l'ail.", "Couper le poulet en dés.", "Rincer les épinards."],
-            etapes: ["Cuire le boulgour 10 min à feu doux dans 300ml d'eau.", "Dorer le poulet et l'ail avec le curcuma 8 min.", "Faire tomber les épinards hors du feu.", "Mélanger avec le boulgour."],
-            astuce: "La chaleur résiduelle suffit à faire tomber les épinards."
+            materiel: ["Poêle antiadhésive", "Casserole"],
+            ingredients: ["350g de filet de poulet bio", "150g de boulgour cru", "300g de pousses d'épinards", "1 cc de curcuma", "15ml d'huile d'olive"],
+            miseenplace: ["Couper le poulet.", "Rincer les épinards."],
+            etapes: ["Cuire le boulgour 10 min.", "Dorer le poulet.", "Faire tomber les épinards hors du feu."],
+            astuce: "La chaleur résiduelle suffit pour les épinards."
           },
           dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: ["250g de fraises", "2 yaourts grecs", "1 cs de miel"] }
-        },
-        {
-          cuisine: "🌱 Printemps • Vitalité Verde",
-          entree: {
-            nom: "Tartine d'avocat écrasé, graines de chanvre & fleur de sel", prep: 8, cuisson: 0, difficulte: 1,
-            materiel: ["Fourchette", "Grille-pain"],
-            ingredients: ["1 avocat mûr", "2 tranches de pain au levain", "1 cs de graines de chanvre", "1/2 citron", "Piment d'Espelette"],
-            miseenplace: ["Trancher le pain.", "Évider l'avocat."],
-            etapes: ["Griller le pain.", "Écraser l'avocat avec citron, sel et Espelette.", "Étaler et parsemer de graines."],
-            astuce: "Citronner immédiatement pour éviter le noircissement."
-          },
-          plat: {
-            nom: "Omelette printanière aux fèves, cerfeuil & chèvre frais", prep: 10, cuisson: 8, difficulte: 1,
-            materiel: ["Poêle antiadhésive", "Saladier"],
-            ingredients: ["5 œufs bio", "150g de fèves cuites", "60g de chèvre frais", "1/2 botte de cerfeuil", "15g de beurre"],
-            miseenplace: ["Battre les œufs.", "Hacher le cerfeuil.", "Émietter le chèvre."],
-            etapes: ["Fondre le beurre.", "Verser les œufs et le cerfeuil, ajouter fèves et chèvre.", "Cuire 5 min pour garder le cœur baveux."],
-            astuce: "Ne bats pas trop longuement les œufs."
-          },
-          dessert: { nom: "Mélange de fruits rouges & yaourt au miel", prep: 5, ingredients: ["200g de fruits rouges", "2 yaourts", "1 cs de miel"] }
         }
       ],
       ete: [
         {
           cuisine: "☀️ Été • Équilibre Fraîcheur",
           entree: {
-            nom: "Tartare de concombre, edamames & sésame noir", prep: 12, cuisson: 0, difficulte: 1,
-            materiel: ["Planche", "Passoire"],
-            ingredients: ["1 concombre bio", "150g d'edamames cuits", "20g de sésame noir", "1 cs d'huile de sésame", "1 cs de vinaigre de riz"],
-            miseenplace: ["Épépiner le concombre à la cuillère.", "Tailler en dés."],
-            etapes: ["Dégorger le concombre 5 min au sel.", "Presser dans un torchon.", "Assaisonner avec sésame et vinaigre."],
-            astuce: "Épépiner évite de détremper la sauce."
+            nom: "Tartare de concombre & edamames", prep: 10, cuisson: 0, difficulte: 1,
+            materiel: ["Planche"], ingredients: ["1 concombre bio", "150g d'edamames cuits", "1 cs d'huile de sésame"],
+            miseenplace: ["Dés de concombre."], etapes: ["Mélanger les ingrédients et assaisonner."], astuce: "Servir très frais."
           },
           plat: {
-            nom: "Saumon poêlé, quinoa & courgettes au basilic", prep: 10, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle", "Casserole"],
-            ingredients: ["300g de pavés de saumon", "150g de quinoa", "400g de courgettes", "15ml d'huile de colza", "1 gousse d'ail", "Basilic"],
-            miseenplace: ["Rincer le quinoa.", "Découper les courgettes."],
-            etapes: ["Cuire le quinoa 12 min.", "Poêler les courgettes avec l'ail 8 min.", "Saisir le saumon 4 min côté peau puis 3 min sur chair."],
-            astuce: "Ne déplace pas le saumon lors des premières minutes pour une peau croustillante."
+            nom: "Saumon poêlé & quinoa aux courgettes", prep: 10, cuisson: 15, difficulte: 2,
+            materiel: ["Poêle", "Casserole"], ingredients: ["300g de pavés de saumon", "150g de quinoa", "400g de courgettes"],
+            miseenplace: ["Dés de courgettes."], etapes: ["Cuire le quinoa.", "Poêler les courgettes et le saumon."], astuce: "Saisir le saumon côté peau."
           },
           dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches", "2 yaourts", "1 cs de miel"] }
         }
@@ -248,45 +236,17 @@
       automne: [
         {
           cuisine: "🍂 Automne • Densité Nutritionnelle",
-          entree: {
-            nom: "Houmous de lentilles corail au zaatar & carottes", prep: 10, cuisson: 10, difficulte: 1,
-            materiel: ["Casserole", "Mixeur plongeant"],
-            ingredients: ["120g de lentilles corail", "2 cs de tahini", "1 cs d'huile d'olive", "1 cc de zaatar", "3 carottes"],
-            miseenplace: ["Rincer les lentilles.", "Tailler les carottes en bâtonnets."],
-            etapes: ["Cuire les lentilles 10 min dans l'eau.", "Mixer avec tahini et huile.", "Saupoudrer de zaatar."],
-            astuce: "Ne sale pas l'eau des lentilles pour éviter de durcir la peau."
-          },
-          plat: {
-            nom: "Curry express de tofu, pois chiches & épinards", prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Sauteuse", "Casserole"],
-            ingredients: ["250g de tofu ferme", "250g de pois chiches", "150g d'épinards", "150g de riz basmati", "120ml de lait de coco", "1 cs de curry"],
-            miseenplace: ["Sécher et couper le tofu.", "Rincer les pois chiches."],
-            etapes: ["Lancer le riz (12 min).", "Dorer le tofu 5 min à l'huile.", "Ajouter curry, coco, pois chiches (6 min).", "Mettre les épinards en fin de cuisson."],
-            astuce: "Laisser réduire la sauce coco pour bien enrober le tofu."
-          },
-          dessert: { nom: "Poire mûre, yaourt & noix", prep: 5, ingredients: ["2 poires", "2 yaourts", "30g de noix"] }
+          entree: { nom: "Houmous de lentilles corail", prep: 10, cuisson: 10, difficulte: 1, materiel: ["Mixeur"], ingredients: ["120g de lentilles corail", "2 cs de tahini", "3 carottes"], miseenplace: ["Cuire lentilles"], etapes: ["Mixer avec le tahini."], astuce: "Assaisonner généreusement." },
+          plat: { nom: "Curry express de tofu & pois chiches", prep: 12, cuisson: 15, difficulte: 2, materiel: ["Sauteuse"], ingredients: ["250g de tofu ferme", "250g de pois chiches", "150g de riz basmati", "120ml de lait de coco"], miseenplace: ["Dés de tofu"], etapes: ["Dorer le tofu, ajouter la sauce coco et les pois chiches."], astuce: "Laisser réduire la sauce." },
+          dessert: { nom: "Poire mûre & noix", prep: 5, ingredients: ["2 poires", "30g de noix"] }
         }
       ],
       hiver: [
         {
           cuisine: "❄️ Hiver • Chaud & Épicé",
-          entree: {
-            nom: "Salade tiède de lentilles vertes & échalotes rôties", prep: 10, cuisson: 20, difficulte: 1,
-            materiel: ["Casserole", "Planche"],
-            ingredients: ["150g de lentilles vertes", "2 échalotes", "1 cs de moutarde", "1 cs de vinaigre de cidre", "1 cs d'huile d'olive"],
-            miseenplace: ["Émincer les échalotes."],
-            etapes: ["Cuire les lentilles 20 min sans sel.", "Suer les échalotes à la poêle.", "Mélanger lentilles tièdes et vinaigrette."],
-            astuce: "Assaisonne les lentilles encore chaudes pour imbiber les arômes."
-          },
-          plat: {
-            nom: "Poêlée de dinde au curcuma, poireaux confits & quinoa", prep: 12, cuisson: 18, difficulte: 2,
-            materiel: ["Sauteuse", "Casserole"],
-            ingredients: ["350g de dinde", "2 poireaux", "150g de quinoa", "1 cs de curcuma", "1 cs d'huile d'olive"],
-            miseenplace: ["Émincer les poireaux.", "Trancher la dinde."],
-            etapes: ["Cuire le quinoa 12 min.", "Confire les poireaux 10 min.", "Saisir la dinde et le curcuma 7 min.", "Mélanger le tout."],
-            astuce: "Bien laver les poireaux pour ôter le sable."
-          },
-          dessert: { nom: "Compotée de pommes aux dattes & cannelle", prep: 5, ingredients: ["2 pommes", "4 dattes", "1/2 cc de cannelle"] }
+          entree: { nom: "Salade tiède de lentilles vertes", prep: 10, cuisson: 20, difficulte: 1, materiel: ["Casserole"], ingredients: ["150g de lentilles vertes", "2 échalotes", "1 cs de moutarde"], miseenplace: ["Cuire lentilles"], etapes: ["Mélanger tiède avec la vinaigrette."], astuce: "Assaisonner chaud." },
+          plat: { nom: "Poêlée de dinde au curcuma & poireaux", prep: 12, cuisson: 18, difficulte: 2, materiel: ["Sauteuse"], ingredients: ["350g de dinde", "2 poireaux", "150g de quinoa"], miseenplace: ["Émincer poireaux"], etapes: ["Confire poireaux, saisir la dinde."], astuce: "Bien laver les poireaux." },
+          dessert: { nom: "Compotée de pommes aux dattes", prep: 5, ingredients: ["2 pommes", "4 dattes"] }
         }
       ]
     };
@@ -294,23 +254,9 @@
     const recettesShabbat = [
       {
         cuisine: "✡️ Shabbat • Le Grand Mijoté", fete: true,
-        entree: {
-          nom: "Matbucha maison & carottes au cumin", prep: 15, cuisson: 30, difficulte: 2,
-          materiel: ["Sauteuse", "Casserole"],
-          ingredients: ["5 tomates mûres", "3 poivrons grillés", "4 carottes", "1.5 cs d'huile d'olive", "3 gousses d'ail", "Cumin, paprika"],
-          miseenplace: ["Peler et couper les tomates.", "Hacher l'ail."],
-          etapes: ["Mijoter tomates, poivrons, ail 30 min.", "Cuire carottes 15 min.", "Assaisonner au cumin et huile."],
-          astuce: "Confire doucement la matbucha pour concentrer le goût."
-        },
-        plat: {
-          nom: "Poulet rôti aux citrons confits, curcuma & patates douces", prep: 20, cuisson: 50, difficulte: 2,
-          materiel: ["Grand plat à four"],
-          ingredients: ["1 poulet bio entier", "400g de patates douces", "3 citrons confits", "2 oignons", "1.5 cs d'huile d'olive", "1 cs de curcuma"],
-          miseenplace: ["Préchauffer le four à 190°C.", "Tailler oignons et patates douces."],
-          etapes: ["Préparer la marinade au curcuma.", "Enrober le poulet et les légumes.", "Enfourner 50 min en arrosant."],
-          astuce: "Arroser avec le jus garantit une peau dorée."
-        },
-        dessert: { nom: "Salade d'oranges à la cannelle & dattes", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool", "Cannelle"] }
+        entree: { nom: "Matbucha maison", prep: 15, cuisson: 30, difficulte: 2, materiel: ["Sauteuse"], ingredients: ["5 tomates mûres", "3 poivrons", "3 gousses d'ail"], miseenplace: ["Hacher légumes"], etapes: ["Mijoter à feu doux 30 min."], astuce: "Confire doucement." },
+        plat: { nom: "Poulet rôti aux citrons confits & patates douces", prep: 20, cuisson: 50, difficulte: 2, materiel: ["Plat à four"], ingredients: ["1 poulet bio entier", "400g de patates douces", "3 citrons confits"], miseenplace: ["Préchauffer four"], etapes: ["Enfourner 50 min à 190°C."], astuce: "Arroser régulièrement." },
+        dessert: { nom: "Salade d'oranges à la cannelle", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool"] }
       }
     ];
 
@@ -331,8 +277,8 @@
     const RAYONS = [
       { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","fèves","avocat","patate douce","potimarron","champignon","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","persil","gingembre","fraise","pêche","melon","pastèque","poire","pomme","orange","kiwi","figue","datte"] },
       { nom: "🐟 Poissons & Viandes", mots: ["poulet","saumon","cabillaud","dinde","bœuf","boeuf","thon"] },
-      { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","œuf","oeuf","tofu","edamame","chèvre","beurre"] },
-      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","tahini","huile","vinaigre","graine","sésame","noix","noisette","miel","cannelle","curcuma","cumin","curry","paprika","zaatar","citron confit","lait de coco","moutarde","olive","pain"] }
+      { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","œuf","oeuf","tofu","edamame","chèvre","beurre","lait"] },
+      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","tahini","huile","vinaigre","graine","sésame","noix","noisette","miel","cannelle","curcuma","cumin","curry","paprika","zaatar","citron confit","lait de coco","moutarde","olive","pain","pâtes","conserve"] }
     ];
     const ORDRE_RAYONS = ["🥬 Fruits & Légumes","🐟 Poissons & Viandes","🧀 Frais & Crèmerie","🌾 Épicerie & Secs","🛒 Autres"];
 
@@ -346,10 +292,10 @@
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    const STORAGE_KEY = "menu-market-v9";
+    const STORAGE_KEY = "menu-market-v10";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
-    function persister() { safeSet({ menuSemaine, etatStock, joursSelectionnes, jourActiveIndex }); }
+    function persister() { safeSet({ menuSemaine, stockPlacard, joursSelectionnes, jourActiveIndex }); }
 
     const saisonActuelle = obtenirSaisonActuelle();
     const poolRecettesSaison = catalogueSaisons[saisonActuelle] || catalogueSaisons["printemps"];
@@ -374,16 +320,19 @@
       });
     }
 
-    let menuSemaine, etatStock, joursSelectionnes, jourActiveIndex;
+    let menuSemaine, stockPlacard, joursSelectionnes, jourActiveIndex;
     const sauvegarde = safeGet();
     if (sauvegarde && Array.isArray(sauvegarde.menuSemaine) && sauvegarde.menuSemaine.length) {
       menuSemaine = sauvegarde.menuSemaine;
-      etatStock = sauvegarde.etatStock || {};
+      stockPlacard = sauvegarde.stockPlacard || {};
       joursSelectionnes = sauvegarde.joursSelectionnes || [0, 1, 2, 3, 4, 5, 6];
       jourActiveIndex = sauvegarde.jourActiveIndex !== undefined ? sauvegarde.jourActiveIndex : meGetJourActuelIndex();
     } else {
       menuSemaine = genererMenuSemaineDynamique();
-      etatStock = {};
+      stockPlacard = {
+        "Huile d'olive": { enStock: true, qte: "1 bouteille", date: "En stock" },
+        "Sel & Poivre": { enStock: true, qte: "Stock permanent", date: "" }
+      };
       joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
       jourActiveIndex = meGetJourActuelIndex();
     }
@@ -436,7 +385,7 @@
           </div>
 
           <div class="space-y-3">
-            <div class="bg-slate-50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-slate-100 hover:border-slate-200 transition">
+            <div class="bg-slate-50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-slate-100">
               <div class="min-w-0">
                 <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">🥗 Entrée</span>
                 <h3 class="font-bold text-slate-900 text-sm leading-snug mt-0.5">${item.entree.nom}</h3>
@@ -445,7 +394,7 @@
               <button data-modal="${jourActiveIndex}" data-type="entree" class="shrink-0 text-emerald-700 hover:text-emerald-800 font-bold text-xs px-3.5 py-2 bg-white rounded-xl border border-slate-200 shadow-sm active:scale-95 transition">Recette ➔</button>
             </div>
 
-            <div class="bg-emerald-50/50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-emerald-100 hover:border-emerald-200 transition">
+            <div class="bg-emerald-50/50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-emerald-100">
               <div class="min-w-0">
                 <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">🥘 Plat principal</span>
                 <h3 class="font-bold text-slate-900 text-sm leading-snug mt-0.5">${item.plat.nom}</h3>
@@ -471,17 +420,21 @@
                 📋 Ingrédients du jour <span class="text-[10px] text-slate-400 font-semibold">(To-Do List)</span>
               </h4>
               <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                ${ings.filter(i => etatStock[i]).length} / ${ings.length} en réserve
+                ${ings.filter(i => stockPlacard[i] && stockPlacard[i].enStock).length} / ${ings.length} en stock
               </span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               ${ings.map(ing => {
-                const enStock = !!etatStock[ing];
+                const itemStock = stockPlacard[ing];
+                const enStock = itemStock && itemStock.enStock;
                 return `
                   <label class="flex items-center gap-2.5 p-2.5 rounded-xl border transition cursor-pointer ${enStock ? 'bg-slate-50 border-slate-200/60 text-slate-400' : 'bg-white border-slate-200 text-slate-800 hover:border-emerald-300'}">
                     <input type="checkbox" data-ing-toggle="${ing}" ${enStock ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
-                    <span class="text-xs font-semibold ${enStock ? 'line-through' : ''}">${ing}</span>
-                    <span class="ml-auto text-[9px] font-bold ${enStock ? 'text-slate-400 bg-slate-100' : 'text-emerald-700 bg-emerald-50'} px-1.5 py-0.5 rounded">
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-xs font-semibold truncate ${enStock ? 'line-through' : ''}">${ing}</span>
+                      ${itemStock && itemStock.qte ? `<span class="text-[9px] text-slate-400 font-medium">${itemStock.qte}</span>` : ''}
+                    </div>
+                    <span class="ml-auto text-[9px] font-bold shrink-0 ${enStock ? 'text-slate-400 bg-slate-100' : 'text-emerald-700 bg-emerald-50'} px-1.5 py-0.5 rounded">
                       ${enStock ? 'En stock' : 'À acheter'}
                     </span>
                   </label>`;
@@ -517,10 +470,14 @@
     }
 
     function itemHTML(ing, achete) {
+      const details = stockPlacard[ing];
       return `
         <label class="flex items-center gap-3 py-2.5 cursor-pointer group">
           <input type="checkbox" data-ing-toggle="${ing}" ${achete ? 'checked' : ''} class="w-4 h-4 rounded-md text-emerald-600 focus:ring-emerald-500 border-slate-300 transition">
-          <span class="text-xs font-semibold transition ${achete ? 'line-through text-slate-400' : 'text-slate-700 group-hover:text-slate-900'}">${ing}</span>
+          <div class="flex justify-between items-center w-full">
+            <span class="text-xs font-semibold transition ${achete ? 'line-through text-slate-400' : 'text-slate-700 group-hover:text-slate-900'}">${ing}</span>
+            ${details && details.qte ? `<span class="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-100">${details.qte}</span>` : ''}
+          </div>
         </label>`;
     }
 
@@ -532,8 +489,8 @@
       joursAffiches.forEach(m => tousIngs.push(...ingredientsDuJour(m)));
       const ingsUniques = [...new Set(tousIngs)];
 
-      const aAcheter = ingsUniques.filter(i => !etatStock[i]);
-      const achetes = ingsUniques.filter(i => etatStock[i]);
+      const aAcheter = ingsUniques.filter(i => !(stockPlacard[i] && stockPlacard[i].enStock));
+      const achetes = ingsUniques.filter(i => stockPlacard[i] && stockPlacard[i].enStock);
 
       const groupes = {};
       aAcheter.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
@@ -557,34 +514,45 @@
     }
 
     function rendreInventaire() {
-      const tousIngs = [];
-      menuSemaine.forEach(m => tousIngs.push(...ingredientsDuJour(m)));
-      const ingsUniques = [...new Set(tousIngs)];
+      // Fusionner les ingrédients du menu et les ajouts personnalisés du placard
+      const ingredientsMenu = [];
+      menuSemaine.forEach(m => ingredientsMenu.push(...ingredientsDuJour(m)));
+      
+      const tousIngs = [...new Set([...ingredientsMenu, ...Object.keys(stockPlacard)])];
 
       const groupes = {};
-      ingsUniques.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
+      tousIngs.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
 
       const container = document.getElementById("inventaire-container");
       container.innerHTML = ORDRE_RAYONS
         .filter(r => groupes[r] && groupes[r].length)
         .map(r => `
-          <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
-            <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-2">${r}</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-100 space-y-2">
+            <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">${r}</h3>
+            <div class="space-y-2">
               ${groupes[r].map(ing => {
-                const enStock = !!etatStock[ing];
+                const item = stockPlacard[ing] || { enStock: false, qte: "", date: "" };
+                const estStock = item.enStock;
                 return `
-                  <label class="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200/80 cursor-pointer">
-                    <input type="checkbox" data-ing-toggle="${ing}" ${enStock ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
-                    <span class="text-xs font-semibold ${enStock ? 'text-emerald-700 font-bold' : 'text-slate-600'}">${ing}</span>
-                  </label>`;
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 gap-2">
+                    <label class="flex items-center gap-2.5 cursor-pointer min-w-0">
+                      <input type="checkbox" data-ing-toggle="${ing}" ${estStock ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                      <span class="text-xs font-bold ${estStock ? 'text-emerald-800' : 'text-slate-600'}">${ing}</span>
+                    </label>
+                    <div class="flex items-center gap-2 pl-6 sm:pl-0 text-xs">
+                      <input type="text" data-update-qte="${ing}" value="${item.qte || ''}" placeholder="Quantité (ex: 200g)" class="w-28 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                      <input type="text" data-update-date="${ing}" value="${item.date || ''}" placeholder="Date / Péremption" class="w-28 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                      <button data-remove-custom="${ing}" class="text-slate-300 hover:text-rose-500 p-1 text-xs" title="Supprimer">✕</button>
+                    </div>
+                  </div>`;
               }).join('')}
             </div>
           </div>`).join('');
     }
 
     function toggleStock(ing) {
-      etatStock[ing] = !etatStock[ing];
+      if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: false, qte: "", date: "" };
+      stockPlacard[ing].enStock = !stockPlacard[ing].enStock;
       persister();
       rendreVueJour();
       rendreCourses();
@@ -676,7 +644,47 @@
       rendreMenuComplet();
     }
 
-    // ÉCOUTEURS D'ÉVÉNEMENTS
+    // GESTION DU FORMULAIRE ET DES ÉVÉNEMENTS
+    document.getElementById("form-add-custom-item").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nom = document.getElementById("custom-nom").value.trim();
+      const qte = document.getElementById("custom-qte").value.trim();
+      const date = document.getElementById("custom-date").value.trim();
+
+      if (nom) {
+        stockPlacard[nom] = { enStock: true, qte: qte, date: date };
+        persister();
+        document.getElementById("custom-nom").value = "";
+        document.getElementById("custom-qte").value = "";
+        document.getElementById("custom-date").value = "";
+        rendreMenuComplet();
+      }
+    });
+
+    document.addEventListener("change", (e) => {
+      const ingToggle = e.target.closest("[data-ing-toggle]");
+      if (ingToggle) {
+        toggleStock(ingToggle.dataset.ingToggle);
+        return;
+      }
+      const updateQte = e.target.closest("[data-update-qte]");
+      if (updateQte) {
+        const ing = updateQte.dataset.updateQte;
+        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: false, qte: "", date: "" };
+        stockPlacard[ing].qte = updateQte.value;
+        persister();
+        return;
+      }
+      const updateDate = e.target.closest("[data-update-date]");
+      if (updateDate) {
+        const ing = updateDate.dataset.updateDate;
+        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: false, qte: "", date: "" };
+        stockPlacard[ing].date = updateDate.value;
+        persister();
+        return;
+      }
+    });
+
     document.addEventListener("click", (e) => {
       const selectDay = e.target.closest("[data-select-day]");
       if (selectDay) {
@@ -696,13 +704,14 @@
       if (regen) { regenererJour(Number(regen.dataset.regen)); return; }
 
       const modal = e.target.closest("[data-modal]");
-      if (modal) { ouvrirModal(Number(modal.dataset.modal), modal.dataset.type); }
-    });
+      if (modal) { ouvrirModal(Number(modal.dataset.modal), modal.dataset.type); return; }
 
-    document.addEventListener("change", (e) => {
-      const ingToggle = e.target.closest("[data-ing-toggle]");
-      if (ingToggle) {
-        toggleStock(ingToggle.dataset.ingToggle);
+      const removeCustom = e.target.closest("[data-remove-custom]");
+      if (removeCustom) {
+        delete stockPlacard[removeCustom.dataset.removeCustom];
+        persister();
+        rendreMenuComplet();
+        return;
       }
     });
 
@@ -730,16 +739,14 @@
     });
 
     document.getElementById("btn-vider-panier").addEventListener("click", () => {
-      etatStock = {};
+      Object.keys(stockPlacard).forEach(k => stockPlacard[k].enStock = false);
       persister();
       rendreMenuComplet();
     });
 
     document.getElementById("btn-reset-all").addEventListener("click", () => {
-      if (confirm("Générer une toute nouvelle semaine ? L'inventaire sera réinitialisé.")) {
+      if (confirm("Générer une toute nouvelle semaine ? L'inventaire sera conservé.")) {
         menuSemaine = genererMenuSemaineDynamique();
-        etatStock = {};
-        joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
         jourActiveIndex = meGetJourActuelIndex();
         persister();
         rendreMenuComplet();
