@@ -14,16 +14,16 @@
     .badge-shabbat { background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); color: #B45309; border: 1px solid #FDE68A; }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .card-shadow { box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03); }
+    .card-shadow { box-shadow: 0 4px 25px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04); }
     .modal-shadow { box-shadow: 0 -10px 40px -5px rgba(15, 23, 42, 0.25); }
     @media (min-width: 640px) { .modal-shadow { box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25); } }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-full pb-28 selection:bg-emerald-500 selection:text-white">
+<body class="bg-slate-100/70 text-slate-800 antialiased min-h-full pb-28 selection:bg-emerald-500 selection:text-white">
 
   <!-- En-tête Fixe -->
   <header class="glass-header sticky top-0 z-30 border-b border-slate-200/80 px-4 py-3.5 transition-all">
-    <div class="max-w-md mx-auto flex justify-between items-center">
+    <div class="max-w-2xl mx-auto flex justify-between items-center">
       <div>
         <div class="flex items-center gap-1.5">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -31,43 +31,57 @@
         </div>
         <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Menu & Market</h1>
       </div>
-      <button id="btn-reset-all" class="p-2.5 rounded-2xl bg-slate-100/80 hover:bg-rose-50 hover:text-rose-600 text-slate-600 transition-all duration-200 border border-slate-200/60 active:scale-95 flex items-center justify-center group" title="Générer une nouvelle semaine">
+      <button id="btn-reset-all" class="p-2.5 rounded-2xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 transition-all duration-200 border border-slate-200/60 active:scale-95 flex items-center justify-center group" title="Générer une nouvelle semaine">
         <svg class="w-5 h-5 transition-transform group-hover:rotate-180 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
       </button>
     </div>
   </header>
 
   <!-- Contenu Principal -->
-  <main class="max-w-md mx-auto px-4 pt-5 space-y-5">
+  <main class="max-w-2xl mx-auto px-4 pt-5 space-y-5">
 
-    <!-- Onglets de Navigation -->
-    <div class="bg-slate-200/70 p-1 rounded-2xl flex text-xs font-bold shadow-inner">
-      <button id="tab-menu" class="w-1/2 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-2">
-        <span>📅</span> Menu Semaine
+    <!-- Onglets de Navigation Principaux -->
+    <div class="bg-slate-200/80 p-1 rounded-2xl flex text-xs font-bold shadow-inner">
+      <button id="tab-jour" class="w-1/3 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5">
+        <span>⭐</span> Jour par Jour
       </button>
-      <button id="tab-courses" class="w-1/2 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-2">
-        <span>🛒</span> Liste de courses
+      <button id="tab-semaine" class="w-1/3 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1.5">
+        <span>📅</span> Vue Semaine
+      </button>
+      <button id="tab-courses" class="w-1/3 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1.5">
+        <span>🛒</span> Courses
       </button>
     </div>
 
-    <!-- SECTION MENU -->
-    <div id="section-menu" class="space-y-4">
+    <!-- VUE 1 : JOUR PAR JOUR (Focus sur le jour sélectionné/actuel) -->
+    <div id="section-jour" class="space-y-4">
+      
+      <!-- Selecteur Horizontal de Jours -->
+      <div id="day-selector" class="flex gap-2 overflow-x-auto hide-scrollbar py-1"></div>
+
+      <!-- Carte du Jour Unique Focus -->
+      <div id="card-day-focus"></div>
+
+    </div>
+
+    <!-- VUE 2 : VUE SEMAINE (Grille globale) -->
+    <div id="section-semaine" class="hidden space-y-4">
       <div class="bg-emerald-50/70 border border-emerald-200/60 rounded-2xl px-4 py-3 text-xs text-emerald-900 leading-relaxed flex items-center gap-3 shadow-sm">
-        <div class="p-2 bg-emerald-100/80 text-emerald-700 rounded-xl shrink-0">🎓</div>
+        <div class="p-2 bg-emerald-100/80 text-emerald-700 rounded-xl shrink-0">💡</div>
         <div>
-          <strong class="font-bold">Mode Apprentis :</strong> Menu généré selon tes recettes. Cliquez sur <span class="inline-block bg-white px-1 py-0.5 rounded border border-emerald-200 text-[10px]">🔄</span> pour varier une journée.
+          <strong class="font-bold">Vue globale :</strong> Cliquez sur <span class="inline-block bg-white px-1.5 py-0.5 rounded border border-emerald-200 text-[10px]">🔄</span> pour changer le menu d'une journée.
         </div>
       </div>
-      <div id="cards-container" class="space-y-4"></div>
+      <div id="cards-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- SECTION COURSES -->
+    <!-- VUE 3 : COURSES -->
     <div id="section-courses" class="hidden space-y-5">
 
       <!-- Filtres Jours & Progression -->
       <div class="bg-white p-4 rounded-3xl card-shadow border border-slate-200/60 space-y-3">
         <div class="flex justify-between items-center">
-          <label class="block text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">🎯 Sélectionner les jours :</label>
+          <label class="block text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">🎯 Ingrédients pour :</label>
           <button id="btn-toggle-all-days" class="text-[11px] font-bold text-emerald-600 hover:text-emerald-700 transition">Tout sélectionner</button>
         </div>
         <div id="days-filter" class="flex gap-1.5 overflow-x-auto hide-scrollbar py-1"></div>
@@ -165,430 +179,163 @@
       return "hiver";
     }
 
+    // Détermination de l'index du jour actuel (0 = Lundi ... 6 = Dimanche)
+    function meGetJourActuelIndex() {
+      const jsDay = new Date().getDay(); // 0:Dim, 1:Lun...
+      return jsDay === 0 ? 6 : jsDay - 1;
+    }
+
     const catalogueSaisons = {
       printemps: [
         {
           cuisine: "🌱 Printemps • Haute Protéine",
           entree: {
-            nom: "Salade croquante d'asperges vertes & radis",
-            prep: 10, cuisson: 5, difficulte: 1,
-            materiel: ["Économe", "Casserole large", "Planche à découper", "Petite poêle"],
-            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza bio", "1 cs de jus de citron"],
-            miseenplace: ["Laver les légumes.", "Casser le bas dur des asperges à la main.", "Émincer les radis en rondelles finissimes."],
-            etapes: [
-              "Porte un grand volume d'eau salée à ébullition à feu vif.",
-              "Plonge les asperges et laisse cuire 5 minutes. Égoutte-les aussitôt.",
-              "Torréfie les graines de tournesol à sec dans une poêle à feu moyen pendant 2 minutes.",
-              "Mélange le jus de citron et l'huile de colza, puis enrobe les asperges, radis et graines."
-            ],
-            astuce: "Plonge les asperges dans de l'eau glacée après cuisson pour fixer leur couleur verte."
+            nom: "Salade croquante d'asperges vertes & radis", prep: 10, cuisson: 5, difficulte: 1,
+            materiel: ["Économe", "Casserole large", "Planche", "Petite poêle"],
+            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza", "1 cs de jus de citron"],
+            miseenplace: ["Laver les légumes.", "Casser le bas dur des asperges.", "Émincer les radis."],
+            etapes: ["Porte de l'eau salée à ébullition.", "Cuis les asperges 5 min.", "Torréfie les graines à sec 2 min.", "Mélange le tout avec la citronnette."],
+            astuce: "Plonge les asperges dans de l'eau glacée après cuisson pour fixer le vert."
           },
           plat: {
-            nom: "Poulet poêlé aux herbes, boulgour & épinards",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle antiadhésive", "Casserole avec couvercle", "Planche à découper"],
+            nom: "Poulet poêlé aux herbes, boulgour & épinards", prep: 12, cuisson: 15, difficulte: 2,
+            materiel: ["Poêle antiadhésive", "Casserole avec couvercle"],
             ingredients: ["350g de filet de poulet bio", "150g de boulgour cru", "300g de pousses d'épinards", "1 cc de curcuma", "15ml d'huile d'olive", "2 gousses d'ail"],
-            miseenplace: ["Émincer l'ail finement.", "Couper le poulet en dés de 2 cm.", "Rincer les pousses d'épinards."],
-            etapes: [
-              "Fais cuire le boulgour dans 300ml d'eau salée à couvert pendant 10 minutes à feu doux.",
-              "Fais dorer le poulet et l'ail avec le curcuma dans la poêle avec l'huile d'olive pendant 8 minutes.",
-              "Hors du feu, ajoute les épinards sur le poulet chaud pour les faire tomber en 2 minutes.",
-              "Mélange le boulgour égréné avec la poêlée de poulet et épinards."
-            ],
-            astuce: "La chaleur résiduelle de la poêle suffit à cuire les épinards sans les rendre mous."
+            miseenplace: ["Émincer l'ail.", "Couper le poulet en dés.", "Rincer les épinards."],
+            etapes: ["Cuire le boulgour 10 min à feu doux dans 300ml d'eau.", "Dorer le poulet et l'ail avec le curcuma 8 min.", "Faire tomber les épinards hors du feu.", "Mélanger avec le boulgour."],
+            astuce: "La chaleur résiduelle suffit à faire tomber les épinards."
           },
           dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: ["250g de fraises", "2 yaourts grecs", "1 cs de miel"] }
         },
         {
           cuisine: "🌱 Printemps • Vitalité Verde",
           entree: {
-            nom: "Tartine d'avocat écrasé, graines de chanvre & fleur de sel",
-            prep: 8, cuisson: 0, difficulte: 1,
+            nom: "Tartine d'avocat écrasé, graines de chanvre & fleur de sel", prep: 8, cuisson: 0, difficulte: 1,
             materiel: ["Fourchette", "Grille-pain"],
-            ingredients: ["1 avocat mûr", "2 tranches de pain complet au levain", "1 cs de graines de chanvre", "1/2 citron", "Piment d'Espelette"],
+            ingredients: ["1 avocat mûr", "2 tranches de pain au levain", "1 cs de graines de chanvre", "1/2 citron", "Piment d'Espelette"],
             miseenplace: ["Trancher le pain.", "Évider l'avocat."],
-            etapes: [
-              "Grille les tranches de pain au grille-pain.",
-              "Écrase l'avocat à la fourchette avec le jus de citron, une pincée de sel et une touche d'Espelette.",
-              "Étale généreusement sur le pain grillé et parsème de graines de chanvre."
-            ],
-            astuce: "Ajoute le jus de citron dès le début de l'écrasement pour éviter que l'avocat ne noircisse."
+            etapes: ["Griller le pain.", "Écraser l'avocat avec citron, sel et Espelette.", "Étaler et parsemer de graines."],
+            astuce: "Citronner immédiatement pour éviter le noircissement."
           },
           plat: {
-            nom: "Omelette printanière aux fèves, cerfeuil & chèvre frais",
-            prep: 10, cuisson: 8, difficulte: 1,
+            nom: "Omelette printanière aux fèves, cerfeuil & chèvre frais", prep: 10, cuisson: 8, difficulte: 1,
             materiel: ["Poêle antiadhésive", "Saladier"],
             ingredients: ["5 œufs bio", "150g de fèves cuites", "60g de chèvre frais", "1/2 botte de cerfeuil", "15g de beurre"],
-            miseenplace: ["Battre les œufs dans un saladier.", "Hacher le cerfeuil.", "Émietter le chèvre."],
-            etapes: [
-              "Dans la poêle, fais fondre le beurre à feu moyen.",
-              "Verse les œufs battus avec le cerfeuil, puis ajoute les fèves et le chèvre au bout d'une minute.",
-              "Laisse cuire 5 minutes jusqu'à ce que les bords soient pris et le centre encore moelleux.",
-              "Replie l'omelette en deux et glisse-la sur l'assiette."
-            ],
-            astuce: "Ne bats pas trop longuement les œufs pour garder une texture baveuse à la cuisson."
+            miseenplace: ["Battre les œufs.", "Hacher le cerfeuil.", "Émietter le chèvre."],
+            etapes: ["Fondre le beurre.", "Verser les œufs et le cerfeuil, ajouter fèves et chèvre.", "Cuire 5 min pour garder le cœur baveux."],
+            astuce: "Ne bats pas trop longuement les œufs."
           },
-          dessert: { nom: "Mélange de fruits rouges & yaourt au miel", prep: 5, ingredients: ["200g de fruits rouges", "2 yaourts nats", "1 cs de miel"] }
-        },
-        {
-          cuisine: "🌱 Printemps • Levantin & Douceur",
-          entree: {
-            nom: "Salade de pois chiches, menthe & feta",
-            prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Saladier", "Passoire"],
-            ingredients: ["200g de pois chiches cuits", "60g de feta", "1/2 botte de menthe fraîche", "1 cs d'huile d'olive", "1/2 citron"],
-            miseenplace: ["Rincer et égoutter les pois chiches.", "Ciseler la menthe.", "Émietter la feta."],
-            etapes: [
-              "Mélange les pois chiches avec l'huile d'olive et le jus de citron.",
-              "Ajoute la feta et la menthe délicatement.",
-              "Assaisonne avec un poivre moulu frais."
-            ],
-            astuce: "Presse le jus de citron directement sur les pois chiches chauds si tu les réchauffes légèrement pour qu'ils absorbent mieux les arômes."
-          },
-          plat: {
-            nom: "Pavé de cabillaud en croûte d'herbes & écrasé de fenouil",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Plat à four", "Casserole", "Presse-purée"],
-            ingredients: ["300g de filet de cabillaud", "2 fenouils", "30g de chapelure", "1 cs de persil haché", "1 cs d'huile d'olive"],
-            miseenplace: ["Préchauffer le four à 200°C.", "Couper les fenouils en morceaux.", "Mélanger chapelure, persil et 1 cc d'huile."],
-            etapes: [
-              "Fais cuire le fenouil dans de l'eau bouillante salée 12 minutes puis écrase-le à la fourchette.",
-              "Dispose le cabillaud dans un plat, recouvre-le du mélange de chapelure aux herbes.",
-              "Enfourne 12 minutes jusqu'à ce que le dessus soit bien doré.",
-              "Sers le poisson croustillant sur son lit d'écrasé de fenouil."
-            ],
-            astuce: "Assure-toi que le poisson est bien séché avec de l'essuie-tout avant d'ajouter la croûte."
-          },
-          dessert: { nom: "Carpaccio de kiwis & sirop léger de fleur d'oranger", prep: 5, ingredients: ["3 kiwis", "1 cc d'eau de fleur d me d'oranger", "1 cs de miel"] }
+          dessert: { nom: "Mélange de fruits rouges & yaourt au miel", prep: 5, ingredients: ["200g de fruits rouges", "2 yaourts", "1 cs de miel"] }
         }
       ],
       ete: [
         {
           cuisine: "☀️ Été • Équilibre Fraîcheur",
           entree: {
-            nom: "Tartare de concombre, edamames & sésame noir",
-            prep: 12, cuisson: 0, difficulte: 1,
-            materiel: ["Planche à découper", "Grand couteau", "Passoire"],
-            ingredients: ["1 concombre bio", "150g d'edamames cuits", "20g de graines de sésame noir", "1 cs d'huile de sésame", "1 cs de vinaigre de riz"],
-            miseenplace: ["Couper le concombre en deux et épépiner le centre à la cuillère.", "Tailler en dés de 0,5 cm."],
-            etapes: [
-              "Fais dégager le concombre 5 minutes dans une passoire avec 1 cc de sel.",
-              "Presse doucement les dés de concombre dans un torchon pour retirer l'excès d'eau.",
-              "Mélange dans un saladier avec les edamames, l'huile de sésame et le vinaigre de riz.",
-              "Saupoudre généreusement de sésame noir."
-            ],
-            astuce: "Épépiner le concombre évite de détremper la vinaigrette."
+            nom: "Tartare de concombre, edamames & sésame noir", prep: 12, cuisson: 0, difficulte: 1,
+            materiel: ["Planche", "Passoire"],
+            ingredients: ["1 concombre bio", "150g d'edamames cuits", "20g de sésame noir", "1 cs d'huile de sésame", "1 cs de vinaigre de riz"],
+            miseenplace: ["Épépiner le concombre à la cuillère.", "Tailler en dés."],
+            etapes: ["Dégorger le concombre 5 min au sel.", "Presser dans un torchon.", "Assaisonner avec sésame et vinaigre."],
+            astuce: "Épépiner évite de détremper la sauce."
           },
           plat: {
-            nom: "Saumon poêlé, quinoa & courgettes au basilic",
-            prep: 10, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle antiadhésive", "Casserole", "Spatule"],
-            ingredients: ["300g de pavés de saumon avec peau", "150g de quinoa", "400g de courgettes", "15ml d'huile de colza à cru", "1 gousse d'ail", "Basilic"],
-            miseenplace: ["Rincer le quinoa.", "Découper les courgettes en dés d'1 cm.", "Éponger le saumon."],
-            etapes: [
-              "Cuire le quinoa dans 300ml d'eau salée à couvert pendant 12 minutes à feu doux.",
-              "Poêler les courgettes avec l'ail pendant 8 minutes à feu moyen-vif. Réserver.",
-              "Cuire les pavés de saumon côté peau 4 minutes à feu vif, puis 3 minutes sur la chair.",
-              "Dresser le quinoa, les courgettes et le saumon en arrosant d'huile de colza à cru et de basilic."
-            ],
-            astuce: "Ne déplace pas le saumon pendant les 4 premières minutes pour obtenir une peau bien croustillante."
+            nom: "Saumon poêlé, quinoa & courgettes au basilic", prep: 10, cuisson: 15, difficulte: 2,
+            materiel: ["Poêle", "Casserole"],
+            ingredients: ["300g de pavés de saumon", "150g de quinoa", "400g de courgettes", "15ml d'huile de colza", "1 gousse d'ail", "Basilic"],
+            miseenplace: ["Rincer le quinoa.", "Découper les courgettes."],
+            etapes: ["Cuire le quinoa 12 min.", "Poêler les courgettes avec l'ail 8 min.", "Saisir le saumon 4 min côté peau puis 3 min sur chair."],
+            astuce: "Ne déplace pas le saumon lors des premières minutes pour une peau croustillante."
           },
-          dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches mûres", "2 yaourts", "1 cs de miel"] }
-        },
-        {
-          cuisine: "☀️ Été • Riviera & Épices",
-          entree: {
-            nom: "Salade de melon, tomates cerises & basilic",
-            prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Couteau", "Saladier"],
-            ingredients: ["1/2 melon", "150g de tomates cerises", "1/2 botte de basilic", "1 cs d'huile d'olive", "1 cs de vinaigre balsamique"],
-            miseenplace: ["Couper le melon en bille ou dés.", "Couper les tomates cerises en deux."],
-            etapes: [
-              "Mélanger le melon et les tomates dans un saladier.",
-              "Ajouter l'huile d'olive et le vinaigre balsamique.",
-              "Parsemer de basilic frais ciselé au dernier moment."
-            ],
-            astuce: "Conserve le melon à température ambiante 1h avant de servir pour révéler son parfum."
-          },
-          plat: {
-            nom: "Brochettes de poulet marinées au citron & taboulé de boulgour",
-            prep: 15, cuisson: 10, difficulte: 2,
-            materiel: ["Pic en bois", "Poêle grill ou BBQ", "Saladier"],
-            ingredients: ["350g de blanc de poulet", "150g de boulgour", "1 citron", "1 cc de origan", "1 cs d'huile d'olive", "1/2 concombre"],
-            miseenplace: ["Couper le poulet en cubes.", "Faire tremper le boulgour dans de l'eau chaude 15 min.", "Couper le concombre en petits dés."],
-            etapes: [
-              "Faire mariner le poulet dans le jus de citron, l'huile et l'origan pendant 10 min.",
-              "Enfiler sur les pics et faire griller 10 minutes à la poêle en tournant régulièrement.",
-              "Mélanger le boulgour gonflé avec les dés de concombre et de l'huile d'olive.",
-              "Servir les brochettes bien chaudes sur le taboulé frais."
-            ],
-            astuce: "Fais tremper les pics en bois dans l'eau 10 min avant pour éviter qu'ils ne brûlent à la cuisson."
-          },
-          dessert: { nom: "Granité express de pastèque au citron vert", prep: 5, ingredients: ["300g de pastèque", "1 citron vert"] }
+          dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches", "2 yaourts", "1 cs de miel"] }
         }
       ],
       automne: [
         {
           cuisine: "🍂 Automne • Densité Nutritionnelle",
           entree: {
-            nom: "Houmous de lentilles corail au zaatar & carottes",
-            prep: 10, cuisson: 10, difficulte: 1,
-            materiel: ["Casserole", "Mixeur plongeant", "Économe"],
+            nom: "Houmous de lentilles corail au zaatar & carottes", prep: 10, cuisson: 10, difficulte: 1,
+            materiel: ["Casserole", "Mixeur plongeant"],
             ingredients: ["120g de lentilles corail", "2 cs de tahini", "1 cs d'huile d'olive", "1 cc de zaatar", "3 carottes"],
-            miseenplace: ["Rincer les lentilles corail.", "Éplucher les carottes et les tailler en bâtonnets."],
-            etapes: [
-              "Cuire les lentilles dans 350ml d'eau sans sel pendant 10 minutes.",
-              "Mixer avec le tahini, l'huile d'olive et un peu d'eau de cuisson pour assouplir.",
-              "Servir le houmous tiède saupoudré de zaatar avec les carottes."
-            ],
-            astuce: "Ne sale pas l'eau des lentilles pour éviter de durcir leur peau à la cuisson."
+            miseenplace: ["Rincer les lentilles.", "Tailler les carottes en bâtonnets."],
+            etapes: ["Cuire les lentilles 10 min dans l'eau.", "Mixer avec tahini et huile.", "Saupoudrer de zaatar."],
+            astuce: "Ne sale pas l'eau des lentilles pour éviter de durcir la peau."
           },
           plat: {
-            nom: "Curry express de tofu, pois chiches & épinards",
-            prep: 12, cuisson: 15, difficulte: 2,
+            nom: "Curry express de tofu, pois chiches & épinards", prep: 12, cuisson: 15, difficulte: 2,
             materiel: ["Sauteuse", "Casserole"],
-            ingredients: ["250g de tofu ferme", "250g de pois chiches en bocal", "150g d'épinards frais", "150g de riz basmati", "120ml de lait de coco", "1 cs de curry"],
-            miseenplace: ["Sécher le tofu et le couper en cubes.", "Rincer les pois chiches."],
-            etapes: [
-              "Lancer la cuisson du riz basmati (12 min à feu doux).",
-              "Dorer les dés de tofu 5 minutes à la poêle dans 1 cs d'huile.",
-              "Ajouter le curry, le lait de coco et les pois chiches. Laisser frémir 6 minutes.",
-              "Incorporer les épinards en fin de cuisson pendant 2 minutes jusqu'à réduction."
-            ],
-            astuce: "Laisser réduire le lait de coco à feu moyen permet d'enrober généreusement le tofu."
+            ingredients: ["250g de tofu ferme", "250g de pois chiches", "150g d'épinards", "150g de riz basmati", "120ml de lait de coco", "1 cs de curry"],
+            miseenplace: ["Sécher et couper le tofu.", "Rincer les pois chiches."],
+            etapes: ["Lancer le riz (12 min).", "Dorer le tofu 5 min à l'huile.", "Ajouter curry, coco, pois chiches (6 min).", "Mettre les épinards en fin de cuisson."],
+            astuce: "Laisser réduire la sauce coco pour bien enrober le tofu."
           },
-          dessert: { nom: "Poire mûre, yaourt & noix", prep: 5, ingredients: ["2 poires", "2 yaourts", "30g de cerneaux de noix"] }
-        },
-        {
-          cuisine: "🍂 Automne • Saveurs de la Terre",
-          entree: {
-            nom: "Velouté de potimarron aux éclats de noisettes",
-            prep: 10, cuisson: 20, difficulte: 1,
-            materiel: ["Faitout", "Mixeur plongeant"],
-            ingredients: ["400g de potimarron", "1 oignon", "20g de noisettes concassées", "1 cs d'huile d'olive", "1 pincée de muscade"],
-            miseenplace: ["Laver le potimarron (pas besoin d'éplucher), retirer les graines et couper en cubes.", "Émincer l'oignon."],
-            etapes: [
-              "Faire revenir l'oignon dans l'huile d'olive dans le faitout.",
-              "Ajouter le potimarron, couvrir d'eau à hauteur et cuire 20 minutes.",
-              "Mixer finement avec la muscade et servir parsemé de noisettes torréfiées à sec."
-            ],
-            astuce: "La peau du potimarron devient très tendre à la cuisson et donne une belle couleur soutenue au velouté."
-          },
-          plat: {
-            nom: "Poêlée de champignons, thon poêlé & écrasé de pommes de terre",
-            prep: 15, cuisson: 15, difficulte: 2,
-            materiel: ["Casserole", "Poêle", "Presse-purée"],
-            ingredients: ["300g de pavés de thon frais", "250g de champignons de Paris", "300g de pommes de terre", "1.5 cs d'huile d'olive", "1 gousse d'ail"],
-            miseenplace: ["Éplucher les pommes de terre et les couper en cubes.", "Émincer les champignons et l'ail."],
-            etapes: [
-              "Cuire les pommes de terre 15 min dans l'eau salée, égoutter et écraser avec 1 cs d'huile d'olive.",
-              "Faire sauter les champignons et l'ail 8 minutes à feu vif.",
-              "Poêler les steaks de thon 2 minutes de chaque côté pour les garder mi-cuits et fondants.",
-              "Assembler l'écrasé, les champignons persillés et le thon."
-            ],
-            astuce: "Saisis le thon à feu très vif pour former une croûte rosée sans assécher le cœur."
-          },
-          dessert: { nom: "Pommes au four à la cannelle", prep: 5, ingredients: ["2 pommes", "1 cc de cannelle", "1 cs de miel"] }
+          dessert: { nom: "Poire mûre, yaourt & noix", prep: 5, ingredients: ["2 poires", "2 yaourts", "30g de noix"] }
         }
       ],
       hiver: [
         {
-          cuisine: "❄️ Hiver • Réconfort & Vitalité",
-          entree: {
-            nom: "Velouté de fenouil express & graines de courge",
-            prep: 10, cuisson: 15, difficulte: 1,
-            materiel: ["Faitout", "Mixeur plongeant", "Poêle"],
-            ingredients: ["100g de lentilles corail", "2 fenouils", "25g de graines de courge", "1 cc de cumin", "1 cs d'huile d'olive"],
-            miseenplace: ["Trancher les fenouils en morceaux."],
-            etapes: [
-              "Faire suer le fenouil dans l'huile d'olive 3 minutes.",
-              "Ajouter les lentilles corail et 600ml d'eau. Cuire 15 minutes à couvert.",
-              "Griller les graines de courge 3 minutes à sec à la poêle.",
-              "Mixer la soupe très finement et parsemer de graines."
-            ],
-            astuce: "Le fenouil cuit perd son côté anisé prononcé au profit d'une saveur douce."
-          },
-          plat: {
-            nom: "Dos de cabillaud, écrasé de patate douce & épinards",
-            prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Casserole", "Presse-purée", "Poêle"],
-            ingredients: ["320g de cabillaud", "300g de patate douce", "250g d'épinards", "20g de graines de lin moulues", "15ml d'huile d'olive"],
-            miseenplace: ["Éplucher la patate douce et la couper en petits dés."],
-            etapes: [
-              "Cuire la patate douce 12 minutes à l'eau bouillante. Égoutter et écraser avec l'huile d'olive.",
-              "Poêler le cabillaud 4 minutes sur la première face, retourner et ajouter les épinards.",
-              "Poursuivre la cuisson 3 minutes jusqu'à ce que la chair du poisson devienne nacrée.",
-              "Dresser l'écrasé, le cabillaud et les épinards saupoudrés de graines de lin."
-            ],
-            astuce: "Moudre les graines de lin permet à l'organisme d'en assimiler tous les oméga-3."
-          },
-          dessert: { nom: "Orange, yaourt & miel", prep: 5, ingredients: ["2 oranges", "2 yaourts", "1 cs de miel"] }
-        },
-        {
           cuisine: "❄️ Hiver • Chaud & Épicé",
           entree: {
-            nom: "Salade tiède de lentilles vertes & échalotes rôties",
-            prep: 10, cuisson: 20, difficulte: 1,
-            materiel: ["Casserole", "Planche à découper"],
+            nom: "Salade tiède de lentilles vertes & échalotes rôties", prep: 10, cuisson: 20, difficulte: 1,
+            materiel: ["Casserole", "Planche"],
             ingredients: ["150g de lentilles vertes", "2 échalotes", "1 cs de moutarde", "1 cs de vinaigre de cidre", "1 cs d'huile d'olive"],
             miseenplace: ["Émincer les échalotes."],
-            etapes: [
-              "Cuire les lentilles vertes dans 3 volumes d'eau froide pendant 20 minutes (sans sel).",
-              "Pendant ce temps, faire suer doucement les échalotes à la poêle avec l'huile d'olive.",
-              "Mélanger la moutarde et le vinaigre de cidre.",
-              "Incorporer les lentilles égouttées tièdes aux échalotes et à la vinaigrette."
-            ],
-            astuce: "Assaisonne les lentilles encore chaudes pour qu'elles s'imprégnent de la sauce."
+            etapes: ["Cuire les lentilles 20 min sans sel.", "Suer les échalotes à la poêle.", "Mélanger lentilles tièdes et vinaigrette."],
+            astuce: "Assaisonne les lentilles encore chaudes pour imbiber les arômes."
           },
           plat: {
-            nom: "Poêlée de dinde au curcuma, poireaux confits & quinoa",
-            prep: 12, cuisson: 18, difficulte: 2,
+            nom: "Poêlée de dinde au curcuma, poireaux confits & quinoa", prep: 12, cuisson: 18, difficulte: 2,
             materiel: ["Sauteuse", "Casserole"],
-            ingredients: ["350g d'escalope de dinde", "2 poireaux", "150g de quinoa", "1 cs de curcuma", "1 cs d'huile d'olive"],
-            miseenplace: ["Émincer les poireaux finement.", "Couper la dinde en lanières."],
-            etapes: [
-              "Lancer la cuisson du quinoa dans 300ml d'eau (12 min).",
-              "Faire confire les poireaux dans la sauteuse avec l'huile d'olive pendant 10 minutes à couvert.",
-              "Ajouter les lanières de dinde et le curcuma, puis sauter le tout 6-8 minutes à feu vif.",
-              "Mélanger le quinoa avec la poêlée de dinde et poireaux."
-            ],
-            astuce: "Bien laver les poireaux sous l'eau pour enlever le sable entre les feuilles."
+            ingredients: ["350g de dinde", "2 poireaux", "150g de quinoa", "1 cs de curcuma", "1 cs d'huile d'olive"],
+            miseenplace: ["Émincer les poireaux.", "Trancher la dinde."],
+            etapes: ["Cuire le quinoa 12 min.", "Confire les poireaux 10 min.", "Saisir la dinde et le curcuma 7 min.", "Mélanger le tout."],
+            astuce: "Bien laver les poireaux pour ôter le sable."
           },
           dessert: { nom: "Compotée de pommes aux dattes & cannelle", prep: 5, ingredients: ["2 pommes", "4 dattes", "1/2 cc de cannelle"] }
         }
       ]
     };
 
-    // Sélection élargie avec recettes de fêtes (Temps long autorisé jusqu'à 1h - 1h15)
     const recettesShabbat = [
       {
-        cuisine: "✡️ Shabbat • Le Grand Mijoté",
-        fete: true,
+        cuisine: "✡️ Shabbat • Le Grand Mijoté", fete: true,
         entree: {
-          nom: "Matbucha maison & carottes au cumin",
-          prep: 15, cuisson: 30, difficulte: 2,
-          materiel: ["Sauteuse", "Casserole", "Planche à découper"],
+          nom: "Matbucha maison & carottes au cumin", prep: 15, cuisson: 30, difficulte: 2,
+          materiel: ["Sauteuse", "Casserole"],
           ingredients: ["5 tomates mûres", "3 poivrons grillés", "4 carottes", "1.5 cs d'huile d'olive", "3 gousses d'ail", "Cumin, paprika"],
-          miseenplace: ["Monder les tomates et les couper en dés.", "Émincer l'ail.", "Couper les carottes en rondelles."],
-          etapes: [
-            "Cuire tomates, poivrons, ail et paprika dans l'huile d'olive 30 minutes à feu très doux.",
-            "Cuire les carottes 15 minutes à l'eau bouillante salée.",
-            "Égoutter les carottes et assaisonner à chaud avec huile d'olive, cumin et jus de citron."
-          ],
-          astuce: "La matbucha doit confire doucement pour concentrer les arômes."
+          miseenplace: ["Peler et couper les tomates.", "Hacher l'ail."],
+          etapes: ["Mijoter tomates, poivrons, ail 30 min.", "Cuire carottes 15 min.", "Assaisonner au cumin et huile."],
+          astuce: "Confire doucement la matbucha pour concentrer le goût."
         },
         plat: {
-          nom: "Poulet rôti aux citrons confits, curcuma & patates douces",
-          prep: 20, cuisson: 50, difficulte: 2,
-          materiel: ["Grand plat à four", "Bol"],
+          nom: "Poulet rôti aux citrons confits, curcuma & patates douces", prep: 20, cuisson: 50, difficulte: 2,
+          materiel: ["Grand plat à four"],
           ingredients: ["1 poulet bio entier", "400g de patates douces", "3 citrons confits", "2 oignons", "1.5 cs d'huile d'olive", "1 cs de curcuma"],
-          miseenplace: ["Préchauffer le four à 190°C.", "Couper patates douces et oignons en morceaux."],
-          etapes: [
-            "Mélanger huile, curcuma, sel et poivre dans un bol.",
-            "Enrober le poulet et les légumes avec cette marinade dans le plat à four.",
-            "Enfourner 50 minutes à 190°C en arrosant à mi-cuisson."
-          ],
-          astuce: "Arroser le poulet avec son jus garantit une peau dorée et croustillante."
+          miseenplace: ["Préchauffer le four à 190°C.", "Tailler oignons et patates douces."],
+          etapes: ["Préparer la marinade au curcuma.", "Enrober le poulet et les légumes.", "Enfourner 50 min en arrosant."],
+          astuce: "Arroser avec le jus garantit une peau dorée."
         },
         dessert: { nom: "Salade d'oranges à la cannelle & dattes", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool", "Cannelle"] }
       },
       {
-        cuisine: "✡️ Shabbat • Festin Méditerranéen",
-        fete: true,
+        cuisine: "✡️ Shabbat • Festin Méditerranéen", fete: true,
         entree: {
-          nom: "Chakchouka rouge aux poivrons & ail",
-          prep: 15, cuisson: 25, difficulte: 2,
-          materiel: ["Sauteuse large", "Planche à découper"],
-          ingredients: ["4 poivrons (rouges et jaunes)", "4 tomates très mûres", "4 gousses d'ail", "1 cs de paprika doux", "1.5 cs d'huile d'olive"],
-          miseenplace: ["Émincer les poivrons en lanières.", "Hacher l'ail.", "Découper les tomates en cubes."],
-          etapes: [
-            "Faire revenir les poivrons et l'ail dans l'huile d'olive pendant 10 min à feu moyen.",
-            "Ajouter les tomates, le paprika, du sel et du poivre.",
-            "Laisser réduire à feu doux à couvert pendant 15 minutes jusqu'à ce que les poivrons soient très fondants."
-          ],
-          astuce: "Peut se déguster chaude ou tiède avec du pain hallah maison."
+          nom: "Chakchouka rouge aux poivrons & ail", prep: 15, cuisson: 25, difficulte: 2,
+          materiel: ["Sauteuse large"],
+          ingredients: ["4 poivrons", "4 tomates mûres", "4 gousses d'ail", "1 cs de paprika", "1.5 cs d'huile d me d'olive"],
+          miseenplace: ["Trancher poivrons.", "Découper tomates."],
+          etapes: ["Revenir poivrons et ail 10 min.", "Ajouter tomates et paprika.", "Réduire à feu doux 15 min."],
+          astuce: "Excellente tiède avec du pain hallah."
         },
         plat: {
-          nom: "Mijoté de poulet aux olives vertes, citron & coriandre",
-          prep: 15, cuisson: 45, difficulte: 2,
-          materiel: ["Cocotte ou faitout", "Passoire"],
-          ingredients: ["4 cuisses de poulet", "150g d'olives vertes dénoyautées", "2 oignons", "1 citron bio", "1 bouquet de coriandre", "1 cs de gingembre moulu"],
-          miseenplace: ["Faire blanchir les olives 5 min dans l'eau bouillante pour enlever l'excès de sel.", "Émincer les oignons."],
-          etapes: [
-            "Faire dorer les cuisses de poulet dans la cocotte avec un filet d'huile 5 min par côté.",
-            "Retirer le poulet, faire suer les oignons à la place.",
-            "Remettre le poulet, ajouter le gingembre, le jus d'un demi citron, les olives et 200ml d'eau.",
-            "Couvrir et laisser mijoter 40 minutes à feu doux. Parsemer de coriandre avant de servir."
-          ],
-          astuce: "Blanchir les olives évite d'avoir un plat trop salé en fin de cuisson."
+          nom: "Mijoté de poulet aux olives vertes, citron & coriandre", prep: 15, cuisson: 45, difficulte: 2,
+          materiel: ["Cocotte en fonte"],
+          ingredients: ["4 cuisses de poulet", "150g d'olives vertes", "2 oignons", "1 citron bio", "1 bouquet de coriandre", "1 cs de gingembre"],
+          miseenplace: ["Blanchir les olives 5 min.", "Émincer les oignons."],
+          etapes: ["Dorer le poulet 5 min.", "Faire suer les oignons.", "Mijoter le tout avec eau et épices 40 min.", "Parsemer de coriandre."],
+          astuce: "Blanchir les olives évite d'avoir un plat trop salé."
         },
-        dessert: { nom: "Salade de fruits frais à l'eau de fleur d'oranger", prep: 10, ingredients: ["2 pêches", "200g de fraises", "1 cc d'eau de fleur d'oranger"] }
-      },
-      {
-        cuisine: "✡️ Shabbat • Tradition & Épices",
-        fete: true,
-        entree: {
-          nom: "Salade de carottes râpées à la marocaine & harissa douce",
-          prep: 15, cuisson: 0, difficulte: 1,
-          materiel: ["Râpe à légumes", "Saladier"],
-          ingredients: ["4 grandes carottes", "1 gousse d'ail", "1 cc de cumin", "1/2 cc de harissa", "2 cs d'huile d'olive", "Jus d'un 1/2 citron"],
-          miseenplace: ["Éplucher et râper les carottes.", "Hacher l'ail très finement."],
-          etapes: [
-            "Emulsionner l'huile d'olive, le jus de citron, la harissa, l'ail et le cumin dans un saladier.",
-            "Ajouter les carottes râpées et mélanger vigoureusement.",
-            "Laisse reposer au moins 20 minutes au frais avant de servir pour infuser les arômes."
-          ],
-          astuce: "Cette salade gagne encore plus en saveur si elle est préparée la veille."
-        },
-        plat: {
-          nom: "Chraime : Poisson mijoté à la sauce tomate épicée & couscous",
-          prep: 15, cuisson: 30, difficulte: 2,
-          materiel: ["Sauteuse large", "Casserole"],
-          ingredients: ["400g de pavés de cabillaud ou colin", "400g de chair de tomate", "4 gousses d'ail", "1 cc de carvi", "1 cs de paprika", "150g de graine de couscous"],
-          miseenplace: ["Piler l'ail avec les épices (carvi, paprika).", "Éponger le poisson."],
-          etapes: [
-            "Faire revenir l'ail et les épices dans 2 cs d'huile 1 minute sans brûler.",
-            "Ajouter la chair de tomate et 100ml d'eau. Laisser réduire 15 minutes.",
-            "Déposer les pavés de poisson dans la sauce, couvrir et cuire 15 min à feu doux.",
-            "Préparer la semoule de couscous à côté en versant 150ml d'eau bouillante salée dessus."
-          ],
-          astuce: "Arrose régulièrement le poisson avec la sauce tomate pendant la cuisson."
-        },
-        dessert: { nom: "Dattes Medjool fourrées aux noix & cannelle", prep: 5, ingredients: ["6 dattes Medjool", "30g de cerneaux de noix", "Pincée de cannelle"] }
-      },
-      {
-        cuisine: "✡️ Shabbat • Saveurs d'Orient",
-        fete: true,
-        entree: {
-          nom: "Aubergine brûlée au tahini & grenades",
-          prep: 10, cuisson: 30, difficulte: 2,
-          materiel: ["Plaque de four", "Fourchette", "Bol"],
-          ingredients: ["2 aubergines", "2 cs de tahini", "1 cs de jus de citron", "30g de graines de grenade", "1 cs d'huile d'olive"],
-          miseenplace: ["Préchauffer le four à 220°C.", "Piquer la peau des aubergines à la fourchette."],
-          etapes: [
-            "Enfourner les aubergines entières 30 minutes jusqu'à ce qu'elles soient complètement flétries.",
-            "Ouvrir en deux, prélever la chair et l'écraser grossièrement.",
-            "Mélanger le tahini, le citron et l'eau pour obtenir une sauce fluide.",
-            "Napper la chair d'aubergines de sauce tahini, d'huile d'olive et de graines de grenade."
-          ],
-          astuce: "Le goût légèrement fumé vient de la peau bien cuite de l'aubergine."
-        },
-        plat: {
-          nom: "Pala (Daube douce) de bœuf aux pruneaux, patates douces & riz",
-          prep: 20, cuisson: 55, difficulte: 2,
-          materiel: ["Cocotte en fonte", "Casserole"],
-          ingredients: ["400g de paleron de bœuf en cubes", "100g de pruneaux dénoyautés", "300g de patates douces", "2 oignons", "1 bâton de cannelle", "150g de riz basmati"],
-          miseenplace: ["Émincer les oignons.", "Éplucher et couper les patates douces en gros morceaux."],
-          etapes: [
-            "Faire saisir les dés de bœuf à feu vif dans 1 cs d'huile 5 minutes dans la cocotte.",
-            "Ajouter les oignons, le bâton de cannelle, du sel, du poivre et couvrir d'eau.",
-            "Laisser mijoter à feu doux à couvert pendant 35 minutes.",
-            "Ajouter les patates douces et les pruneaux, puis poursuivre la cuisson 20 minutes.",
-            "Servir avec du riz basmati chaud."
-          ],
-          astuce: "La cuisson douce et prolongée rend la viande de bœuf parfaitement fondante."
-        },
-        dessert: { nom: "Compote de poires au miel & graines de sésame", prep: 10, ingredients: ["3 poires", "1 cs de miel", "1 cs de sésame"] }
+        dessert: { nom: "Salade de fruits à la fleur d'oranger", prep: 10, ingredients: ["2 pêches", "200g de fraises", "1 cc de fleur d'oranger"] }
       }
     ];
 
@@ -605,21 +352,13 @@
       return m ? `${h} h ${String(m).padStart(2, "0")}` : `${h} h`;
     }
     function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-
-    function tempsRepas(item) {
-      return item.entree.prep + item.plat.prep + Math.max(item.entree.cuisson, item.plat.cuisson);
-    }
-    function badgeTemps(t) {
-      if (t <= 35) return { classe: "bg-emerald-50 text-emerald-700 border-emerald-200/60" };
-      if (t <= 45) return { classe: "bg-amber-50 text-amber-700 border-amber-200/60" };
-      return { classe: "bg-rose-50 text-rose-700 border-rose-200/60" };
-    }
+    function tempsRepas(item) { return item.entree.prep + item.plat.prep + Math.max(item.entree.cuisson, item.plat.cuisson); }
 
     const RAYONS = [
-      { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","petits pois","fèves","avocat","patate douce","potimarron","potiron","butternut","champignon","panais","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","aneth","persil","ciboulette","gingembre","pousses","mesclun","salade","maïs","céleri","haricots verts","fraise","pêche","melon","pastèque","poire","pomme","orange","clémentine","kiwi","raisin","figue","abricot","endive","mâche","navet","chou","choucroute","ananas","brugnon","grenade"] },
-      { nom: "🐟 Poissons & Viandes", mots: ["poulet","truite","saumon","cabillaud","dinde","bœuf","boeuf","lieu","dorade","poisson","cuisse","steak","crevette","thon","rumsteck","paleron","colin"] },
-      { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","fromage blanc","œuf","oeuf","tofu","edamame","chèvre","beurre","parmesan","ricotta"] },
-      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","pois cassé","haricot","tahini","houmous","huile","vinaigre","graine","sésame","noix","noisette","amande","pignon","granola","miel","sucre","cannelle","muscade","curcuma","cumin","curry","paprika","zaatar","chili","tamari","soja","sauce","chocolat","citron confit","lait de coco","moutarde","balsamique","laurier","thym","bouillon","épices","datte","fleur d'oranger","pita","challah","pain","croûtons","chapelure","levure","pruneau","olive","grenade","carvi","harissa"] }
+      { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","fèves","avocat","patate douce","potimarron","champignon","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","persil","gingembre","fraise","pêche","melon","pastèque","poire","pomme","orange","kiwi","figue","datte"] },
+      { nom: "🐟 Poissons & Viandes", mots: ["poulet","saumon","cabillaud","dinde","bœuf","boeuf","thon"] },
+      { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","œuf","oeuf","tofu","edamame","chèvre","beurre"] },
+      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","tahini","huile","vinaigre","graine","sésame","noix","noisette","miel","cannelle","curcuma","cumin","curry","paprika","zaatar","citron confit","lait de coco","moutarde","olive"] }
     ];
     const ORDRE_RAYONS = ["🥬 Fruits & Légumes","🐟 Poissons & Viandes","🧀 Frais & Crèmerie","🌾 Épicerie & Secs","🛒 Autres"];
     
@@ -632,10 +371,10 @@
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    const STORAGE_KEY = "menu-market-v7";
+    const STORAGE_KEY = "menu-market-v8";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
-    function persister() { safeSet({ menuSemaine, etatStock, joursSelectionnes, saison: saisonActuelle }); }
+    function persister() { safeSet({ menuSemaine, etatStock, joursSelectionnes, jourActiveIndex }); }
 
     const saisonActuelle = obtenirSaisonActuelle();
     const poolRecettesSaison = catalogueSaisons[saisonActuelle] || catalogueSaisons["printemps"];
@@ -660,100 +399,142 @@
       });
     }
 
-    let menuSemaine, etatStock, joursSelectionnes;
+    let menuSemaine, etatStock, joursSelectionnes, jourActiveIndex;
     const sauvegarde = safeGet();
     if (sauvegarde && Array.isArray(sauvegarde.menuSemaine) && sauvegarde.menuSemaine.length) {
       menuSemaine = sauvegarde.menuSemaine;
       etatStock = sauvegarde.etatStock || {};
       joursSelectionnes = sauvegarde.joursSelectionnes || [0, 1, 2, 3, 4, 5, 6];
+      jourActiveIndex = sauvegarde.jourActiveIndex !== undefined ? sauvegarde.jourActiveIndex : meGetJourActuelIndex();
     } else {
       menuSemaine = genererMenuSemaineDynamique();
       etatStock = {};
       joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
+      jourActiveIndex = meGetJourActuelIndex();
     }
 
-    function ligneMeta(plat) {
+    function meLigneMeta(plat) {
       const d = DIFFICULTES[plat.difficulte] || DIFFICULTES[1];
       return `<div class="flex items-center gap-2 mt-1.5">
-        <span class="text-[10px] font-bold text-slate-500 bg-slate-100/80 px-2 py-0.5 rounded-md border border-slate-200/40">⏱️ ${formatTemps(plat.prep + plat.cuisson)}</span>
+        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/50">⏱️ ${formatTemps(plat.prep + plat.cuisson)}</span>
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-md border ${d.classe}">${d.label}</span>
       </div>`;
     }
 
-    function rendreMenu() {
-      document.getElementById("header-saison").innerText = `Chef Personnel • Saison ${cap(saisonActuelle)}`;
-      const container = document.getElementById("cards-container");
-      container.innerHTML = "";
+    // AFFICHER LE SELECTEUR DE JOURS (Vue Jour par Jour)
+    function rendreSélecteurDeJours() {
+      const container = document.getElementById("day-selector");
+      const jourAujourdhuiIdx = meGetJourActuelIndex();
 
-      menuSemaine.forEach((item, index) => {
-        const estShabbat = item.jour.includes("Vendredi");
-        const t = tempsRepas(item);
-        const bt = badgeTemps(t);
-        const chipTemps = estShabbat
-          ? `<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full badge-shabbat flex items-center gap-1 inline-flex">🕯️ Repas de fête (~${t} min)</span>`
-          : `<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${bt.classe} inline-flex items-center gap-1">⏱️ Repas prêt en ~${t} min</span>`;
+      container.innerHTML = menuSemaine.map((item, idx) => {
+        const estActif = idx === jourActiveIndex;
+        const estAujourdhui = idx === jourAujourdhuiIdx;
+        return `
+          <button data-select-day="${idx}" class="flex-1 min-w-[70px] py-2.5 px-3 rounded-2xl flex flex-col items-center justify-center transition-all ${estActif ? 'bg-slate-900 text-white shadow-md scale-105' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'}">
+            <span class="text-[9px] font-extrabold uppercase tracking-wider ${estActif ? 'text-emerald-400' : 'text-slate-400'}">
+              ${estAujourdhui ? 'Aujourd\'hui' : item.jour.split(' ')[0]}
+            </span>
+            <span class="text-xs font-bold mt-0.5">${item.jour.substring(0, 3)}</span>
+          </button>`;
+      }).join('');
+    }
 
-        container.innerHTML += `
-          <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/60 transition duration-200 space-y-3.5">
-            <div class="flex justify-between items-start gap-2">
+    // RENDRE LE FOCUS DU JOUR (Grande carte immersive)
+    function rendreVueJour() {
+      rendreSélecteurDeJours();
+      const item = menuSemaine[jourActiveIndex];
+      const estShabbat = item.jour.includes("Vendredi");
+      const t = tempsRepas(item);
+
+      const container = document.getElementById("card-day-focus");
+      container.innerHTML = `
+        <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-200/80 space-y-5 animate-in fade-in duration-300">
+          <div class="flex justify-between items-start gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider">${item.cuisine}</span>
+                ${estShabbat ? '<span class="badge-shabbat text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase">Shabbat</span>' : ''}
+              </div>
+              <h2 class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">${item.jour}</h2>
+            </div>
+            <button data-regen="${jourActiveIndex}" class="p-2.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-2xl transition active:scale-95 border border-slate-100" title="Changer le repas de ce jour">
+              🔄
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Entrée -->
+            <div class="bg-slate-50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-slate-100 hover:border-slate-200 transition">
               <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="font-extrabold text-base text-slate-900 tracking-tight">${item.jour}</span>
-                  ${estShabbat ? '<span class="badge-shabbat text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">Shabbat</span>' : ''}
-                </div>
-                <div class="mt-1">${chipTemps}</div>
+                <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">🥗 Entrée</span>
+                <h3 class="font-bold text-slate-900 text-sm leading-snug mt-0.5">${item.entree.nom}</h3>
+                ${meLigneMeta(item.entree)}
               </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200/40">${item.cuisine}</span>
-                <button data-regen="${index}" class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all active:scale-90" title="Changer ce menu">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                </button>
-              </div>
+              <button data-modal="${jourActiveIndex}" data-type="entree" class="shrink-0 text-emerald-700 hover:text-emerald-800 font-bold text-xs px-3.5 py-2 bg-white rounded-xl border border-slate-200 shadow-sm active:scale-95 transition">Recette ➔</button>
             </div>
 
-            <div class="space-y-2 text-xs">
-              <div class="bg-slate-50 p-3 rounded-2xl flex justify-between items-center gap-2 border border-slate-100">
-                <div class="min-w-0">
-                  <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Entrée</span>
-                  <p class="font-bold text-slate-800 leading-tight mt-0.5">${item.entree.nom}</p>
-                  ${ligneMeta(item.entree)}
-                </div>
-                <button data-modal="${index}" data-type="entree" class="shrink-0 text-emerald-700 hover:text-emerald-800 font-bold text-[11px] px-3 py-1.5 bg-white rounded-xl border border-slate-200/80 shadow-sm active:scale-95 transition">Recette ➔</button>
+            <!-- Plat -->
+            <div class="bg-emerald-50/50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-emerald-100 hover:border-emerald-200 transition">
+              <div class="min-w-0">
+                <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">🥘 Plat principal</span>
+                <h3 class="font-bold text-slate-900 text-sm leading-snug mt-0.5">${item.plat.nom}</h3>
+                ${meLigneMeta(item.plat)}
               </div>
-
-              <div class="bg-emerald-50/40 p-3 rounded-2xl flex justify-between items-center gap-2 border border-emerald-100/80">
-                <div class="min-w-0">
-                  <span class="text-[9px] font-extrabold text-emerald-600 uppercase tracking-wider">Plat principal</span>
-                  <p class="font-bold text-slate-900 leading-tight mt-0.5">${item.plat.nom}</p>
-                  ${ligneMeta(item.plat)}
-                </div>
-                <button data-modal="${index}" data-type="plat" class="shrink-0 text-white bg-emerald-600 hover:bg-emerald-700 font-bold text-[11px] px-3 py-1.5 rounded-xl shadow-sm active:scale-95 transition">Recette ➔</button>
-              </div>
-
-              ${item.dessert ? `
-              <div class="bg-rose-50/30 p-3 rounded-2xl border border-rose-100/60">
-                <div class="flex items-center justify-between">
-                  <span class="text-[9px] font-extrabold text-rose-500 uppercase tracking-wider">🍰 Dessert</span>
-                  <span class="text-[10px] font-bold text-slate-400">⏱️ ${formatTemps(item.dessert.prep)} · sans cuisson</span>
-                </div>
-                <p class="font-bold text-slate-800 leading-tight mt-0.5">${item.dessert.nom}</p>
-              </div>` : ''}
+              <button data-modal="${jourActiveIndex}" data-type="plat" class="shrink-0 text-white bg-emerald-600 hover:bg-emerald-700 font-bold text-xs px-3.5 py-2 rounded-xl shadow-sm active:scale-95 transition">Recette ➔</button>
             </div>
 
-            <details class="group pt-1">
-              <summary class="text-[11px] font-bold text-slate-400 hover:text-slate-600 cursor-pointer list-none flex justify-between items-center pt-2 border-t border-slate-100 transition">
-                <span>🛒 Ingrédients du jour</span>
-                <span class="transition-transform duration-200 group-open:rotate-180 text-xs">▼</span>
-              </summary>
-              <div class="mt-2.5 text-xs bg-slate-50/80 p-3 rounded-2xl border border-slate-100">
-                <div class="flex flex-wrap gap-1.5">
-                  ${ingredientsDuJour(item).map(ing => `<span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200/60 text-slate-700 text-[11px] font-medium shadow-2xs">${ing}</span>`).join('')}
-                </div>
+            <!-- Dessert -->
+            ${item.dessert ? `
+            <div class="bg-rose-50/40 p-3.5 rounded-2xl border border-rose-100 flex justify-between items-center">
+              <div>
+                <span class="text-[10px] font-extrabold text-rose-500 uppercase tracking-wider">🍰 Dessert</span>
+                <p class="font-bold text-slate-800 text-xs mt-0.5">${item.dessert.nom}</p>
               </div>
-            </details>
-          </div>`;
-      });
+              <span class="text-[10px] font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border border-rose-100">⏱️ ${formatTemps(item.dessert.prep)}</span>
+            </div>` : ''}
+          </div>
 
+          <!-- Ingrédients du jour -->
+          <div class="pt-2">
+            <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">🛒 Ingrédients pour ce jour</h4>
+            <div class="flex flex-wrap gap-1.5">
+              ${ingredientsDuJour(item).map(ing => `<span class="bg-slate-100/80 px-2.5 py-1 rounded-xl text-slate-700 text-[11px] font-semibold border border-slate-200/50">${ing}</span>`).join('')}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // RENDRE LA GRILLE SEMAINE (Vue d'ensemble)
+    function rendreVueSemaine() {
+      const container = document.getElementById("cards-grid-container");
+      container.innerHTML = menuSemaine.map((item, index) => `
+        <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-200/60 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="font-extrabold text-slate-900 text-sm">${item.jour}</span>
+              <button data-regen="${index}" class="text-slate-400 hover:text-emerald-600 p-1 text-xs">🔄</button>
+            </div>
+            <p class="text-[10px] font-bold text-emerald-600 mt-0.5">${item.cuisine}</p>
+            
+            <div class="mt-3 space-y-2 text-xs">
+              <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                <p class="text-[9px] font-bold text-slate-400 uppercase">Entrée</p>
+                <p class="font-bold text-slate-800 truncate">${item.entree.nom}</p>
+              </div>
+              <div class="bg-emerald-50/40 p-2.5 rounded-xl border border-emerald-100">
+                <p class="text-[9px] font-bold text-emerald-600 uppercase">Plat</p>
+                <p class="font-bold text-slate-900 truncate">${item.plat.nom}</p>
+              </div>
+            </div>
+          </div>
+          <button data-switch-to-day="${index}" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl transition">Voir détails & recettes ➔</button>
+        </div>`).join('');
+    }
+
+    function rendreMenuComplet() {
+      document.getElementById("header-saison").innerText = `Chef Personnel • ${cap(saisonActuelle)}`;
+      rendreVueJour();
+      rendreVueSemaine();
       rendreFiltresJours();
       rendreCourses();
     }
@@ -814,6 +595,7 @@
 
       document.getElementById("modal-recette").classList.remove("hidden");
     }
+
     document.getElementById("close-modal").addEventListener("click", () => document.getElementById("modal-recette").classList.add("hidden"));
     document.getElementById("modal-recette").addEventListener("click", (e) => { if (e.target.id === "modal-recette") e.currentTarget.classList.add("hidden"); });
 
@@ -826,43 +608,28 @@
         menuSemaine[index] = { ...menuSemaine[index], cuisine: r.cuisine, entree: r.entree, plat: r.plat, dessert: r.dessert };
       }
       persister();
-      rendreMenu();
+      rendreMenuComplet();
     }
 
     function rendreFiltresJours() {
       const container = document.getElementById("days-filter");
-      container.innerHTML = "";
-      menuSemaine.forEach((item, idx) => {
+      container.innerHTML = menuSemaine.map((item, idx) => {
         const active = joursSelectionnes.includes(idx);
-        container.innerHTML += `
+        return `
           <button data-jour="${idx}" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${active ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-400 hover:bg-slate-200/70'}">
             ${item.jour.split(' ')[0]}
           </button>`;
-      });
+      }).join('');
 
-      const btnToggle = document.getElementById("btn-toggle-all-days");
-      btnToggle.innerText = joursSelectionnes.length === 7 ? "Tout décocher" : "Tout sélectionner";
+      document.getElementById("btn-toggle-all-days").innerText = joursSelectionnes.length === 7 ? "Tout décocher" : "Tout sélectionner";
     }
 
     function toggleJourSelection(idx) {
       if (joursSelectionnes.includes(idx)) {
-        if (joursSelectionnes.length > 1) {
-          joursSelectionnes = joursSelectionnes.filter(i => i !== idx);
-        }
+        if (joursSelectionnes.length > 1) joursSelectionnes = joursSelectionnes.filter(i => i !== idx);
       } else {
         joursSelectionnes.push(idx);
         joursSelectionnes.sort((a,b) => a - b);
-      }
-      persister();
-      rendreFiltresJours();
-      rendreCourses();
-    }
-
-    function toggleTousJours() {
-      if (joursSelectionnes.length === 7) {
-        joursSelectionnes = [0];
-      } else {
-        joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
       }
       persister();
       rendreFiltresJours();
@@ -879,12 +646,7 @@
 
     function rendreCourses() {
       const joursAffiches = menuSemaine.filter((_, idx) => joursSelectionnes.includes(idx));
-      
-      const tagText = joursAffiches.length === 7 
-        ? "Toute la semaine" 
-        : joursAffiches.map(j => j.jour.split(' ')[0]).join(', ');
-      
-      document.getElementById("active-days-tag").innerText = tagText;
+      document.getElementById("active-days-tag").innerText = joursAffiches.length === 7 ? "Toute la semaine" : joursAffiches.map(j => j.jour.split(' ')[0]).join(', ');
 
       const tousIngs = [];
       joursAffiches.forEach(m => tousIngs.push(...ingredientsDuJour(m)));
@@ -896,8 +658,7 @@
       const groupes = {};
       aAcheter.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
 
-      const listAcheter = document.getElementById("list-a-acheter");
-      listAcheter.innerHTML = ORDRE_RAYONS
+      document.getElementById("list-a-acheter").innerHTML = ORDRE_RAYONS
         .filter(r => groupes[r] && groupes[r].length)
         .map(r => `
           <div>
@@ -905,15 +666,12 @@
             <div class="divide-y divide-slate-50">${groupes[r].map(i => itemHTML(i, false)).join('')}</div>
           </div>`).join('') || '<p class="text-xs text-slate-400 py-2 font-medium">Tout est dans le panier ✅</p>';
 
-      const listStock = document.getElementById("list-en-stock");
-      listStock.innerHTML = achetes.length
+      document.getElementById("list-en-stock").innerHTML = achetes.length
         ? achetes.map(i => itemHTML(i, true)).join('')
         : '<p class="text-xs text-slate-300 py-2 font-medium">Rien coché pour l\'instant.</p>';
 
       document.getElementById("count-a-acheter").innerText = aAcheter.length;
-
-      const total = ingsUniques.length;
-      const done = achetes.length;
+      const total = ingsUniques.length, done = achetes.length;
       document.getElementById("progress-label").innerText = `${done} / ${total} achetés`;
       document.getElementById("progress-bar").style.width = total ? `${Math.round(done / total * 100)}%` : "0%";
     }
@@ -924,9 +682,25 @@
       rendreCourses();
     }
 
-    document.getElementById("cards-container").addEventListener("click", (e) => {
+    // GESTION DES CLICS SUR L'APPLICATION
+    document.addEventListener("click", (e) => {
+      const selectDay = e.target.closest("[data-select-day]");
+      if (selectDay) {
+        jourActiveIndex = Number(selectDay.dataset.selectDay);
+        persister();
+        rendreVueJour();
+        return;
+      }
+      const switchToDay = e.target.closest("[data-switch-to-day]");
+      if (switchToDay) {
+        jourActiveIndex = Number(switchToDay.dataset.switchToDay);
+        persister();
+        setTab("jour");
+        return;
+      }
       const regen = e.target.closest("[data-regen]");
       if (regen) { regenererJour(Number(regen.dataset.regen)); return; }
+      
       const modal = e.target.closest("[data-modal]");
       if (modal) { ouvrirModal(Number(modal.dataset.modal), modal.dataset.type); }
     });
@@ -936,7 +710,12 @@
       if (btn) toggleJourSelection(Number(btn.dataset.jour));
     });
 
-    document.getElementById("btn-toggle-all-days").addEventListener("click", toggleTousJours);
+    document.getElementById("btn-toggle-all-days").addEventListener("click", () => {
+      joursSelectionnes = joursSelectionnes.length === 7 ? [0] : [0, 1, 2, 3, 4, 5, 6];
+      persister();
+      rendreFiltresJours();
+      rendreCourses();
+    });
 
     document.getElementById("section-courses").addEventListener("change", (e) => {
       if (e.target.matches("input[data-ing]")) toggleStock(e.target.dataset.ing);
@@ -949,26 +728,39 @@
     });
 
     document.getElementById("btn-reset-all").addEventListener("click", () => {
-      if (confirm("Générer une toute nouvelle semaine ? Ta liste de courses sera réinitialisée.")) {
+      if (confirm("Générer une toute nouvelle semaine ? La liste de courses sera réinitialisée.")) {
         menuSemaine = genererMenuSemaineDynamique();
         etatStock = {};
         joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
+        jourActiveIndex = meGetJourActuelIndex();
         persister();
-        rendreMenu();
+        rendreMenuComplet();
       }
     });
 
+    // NAVIGATION ANGLAIS APPLI
     function setTab(tab) {
-      const menu = tab === "menu";
-      document.getElementById("section-menu").classList.toggle("hidden", !menu);
-      document.getElementById("section-courses").classList.toggle("hidden", menu);
-      document.getElementById("tab-menu").className = "w-1/2 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 " + (menu ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800");
-      document.getElementById("tab-courses").className = "w-1/2 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 " + (menu ? "text-slate-500 hover:text-slate-800" : "bg-white text-slate-900 shadow-sm");
+      document.getElementById("section-jour").classList.toggle("hidden", tab !== "jour");
+      document.getElementById("section-semaine").classList.toggle("hidden", tab !== "semaine");
+      document.getElementById("section-courses").classList.toggle("hidden", tab !== "courses");
+
+      const tabs = { jour: "tab-jour", semaine: "tab-semaine", courses: "tab-courses" };
+      Object.keys(tabs).forEach(k => {
+        const el = document.getElementById(tabs[k]);
+        if (k === tab) {
+          el.className = "w-1/3 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5 font-extrabold";
+        } else {
+          el.className = "w-1/3 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1.5";
+        }
+      });
+      if (tab === "jour") rendreVueJour();
     }
-    document.getElementById("tab-menu").addEventListener("click", () => setTab("menu"));
+
+    document.getElementById("tab-jour").addEventListener("click", () => setTab("jour"));
+    document.getElementById("tab-semaine").addEventListener("click", () => setTab("semaine"));
     document.getElementById("tab-courses").addEventListener("click", () => setTab("courses"));
 
-    rendreMenu();
+    rendreMenuComplet();
   </script>
 </body>
 </html>
