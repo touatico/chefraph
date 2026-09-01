@@ -42,29 +42,27 @@
 
     <!-- Onglets de Navigation Principaux -->
     <div class="bg-slate-200/80 p-1 rounded-2xl flex text-xs font-bold shadow-inner">
-      <button id="tab-jour" class="w-1/3 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5">
-        <span>⭐</span> Jour par Jour
+      <button id="tab-jour" class="w-1/4 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-1">
+        ⭐ Jour
       </button>
-      <button id="tab-semaine" class="w-1/3 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1.5">
-        <span>📅</span> Vue Semaine
+      <button id="tab-semaine" class="w-1/4 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1">
+        📅 Semaine
       </button>
-      <button id="tab-courses" class="w-1/3 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1.5">
-        <span>🛒</span> Courses
+      <button id="tab-courses" class="w-1/4 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1">
+        🛒 Courses
+      </button>
+      <button id="tab-inventaire" class="w-1/4 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1">
+        📦 Placard
       </button>
     </div>
 
-    <!-- VUE 1 : JOUR PAR JOUR (Focus sur le jour sélectionné/actuel) -->
+    <!-- VUE 1 : JOUR PAR JOUR -->
     <div id="section-jour" class="space-y-4">
-      
-      <!-- Selecteur Horizontal de Jours -->
       <div id="day-selector" class="flex gap-2 overflow-x-auto hide-scrollbar py-1"></div>
-
-      <!-- Carte du Jour Unique Focus -->
       <div id="card-day-focus"></div>
-
     </div>
 
-    <!-- VUE 2 : VUE SEMAINE (Grille globale) -->
+    <!-- VUE 2 : VUE SEMAINE -->
     <div id="section-semaine" class="hidden space-y-4">
       <div class="bg-emerald-50/70 border border-emerald-200/60 rounded-2xl px-4 py-3 text-xs text-emerald-900 leading-relaxed flex items-center gap-3 shadow-sm">
         <div class="p-2 bg-emerald-100/80 text-emerald-700 rounded-xl shrink-0">💡</div>
@@ -77,8 +75,6 @@
 
     <!-- VUE 3 : COURSES -->
     <div id="section-courses" class="hidden space-y-5">
-
-      <!-- Filtres Jours & Progression -->
       <div class="bg-white p-4 rounded-3xl card-shadow border border-slate-200/60 space-y-3">
         <div class="flex justify-between items-center">
           <label class="block text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">🎯 Ingrédients pour :</label>
@@ -108,18 +104,30 @@
         <div id="list-a-acheter" class="space-y-4"></div>
       </div>
 
-      <!-- Dans le panier -->
+      <!-- Dans le panier / En réserve -->
       <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200/60 space-y-4">
         <div class="flex justify-between items-center border-b border-slate-100 pb-3">
           <h2 class="font-bold text-slate-400 text-sm flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
-            Dans le panier
+            En réserve / Dans le panier
           </h2>
-          <button id="btn-vider-panier" class="text-[11px] font-bold text-slate-400 hover:text-rose-500 transition">Tout décocher</button>
+          <button id="btn-vider-panier" class="text-[11px] font-bold text-slate-400 hover:text-rose-500 transition">Tout remettre en courses</button>
         </div>
         <div id="list-en-stock" class="space-y-1 divide-y divide-slate-50 text-slate-400"></div>
       </div>
+    </div>
 
+    <!-- VUE 4 : INVENTAIRE DU PLACARD -->
+    <div id="section-inventaire" class="hidden space-y-5">
+      <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200/60 space-y-4">
+        <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
+          <div>
+            <h2 class="font-extrabold text-slate-900 text-base">📦 Inventaire du placard</h2>
+            <p class="text-xs text-slate-500">Cochez ce que vous possédez déjà pour l'exclure automatiquement des courses.</p>
+          </div>
+        </div>
+        <div id="inventaire-container" class="space-y-4"></div>
+      </div>
     </div>
   </main>
 
@@ -134,16 +142,11 @@
         </div>
         <button id="close-modal" class="p-2 -mr-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition active:scale-95">✕</button>
       </div>
-
       <div id="modal-stats" class="grid grid-cols-3 gap-2"></div>
-
       <div id="modal-materiel-wrap">
-        <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <span>🧰</span> Matériel nécessaire
-        </h3>
+        <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>🧰</span> Matériel nécessaire</h3>
         <div id="modal-materiel" class="flex flex-wrap gap-1.5"></div>
       </div>
-
       <div>
         <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
           <span>🥑 Ingrédients</span>
@@ -151,21 +154,14 @@
         </h3>
         <ul id="modal-ingredients" class="grid grid-cols-1 gap-1.5 text-xs text-slate-700 font-medium"></ul>
       </div>
-
       <div id="modal-miseenplace-wrap">
-        <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <span>📋</span> Mise en place <span class="text-[10px] text-slate-400 normal-case font-semibold">(Avant la cuisson)</span>
-        </h3>
+        <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>📋</span> Mise en place</h3>
         <ul id="modal-miseenplace" class="space-y-1.5 text-xs text-slate-600"></ul>
       </div>
-
       <div>
-        <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <span>👩‍🍳</span> Pas-à-pas guidé
-        </h3>
+        <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>👩‍🍳</span> Pas-à-pas guidé</h3>
         <ol id="modal-etapes" class="space-y-3 text-xs text-slate-600 pl-4 list-decimal marker:font-bold marker:text-emerald-600 leading-relaxed"></ol>
       </div>
-
       <div id="modal-astuce"></div>
     </div>
   </div>
@@ -179,9 +175,8 @@
       return "hiver";
     }
 
-    // Détermination de l'index du jour actuel (0 = Lundi ... 6 = Dimanche)
     function meGetJourActuelIndex() {
-      const jsDay = new Date().getDay(); // 0:Dim, 1:Lun...
+      const jsDay = new Date().getDay();
       return jsDay === 0 ? 6 : jsDay - 1;
     }
 
@@ -316,26 +311,6 @@
           astuce: "Arroser avec le jus garantit une peau dorée."
         },
         dessert: { nom: "Salade d'oranges à la cannelle & dattes", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool", "Cannelle"] }
-      },
-      {
-        cuisine: "✡️ Shabbat • Festin Méditerranéen", fete: true,
-        entree: {
-          nom: "Chakchouka rouge aux poivrons & ail", prep: 15, cuisson: 25, difficulte: 2,
-          materiel: ["Sauteuse large"],
-          ingredients: ["4 poivrons", "4 tomates mûres", "4 gousses d'ail", "1 cs de paprika", "1.5 cs d'huile d me d'olive"],
-          miseenplace: ["Trancher poivrons.", "Découper tomates."],
-          etapes: ["Revenir poivrons et ail 10 min.", "Ajouter tomates et paprika.", "Réduire à feu doux 15 min."],
-          astuce: "Excellente tiède avec du pain hallah."
-        },
-        plat: {
-          nom: "Mijoté de poulet aux olives vertes, citron & coriandre", prep: 15, cuisson: 45, difficulte: 2,
-          materiel: ["Cocotte en fonte"],
-          ingredients: ["4 cuisses de poulet", "150g d'olives vertes", "2 oignons", "1 citron bio", "1 bouquet de coriandre", "1 cs de gingembre"],
-          miseenplace: ["Blanchir les olives 5 min.", "Émincer les oignons."],
-          etapes: ["Dorer le poulet 5 min.", "Faire suer les oignons.", "Mijoter le tout avec eau et épices 40 min.", "Parsemer de coriandre."],
-          astuce: "Blanchir les olives évite d'avoir un plat trop salé."
-        },
-        dessert: { nom: "Salade de fruits à la fleur d'oranger", prep: 10, ingredients: ["2 pêches", "200g de fraises", "1 cc de fleur d'oranger"] }
       }
     ];
 
@@ -352,26 +327,26 @@
       return m ? `${h} h ${String(m).padStart(2, "0")}` : `${h} h`;
     }
     function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-    function tempsRepas(item) { return item.entree.prep + item.plat.prep + Math.max(item.entree.cuisson, item.plat.cuisson); }
 
     const RAYONS = [
       { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","fèves","avocat","patate douce","potimarron","champignon","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","persil","gingembre","fraise","pêche","melon","pastèque","poire","pomme","orange","kiwi","figue","datte"] },
       { nom: "🐟 Poissons & Viandes", mots: ["poulet","saumon","cabillaud","dinde","bœuf","boeuf","thon"] },
       { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","œuf","oeuf","tofu","edamame","chèvre","beurre"] },
-      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","tahini","huile","vinaigre","graine","sésame","noix","noisette","miel","cannelle","curcuma","cumin","curry","paprika","zaatar","citron confit","lait de coco","moutarde","olive"] }
+      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","tahini","huile","vinaigre","graine","sésame","noix","noisette","miel","cannelle","curcuma","cumin","curry","paprika","zaatar","citron confit","lait de coco","moutarde","olive","pain"] }
     ];
     const ORDRE_RAYONS = ["🥬 Fruits & Légumes","🐟 Poissons & Viandes","🧀 Frais & Crèmerie","🌾 Épicerie & Secs","🛒 Autres"];
-    
+
     function rayonPour(ing) {
       const s = ing.toLowerCase();
       for (const r of RAYONS) if (r.mots.some(m => s.includes(m))) return r.nom;
       return "🛒 Autres";
     }
+
     function ingredientsDuJour(item) {
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    const STORAGE_KEY = "menu-market-v8";
+    const STORAGE_KEY = "menu-market-v9";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
     function persister() { safeSet({ menuSemaine, etatStock, joursSelectionnes, jourActiveIndex }); }
@@ -421,7 +396,6 @@
       </div>`;
     }
 
-    // AFFICHER LE SELECTEUR DE JOURS (Vue Jour par Jour)
     function rendreSélecteurDeJours() {
       const container = document.getElementById("day-selector");
       const jourAujourdhuiIdx = meGetJourActuelIndex();
@@ -439,12 +413,11 @@
       }).join('');
     }
 
-    // RENDRE LE FOCUS DU JOUR (Grande carte immersive)
     function rendreVueJour() {
       rendreSélecteurDeJours();
       const item = menuSemaine[jourActiveIndex];
       const estShabbat = item.jour.includes("Vendredi");
-      const t = tempsRepas(item);
+      const ings = ingredientsDuJour(item);
 
       const container = document.getElementById("card-day-focus");
       container.innerHTML = `
@@ -463,7 +436,6 @@
           </div>
 
           <div class="space-y-3">
-            <!-- Entrée -->
             <div class="bg-slate-50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-slate-100 hover:border-slate-200 transition">
               <div class="min-w-0">
                 <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">🥗 Entrée</span>
@@ -473,7 +445,6 @@
               <button data-modal="${jourActiveIndex}" data-type="entree" class="shrink-0 text-emerald-700 hover:text-emerald-800 font-bold text-xs px-3.5 py-2 bg-white rounded-xl border border-slate-200 shadow-sm active:scale-95 transition">Recette ➔</button>
             </div>
 
-            <!-- Plat -->
             <div class="bg-emerald-50/50 p-4 rounded-2xl flex justify-between items-center gap-3 border border-emerald-100 hover:border-emerald-200 transition">
               <div class="min-w-0">
                 <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">🥘 Plat principal</span>
@@ -483,7 +454,6 @@
               <button data-modal="${jourActiveIndex}" data-type="plat" class="shrink-0 text-white bg-emerald-600 hover:bg-emerald-700 font-bold text-xs px-3.5 py-2 rounded-xl shadow-sm active:scale-95 transition">Recette ➔</button>
             </div>
 
-            <!-- Dessert -->
             ${item.dessert ? `
             <div class="bg-rose-50/40 p-3.5 rounded-2xl border border-rose-100 flex justify-between items-center">
               <div>
@@ -494,17 +464,33 @@
             </div>` : ''}
           </div>
 
-          <!-- Ingrédients du jour -->
-          <div class="pt-2">
-            <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">🛒 Ingrédients pour ce jour</h4>
-            <div class="flex flex-wrap gap-1.5">
-              ${ingredientsDuJour(item).map(ing => `<span class="bg-slate-100/80 px-2.5 py-1 rounded-xl text-slate-700 text-[11px] font-semibold border border-slate-200/50">${ing}</span>`).join('')}
+          <!-- TO DO LIST INGRÉDIENTS DU JOUR -->
+          <div class="pt-2 border-t border-slate-100">
+            <div class="flex justify-between items-center mb-2.5">
+              <h4 class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                📋 Ingrédients du jour <span class="text-[10px] text-slate-400 font-semibold">(To-Do List)</span>
+              </h4>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                ${ings.filter(i => etatStock[i]).length} / ${ings.length} en réserve
+              </span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              ${ings.map(ing => {
+                const enStock = !!etatStock[ing];
+                return `
+                  <label class="flex items-center gap-2.5 p-2.5 rounded-xl border transition cursor-pointer ${enStock ? 'bg-slate-50 border-slate-200/60 text-slate-400' : 'bg-white border-slate-200 text-slate-800 hover:border-emerald-300'}">
+                    <input type="checkbox" data-ing-toggle="${ing}" ${enStock ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                    <span class="text-xs font-semibold ${enStock ? 'line-through' : ''}">${ing}</span>
+                    <span class="ml-auto text-[9px] font-bold ${enStock ? 'text-slate-400 bg-slate-100' : 'text-emerald-700 bg-emerald-50'} px-1.5 py-0.5 rounded">
+                      ${enStock ? 'En stock' : 'À acheter'}
+                    </span>
+                  </label>`;
+              }).join('')}
             </div>
           </div>
         </div>`;
     }
 
-    // RENDRE LA GRILLE SEMAINE (Vue d'ensemble)
     function rendreVueSemaine() {
       const container = document.getElementById("cards-grid-container");
       container.innerHTML = menuSemaine.map((item, index) => `
@@ -515,7 +501,6 @@
               <button data-regen="${index}" class="text-slate-400 hover:text-emerald-600 p-1 text-xs">🔄</button>
             </div>
             <p class="text-[10px] font-bold text-emerald-600 mt-0.5">${item.cuisine}</p>
-            
             <div class="mt-3 space-y-2 text-xs">
               <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                 <p class="text-[9px] font-bold text-slate-400 uppercase">Entrée</p>
@@ -527,119 +512,14 @@
               </div>
             </div>
           </div>
-          <button data-switch-to-day="${index}" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl transition">Voir détails & recettes ➔</button>
+          <button data-switch-to-day="${index}" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl transition">Voir détails & To-Do List ➔</button>
         </div>`).join('');
-    }
-
-    function rendreMenuComplet() {
-      document.getElementById("header-saison").innerText = `Chef Personnel • ${cap(saisonActuelle)}`;
-      rendreVueJour();
-      rendreVueSemaine();
-      rendreFiltresJours();
-      rendreCourses();
-    }
-
-    function statCard(label, valeur, extraClasse) {
-      return `<div class="rounded-2xl p-3 text-center border ${extraClasse || 'bg-slate-50 border-slate-100'}">
-        <p class="text-[9px] font-extrabold uppercase tracking-wider opacity-60">${label}</p>
-        <p class="text-xs font-extrabold mt-0.5">${valeur}</p>
-      </div>`;
-    }
-
-    function ouvrirModal(jourIndex, type) {
-      const item = menuSemaine[jourIndex];
-      const data = type === "entree" ? item.entree : item.plat;
-      const d = DIFFICULTES[data.difficulte] || DIFFICULTES[1];
-
-      document.getElementById("modal-badge").innerText = `${item.jour.split(' ')[0]} • ${type === "entree" ? "Entrée" : "Plat Principal"}`;
-      document.getElementById("modal-title").innerText = data.nom;
-
-      document.getElementById("modal-stats").innerHTML =
-        statCard("Préparation", formatTemps(data.prep)) +
-        statCard("Cuisson", formatTemps(data.cuisson)) +
-        statCard("Niveau", d.label, d.classe);
-
-      const matWrap = document.getElementById("modal-materiel-wrap");
-      const matEl = document.getElementById("modal-materiel");
-      if (data.materiel && data.materiel.length) {
-        matWrap.classList.remove("hidden");
-        matEl.innerHTML = data.materiel.map(m => `<span class="bg-slate-100/80 text-slate-700 px-2.5 py-1 rounded-xl text-[11px] font-semibold border border-slate-200/60">🔨 ${m}</span>`).join('');
-      } else {
-        matWrap.classList.add("hidden");
-      }
-
-      document.getElementById("modal-ingredients").innerHTML = data.ingredients.map(ing => `
-        <li class="flex items-center gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-          <span>${ing}</span>
-        </li>`).join('');
-
-      const mepWrap = document.getElementById("modal-miseenplace-wrap");
-      const mepEl = document.getElementById("modal-miseenplace");
-      if (data.miseenplace && data.miseenplace.length) {
-        mepWrap.classList.remove("hidden");
-        mepEl.innerHTML = data.miseenplace.map(m => `<li class="flex items-start gap-2 bg-slate-50/70 p-2.5 rounded-xl border border-slate-100"><span class="text-emerald-600 font-bold shrink-0">✓</span><span>${m}</span></li>`).join('');
-      } else {
-        mepWrap.classList.add("hidden");
-      }
-
-      document.getElementById("modal-etapes").innerHTML = data.etapes.map(et => `<li class="pl-1 leading-relaxed">${et}</li>`).join('');
-
-      document.getElementById("modal-astuce").innerHTML = data.astuce ? `
-        <div class="bg-amber-50/70 border border-amber-200/60 rounded-2xl p-4 space-y-1">
-          <p class="text-[10px] font-extrabold text-amber-700 uppercase tracking-wider flex items-center gap-1.5">
-            <span>💡</span> Le geste du chef
-          </p>
-          <p class="text-xs text-amber-900 leading-relaxed font-medium">${data.astuce}</p>
-        </div>` : '';
-
-      document.getElementById("modal-recette").classList.remove("hidden");
-    }
-
-    document.getElementById("close-modal").addEventListener("click", () => document.getElementById("modal-recette").classList.add("hidden"));
-    document.getElementById("modal-recette").addEventListener("click", (e) => { if (e.target.id === "modal-recette") e.currentTarget.classList.add("hidden"); });
-
-    function regenererJour(index) {
-      if (index === 4) {
-        const shab = recettesShabbat[Math.floor(Math.random() * recettesShabbat.length)];
-        menuSemaine[index] = { id: index, jour: menuSemaine[index].jour, ...shab };
-      } else {
-        const r = tirerRecette(poolRecettesSaison, menuSemaine[index].plat.nom);
-        menuSemaine[index] = { ...menuSemaine[index], cuisine: r.cuisine, entree: r.entree, plat: r.plat, dessert: r.dessert };
-      }
-      persister();
-      rendreMenuComplet();
-    }
-
-    function rendreFiltresJours() {
-      const container = document.getElementById("days-filter");
-      container.innerHTML = menuSemaine.map((item, idx) => {
-        const active = joursSelectionnes.includes(idx);
-        return `
-          <button data-jour="${idx}" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${active ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-400 hover:bg-slate-200/70'}">
-            ${item.jour.split(' ')[0]}
-          </button>`;
-      }).join('');
-
-      document.getElementById("btn-toggle-all-days").innerText = joursSelectionnes.length === 7 ? "Tout décocher" : "Tout sélectionner";
-    }
-
-    function toggleJourSelection(idx) {
-      if (joursSelectionnes.includes(idx)) {
-        if (joursSelectionnes.length > 1) joursSelectionnes = joursSelectionnes.filter(i => i !== idx);
-      } else {
-        joursSelectionnes.push(idx);
-        joursSelectionnes.sort((a,b) => a - b);
-      }
-      persister();
-      rendreFiltresJours();
-      rendreCourses();
     }
 
     function itemHTML(ing, achete) {
       return `
         <label class="flex items-center gap-3 py-2.5 cursor-pointer group">
-          <input type="checkbox" data-ing="${ing}" ${achete ? 'checked' : ''} class="w-4 h-4 rounded-md text-emerald-600 focus:ring-emerald-500 border-slate-300 transition">
+          <input type="checkbox" data-ing-toggle="${ing}" ${achete ? 'checked' : ''} class="w-4 h-4 rounded-md text-emerald-600 focus:ring-emerald-500 border-slate-300 transition">
           <span class="text-xs font-semibold transition ${achete ? 'line-through text-slate-400' : 'text-slate-700 group-hover:text-slate-900'}">${ing}</span>
         </label>`;
     }
@@ -664,25 +544,139 @@
           <div>
             <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1.5">${r}</p>
             <div class="divide-y divide-slate-50">${groupes[r].map(i => itemHTML(i, false)).join('')}</div>
-          </div>`).join('') || '<p class="text-xs text-slate-400 py-2 font-medium">Tout est dans le panier ✅</p>';
+          </div>`).join('') || '<p class="text-xs text-slate-400 py-2 font-medium">Tout est en réserve ou acheté ✅</p>';
 
       document.getElementById("list-en-stock").innerHTML = achetes.length
         ? achetes.map(i => itemHTML(i, true)).join('')
-        : '<p class="text-xs text-slate-300 py-2 font-medium">Rien coché pour l\'instant.</p>';
+        : '<p class="text-xs text-slate-300 py-2 font-medium">Aucun élément en réserve.</p>';
 
       document.getElementById("count-a-acheter").innerText = aAcheter.length;
       const total = ingsUniques.length, done = achetes.length;
-      document.getElementById("progress-label").innerText = `${done} / ${total} achetés`;
+      document.getElementById("progress-label").innerText = `${done} / ${total} en réserve`;
       document.getElementById("progress-bar").style.width = total ? `${Math.round(done / total * 100)}%` : "0%";
+    }
+
+    function rendreInventaire() {
+      const tousIngs = [];
+      menuSemaine.forEach(m => tousIngs.push(...ingredientsDuJour(m)));
+      const ingsUniques = [...new Set(tousIngs)];
+
+      const groupes = {};
+      ingsUniques.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
+
+      const container = document.getElementById("inventaire-container");
+      container.innerHTML = ORDRE_RAYONS
+        .filter(r => groupes[r] && groupes[r].length)
+        .map(r => `
+          <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
+            <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-2">${r}</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              ${groupes[r].map(ing => {
+                const enStock = !!etatStock[ing];
+                return `
+                  <label class="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200/80 cursor-pointer">
+                    <input type="checkbox" data-ing-toggle="${ing}" ${enStock ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                    <span class="text-xs font-semibold ${enStock ? 'text-emerald-700 font-bold' : 'text-slate-600'}">${ing}</span>
+                  </label>`;
+              }).join('')}
+            </div>
+          </div>`).join('');
     }
 
     function toggleStock(ing) {
       etatStock[ing] = !etatStock[ing];
       persister();
+      rendreVueJour();
       rendreCourses();
+      rendreInventaire();
     }
 
-    // GESTION DES CLICS SUR L'APPLICATION
+    function rendreFiltresJours() {
+      const container = document.getElementById("days-filter");
+      container.innerHTML = menuSemaine.map((item, idx) => {
+        const active = joursSelectionnes.includes(idx);
+        return `
+          <button data-jour="${idx}" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${active ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-100 text-slate-400 hover:bg-slate-200/70'}">
+            ${item.jour.split(' ')[0]}
+          </button>`;
+      }).join('');
+      document.getElementById("btn-toggle-all-days").innerText = joursSelectionnes.length === 7 ? "Tout décocher" : "Tout sélectionner";
+    }
+
+    function rendreMenuComplet() {
+      document.getElementById("header-saison").innerText = `Chef Personnel • ${cap(saisonActuelle)}`;
+      rendreVueJour();
+      rendreVueSemaine();
+      rendreFiltresJours();
+      rendreCourses();
+      rendreInventaire();
+    }
+
+    function statCard(label, valeur, extraClasse) {
+      return `<div class="rounded-2xl p-3 text-center border ${extraClasse || 'bg-slate-50 border-slate-100'}">
+        <p class="text-[9px] font-extrabold uppercase tracking-wider opacity-60">${label}</p>
+        <p class="text-xs font-extrabold mt-0.5">${valeur}</p>
+      </div>`;
+    }
+
+    function ouvrirModal(jourIndex, type) {
+      const item = menuSemaine[jourIndex];
+      const data = type === "entree" ? item.entree : item.plat;
+      const d = DIFFICULTES[data.difficulte] || DIFFICULTES[1];
+
+      document.getElementById("modal-badge").innerText = `${item.jour.split(' ')[0]} • ${type === "entree" ? "Entrée" : "Plat Principal"}`;
+      document.getElementById("modal-title").innerText = data.nom;
+      document.getElementById("modal-stats").innerHTML =
+        statCard("Préparation", formatTemps(data.prep)) +
+        statCard("Cuisson", formatTemps(data.cuisson)) +
+        statCard("Niveau", d.label, d.classe);
+
+      const matWrap = document.getElementById("modal-materiel-wrap");
+      const matEl = document.getElementById("modal-materiel");
+      if (data.materiel && data.materiel.length) {
+        matWrap.classList.remove("hidden");
+        matEl.innerHTML = data.materiel.map(m => `<span class="bg-slate-100/80 text-slate-700 px-2.5 py-1 rounded-xl text-[11px] font-semibold border border-slate-200/60">🔨 ${m}</span>`).join('');
+      } else matWrap.classList.add("hidden");
+
+      document.getElementById("modal-ingredients").innerHTML = data.ingredients.map(ing => `
+        <li class="flex items-center gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+          <span>${ing}</span>
+        </li>`).join('');
+
+      const mepWrap = document.getElementById("modal-miseenplace-wrap");
+      const mepEl = document.getElementById("modal-miseenplace");
+      if (data.miseenplace && data.miseenplace.length) {
+        mepWrap.classList.remove("hidden");
+        mepEl.innerHTML = data.miseenplace.map(m => `<li class="flex items-start gap-2 bg-slate-50/70 p-2.5 rounded-xl border border-slate-100"><span class="text-emerald-600 font-bold shrink-0">✓</span><span>${m}</span></li>`).join('');
+      } else mepWrap.classList.add("hidden");
+
+      document.getElementById("modal-etapes").innerHTML = data.etapes.map(et => `<li class="pl-1 leading-relaxed">${et}</li>`).join('');
+      document.getElementById("modal-astuce").innerHTML = data.astuce ? `
+        <div class="bg-amber-50/70 border border-amber-200/60 rounded-2xl p-4 space-y-1">
+          <p class="text-[10px] font-extrabold text-amber-700 uppercase tracking-wider flex items-center gap-1.5"><span>💡</span> Le geste du chef</p>
+          <p class="text-xs text-amber-900 leading-relaxed font-medium">${data.astuce}</p>
+        </div>` : '';
+
+      document.getElementById("modal-recette").classList.remove("hidden");
+    }
+
+    document.getElementById("close-modal").addEventListener("click", () => document.getElementById("modal-recette").classList.add("hidden"));
+    document.getElementById("modal-recette").addEventListener("click", (e) => { if (e.target.id === "modal-recette") e.currentTarget.classList.add("hidden"); });
+
+    function regenererJour(index) {
+      if (index === 4) {
+        const shab = recettesShabbat[Math.floor(Math.random() * recettesShabbat.length)];
+        menuSemaine[index] = { id: index, jour: menuSemaine[index].jour, ...shab };
+      } else {
+        const r = tirerRecette(poolRecettesSaison, menuSemaine[index].plat.nom);
+        menuSemaine[index] = { ...menuSemaine[index], cuisine: r.cuisine, entree: r.entree, plat: r.plat, dessert: r.dessert };
+      }
+      persister();
+      rendreMenuComplet();
+    }
+
+    // ÉCOUTEURS D'ÉVÉNEMENTS
     document.addEventListener("click", (e) => {
       const selectDay = e.target.closest("[data-select-day]");
       if (selectDay) {
@@ -700,14 +694,32 @@
       }
       const regen = e.target.closest("[data-regen]");
       if (regen) { regenererJour(Number(regen.dataset.regen)); return; }
-      
+
       const modal = e.target.closest("[data-modal]");
       if (modal) { ouvrirModal(Number(modal.dataset.modal), modal.dataset.type); }
     });
 
+    document.addEventListener("change", (e) => {
+      const ingToggle = e.target.closest("[data-ing-toggle]");
+      if (ingToggle) {
+        toggleStock(ingToggle.dataset.ingToggle);
+      }
+    });
+
     document.getElementById("days-filter").addEventListener("click", (e) => {
       const btn = e.target.closest("[data-jour]");
-      if (btn) toggleJourSelection(Number(btn.dataset.jour));
+      if (btn) {
+        const idx = Number(btn.dataset.jour);
+        if (joursSelectionnes.includes(idx)) {
+          if (joursSelectionnes.length > 1) joursSelectionnes = joursSelectionnes.filter(i => i !== idx);
+        } else {
+          joursSelectionnes.push(idx);
+          joursSelectionnes.sort((a,b) => a - b);
+        }
+        persister();
+        rendreFiltresJours();
+        rendreCourses();
+      }
     });
 
     document.getElementById("btn-toggle-all-days").addEventListener("click", () => {
@@ -717,18 +729,14 @@
       rendreCourses();
     });
 
-    document.getElementById("section-courses").addEventListener("change", (e) => {
-      if (e.target.matches("input[data-ing]")) toggleStock(e.target.dataset.ing);
-    });
-
     document.getElementById("btn-vider-panier").addEventListener("click", () => {
       etatStock = {};
       persister();
-      rendreCourses();
+      rendreMenuComplet();
     });
 
     document.getElementById("btn-reset-all").addEventListener("click", () => {
-      if (confirm("Générer une toute nouvelle semaine ? La liste de courses sera réinitialisée.")) {
+      if (confirm("Générer une toute nouvelle semaine ? L'inventaire sera réinitialisé.")) {
         menuSemaine = genererMenuSemaineDynamique();
         etatStock = {};
         joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
@@ -738,27 +746,29 @@
       }
     });
 
-    // NAVIGATION ANGLAIS APPLI
     function setTab(tab) {
       document.getElementById("section-jour").classList.toggle("hidden", tab !== "jour");
       document.getElementById("section-semaine").classList.toggle("hidden", tab !== "semaine");
       document.getElementById("section-courses").classList.toggle("hidden", tab !== "courses");
+      document.getElementById("section-inventaire").classList.toggle("hidden", tab !== "inventaire");
 
-      const tabs = { jour: "tab-jour", semaine: "tab-semaine", courses: "tab-courses" };
+      const tabs = { jour: "tab-jour", semaine: "tab-semaine", courses: "tab-courses", inventaire: "tab-inventaire" };
       Object.keys(tabs).forEach(k => {
         const el = document.getElementById(tabs[k]);
         if (k === tab) {
-          el.className = "w-1/3 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-1.5 font-extrabold";
+          el.className = "w-1/4 py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all duration-200 flex items-center justify-center gap-1 font-extrabold";
         } else {
-          el.className = "w-1/3 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1.5";
+          el.className = "w-1/4 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all duration-200 flex items-center justify-center gap-1";
         }
       });
       if (tab === "jour") rendreVueJour();
+      if (tab === "inventaire") rendreInventaire();
     }
 
     document.getElementById("tab-jour").addEventListener("click", () => setTab("jour"));
     document.getElementById("tab-semaine").addEventListener("click", () => setTab("semaine"));
     document.getElementById("tab-courses").addEventListener("click", () => setTab("courses"));
+    document.getElementById("tab-inventaire").addEventListener("click", () => setTab("inventaire"));
 
     rendreMenuComplet();
   </script>
