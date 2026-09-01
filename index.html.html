@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Recettes & Courses</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 pb-20">
+
+  <!-- En-tête -->
+  <header class="bg-blue-900 text-white p-4 shadow-md sticky top-0 z-10 flex justify-between items-center">
+    <h1 class="font-bold text-lg">🍽️ Recettes & Inventaire</h1>
+    <button id="regen-btn" class="bg-blue-800 hover:bg-blue-700 text-xs px-3 py-2 rounded-lg border border-blue-600">
+      🔄 Nouveau Menu
+    </button>
+  </header>
+
+  <main class="max-w-md mx-auto p-4">
+
+    <!-- Navigation Onglets -->
+    <div class="flex bg-white rounded-xl p-1 shadow-sm mb-4">
+      <button id="tab-menu" class="w-1/2 py-2 text-sm font-bold rounded-lg bg-emerald-600 text-white transition">
+        📅 Menu Semaine
+      </button>
+      <button id="tab-courses" class="w-1/2 py-2 text-sm font-bold rounded-lg text-gray-500 transition">
+        🛒 Courses & Stock
+      </button>
+    </div>
+
+    <!-- ONGLET 1 : MENU DE LA SEMAINE -->
+    <div id="section-menu" class="space-y-3">
+      <!-- Injecté en JS -->
+    </div>
+
+    <!-- ONGLET 2 : COURSES & INVENTAIRE -->
+    <div id="section-courses" class="hidden space-y-4">
+      <div class="bg-white p-4 rounded-xl shadow-sm space-y-4">
+        <div>
+          <h2 class="font-bold text-gray-900 text-sm uppercase tracking-wide border-b pb-2 text-emerald-700">
+            🛒 À acheter pour la semaine
+          </h2>
+          <div id="list-a-acheter" class="divide-y divide-gray-100 mt-2">
+            <!-- Injecté en JS -->
+          </div>
+        </div>
+
+        <div class="pt-4 border-t">
+          <h2 class="font-bold text-gray-500 text-sm uppercase tracking-wide border-b pb-2">
+            ✅ Déjà en stock / En réserve
+          </h2>
+          <div id="list-en-stock" class="divide-y divide-gray-100 mt-2 text-gray-400">
+            <!-- Injecté en JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODALE RECETTE (Tiroir) -->
+  <div id="modal-recette" class="fixed inset-0 bg-black/50 hidden z-50 flex items-end justify-center">
+    <div class="bg-white w-full max-w-md rounded-t-2xl max-h-[85vh] overflow-y-auto p-6 space-y-4 shadow-xl">
+      <div class="flex justify-between items-start border-b pb-3">
+        <div>
+          <span id="modal-cuisine" class="text-xs font-semibold px-2 py-1 bg-emerald-100 text-emerald-800 rounded-full"></span>
+          <h2 id="modal-titre" class="text-xl font-bold text-gray-900 mt-2"></h2>
+          <p id="modal-temps" class="text-xs text-gray-500 mt-1"></p>
+        </div>
+        <button id="close-modal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-sm text-gray-900 mb-2">🥗 Entrée proposée</h3>
+        <p id="modal-entree" class="text-sm text-gray-700 bg-gray-50 p-2 rounded-lg"></p>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-sm text-gray-900 mb-2">🥑 Ingrédients (2 personnes)</h3>
+        <ul id="modal-ingredients" class="list-disc list-inside text-sm text-gray-700 space-y-1"></ul>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-sm text-gray-900 mb-2">👨‍🍳 Préparation rapide (< 30 min)</h3>
+        <ol id="modal-etapes" class="list-decimal list-inside text-sm text-gray-700 space-y-2"></ol>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Données des menus et recettes
+    const donnéesRecettes = [
+      {
+        id: 1,
+        jour: "Lundi",
+        cuisine: "🇲🇪 Moyen-Orient",
+        entree: "Salade de concombre à l'aneth et feta",
+        plat: "Shakshuka royale aux œufs et pois chiches",
+        temps: "20 min",
+        ingredients: ["4 œufs", "1 boîte de tomates concassées", "1 boîte de pois chiches", "1 oignon", "1 poivron rouge", "Épices (cumin, paprika)", "Pain Pita"],
+        etapes: [
+          "Faire revenir l'oignon et le poivron émincés dans une poêle avec de l'huile d'olive (5 min).",
+          "Ajouter les tomates concassées, les pois chiches et les épices. Laisser mijoter 8 min.",
+          "Creuser 4 puits dans la sauce, y casser les œufs. Couvrir et laisser cuire 4-5 min jusqu'à ce que les blancs soient pris.",
+          "Servir chaud directement dans la poêle avec du pain pita."
+        ]
+      },
+      {
+        id: 2,
+        jour: "Mardi",
+        cuisine: "🇯🇵 Japonaise",
+        entree: "Edamames à la fleur de sel",
+        plat: "Pavé de saumon teriyaki & nouilles udon",
+        temps: "20 min",
+        ingredients: ["2 pavés de saumon frais", "200g de nouilles Udon", "2 courgettes", "Sauce Teriyaki", "Graines de sésame"],
+        etapes: [
+          "Tailler les courgettes en fins bâtonnets et les faire sauter au wok avec un peu d'huile 5 min.",
+          "Faire cuire les nouilles Udon selon le paquet (généralement 3 min dans l'eau bouillante).",
+          "Saisir les pavés de saumon 3 min de chaque côté dans une poêle avec la sauce teriyaki.",
+          "Mélanger les nouilles et courgettes, dresser avec le saumon et saupoudrer de sésame."
+        ]
+      },
+      {
+        id: 3,
+        jour: "Mercredi",
+        cuisine: "🇲🇽 Mexicaine",
+        entree: "Guacamole maison & totopos",
+        plat: "Tacos de poulet épicé & haricots rouges",
+        temps: "25 min",
+        ingredients: ["300g de filet de poulet", "4 tortillas de blé/maïs", "1 poivron", "1 petite boîte de haricots rouges", "1 avocat", "Épices mexicaines", "Citron vert"],
+        etapes: [
+          "Émincer le poulet et le poivron. Les faire revenir à feu vif avec les épices mexicaines.",
+          "Ajouter les haricots rouges rincés en fin de cuisson pour les réchauffer.",
+          "Écraser l'avocat avec du jus de citron vert pour le guacamole rapide.",
+          "Garnir les tortillas chaudes avec le mélange poulet/poivron et le guacamole."
+        ]
+      },
+      {
+        id: 4,
+        jour: "Jeudi",
+        cuisine: "🇮🇹 Italienne",
+        entree: "Bruschetta tomates & basilic",
+        plat: "Rigatoni au pesto frais & pecorino",
+        temps: "15 min",
+        ingredients: ["250g de rigatoni", "1 bouquet de basilic", "50g de pignons de pin", "60g de Pecorino râpé", "Huile d'olive extra vierge", "Gousse d'ail"],
+        etapes: [
+          "Faire cuire les rigatoni al dente dans une grande casserole d'eau bouillante salée.",
+          "Mixer le basilic, les pignons, l'ail, l'huile d'olive et le pecorino pour obtenir un pesto frais.",
+          "Égoutter les pâtes en gardant une louche d'eau de cuisson.",
+          "Mélanger les pâtes avec le pesto et un trait d'eau de cuisson pour créer une sauce crémeuse."
+        ]
+      },
+      {
+        id: 5,
+        jour: "Vendredi (Shabbat)",
+        cuisine: "✡️ Traditionnelle Juive",
+        entree: "Salade Matbucha & Carottes au cumin",
+        plat: "Poulet rôti au citron confit & pommes de terre",
+        temps: "30 min prep",
+        ingredients: ["1 poulet (ou 4 cuisses)", "1kg de pommes de terre", "2 citrons confits", "Curcuma, ail, coriandre", "Challah (pain traditionnel)"],
+        etapes: [
+          "Couper les pommes de terre en quartiers et les placer dans un plat au four.",
+          "Masser le poulet avec l'huile d'olive, le curcuma, l'ail haché et le citron confit en morceaux.",
+          "Disposer le poulet sur les pommes de terre.",
+          "Enfourner à 200°C pendant 45 à 50 min jusqu'à ce que la peau soit bien dorée et les patates fondantes."
+        ]
+      }
+    ];
+
+    // État global des courses
+    let etatStock = {};
+
+    // Initialisation du menu
+    function chargerMenu() {
+      const containerMenu = document.getElementById('section-menu');
+      containerMenu.innerHTML = '';
+
+      donnéesRecettes.forEach(item => {
+        const estVendredi = item.jour.includes('Vendredi');
+        containerMenu.innerHTML += `
+          <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 ${estVendredi ? 'border-amber-500' : 'border-emerald-500'}">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-gray-900">${item.jour}</span>
+              <span class="text-xs bg-gray-100 px-2 py-1 rounded-full font-semibold text-gray-600">${item.cuisine}</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-2">⏱️ ${item.temps}</p>
+            <div class="text-sm space-y-1">
+              <p class="text-xs text-gray-500">🥗 ${item.entree}</p>
+              <button onclick="ouvrirRecette(${item.id})" class="text-left font-bold text-emerald-700 hover:underline cursor-pointer block">
+                🍲 ${item.plat} ➔
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      genererListeCourses();
+    }
+
+    // Gestion de la modale de recette
+    function ouvrirRecette(id) {
+      const recette = donnéesRecettes.find(r => r.id === id);
+      if (!recette) return;
+
+      document.getElementById('modal-titre').innerText = recette.plat;
+      document.getElementById('modal-cuisine').innerText = recette.cuisine;
+      document.getElementById('modal-temps').innerText = "⏱️ Temps total : " + recette.temps;
+      document.getElementById('modal-entree').innerText = recette.entree;
+
+      const listIng = document.getElementById('modal-ingredients');
+      listIng.innerHTML = recette.ingredients.map(ing => `<li>${ing}</li>`).join('');
+
+      const listEtapes = document.getElementById('modal-etapes');
+      listEtapes.innerHTML = recette.etapes.map(et => `<li class="pl-1">${et}</li>`).join('');
+
+      document.getElementById('modal-recette').classList.remove('hidden');
+    }
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+      document.getElementById('modal-recette').classList.add('hidden');
+    });
+
+    // Gestion de l'inventaire & Liste de courses
+    function genererListeCourses() {
+      let tousLesIng = [];
+      donnéesRecettes.forEach(r => tousLesIng.push(...r.ingredients));
+      const ingUniques = [...new Set(tousLesIng)];
+
+      const containerAcheter = document.getElementById('list-a-acheter');
+      const containerStock = document.getElementById('list-en-stock');
+
+      containerAcheter.innerHTML = '';
+      containerStock.innerHTML = '';
+
+      ingUniques.forEach(ing => {
+        const enStock = etatStock[ing] || false;
+        const html = `
+          <label class="flex items-center space-x-3 py-2 cursor-pointer">
+            <input type="checkbox" ${enStock ? 'checked' : ''} onchange="toggleStock('${ing}')" class="h-5 w-5 text-emerald-600 rounded">
+            <span class="text-sm ${enStock ? 'line-through text-gray-400' : 'text-gray-800'}">${ing}</span>
+          </label>
+        `;
+
+        if (enStock) {
+          containerStock.innerHTML += html;
+        } else {
+          containerAcheter.innerHTML += html;
+        }
+      });
+    }
+
+    function toggleStock(ingredient) {
+      etatStock[ingredient] = !etatStock[ingredient];
+      genererListeCourses();
+    }
+
+    // Navigation entre les 2 onglets
+    document.getElementById('tab-menu').addEventListener('click', (e) => {
+      document.getElementById('section-menu').classList.remove('hidden');
+      document.getElementById('section-courses').classList.add('hidden');
+      e.target.className = "w-1/2 py-2 text-sm font-bold rounded-lg bg-emerald-600 text-white transition";
+      document.getElementById('tab-courses').className = "w-1/2 py-2 text-sm font-bold rounded-lg text-gray-500 transition";
+    });
+
+    document.getElementById('tab-courses').addEventListener('click', (e) => {
+      document.getElementById('section-courses').classList.remove('hidden');
+      document.getElementById('section-menu').classList.add('hidden');
+      e.target.className = "w-1/2 py-2 text-sm font-bold rounded-lg bg-emerald-600 text-white transition";
+      document.getElementById('tab-menu').className = "w-1/2 py-2 text-sm font-bold rounded-lg text-gray-500 transition";
+    });
+
+    // Lancement au démarrage
+    chargerMenu();
+  </script>
+</body>
+</html>
