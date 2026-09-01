@@ -81,7 +81,7 @@
         <div id="days-filter" class="flex gap-1.5 overflow-x-auto hide-scrollbar py-1"></div>
         <div class="pt-2 border-t border-slate-100">
           <div class="flex justify-between items-center text-[11px] font-semibold text-slate-500 mb-1.5">
-            <span id="progress-label" class="font-bold text-slate-700">0 / 0 achetés</span>
+            <span id="progress-label" class="font-bold text-slate-700">0 / 0 en stock</span>
             <span id="active-days-tag" class="bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full font-bold border border-emerald-100 text-[10px]"></span>
           </div>
           <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/40">
@@ -95,23 +95,23 @@
         <h2 class="font-bold text-slate-900 text-sm flex items-center justify-between border-b border-slate-100 pb-3">
           <span class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100"></span>
-            À acheter
+            À acheter (Manquants)
           </span>
           <span id="count-a-acheter" class="bg-emerald-50 text-emerald-700 text-xs font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-200/60">0</span>
         </h2>
         <div id="list-a-acheter" class="space-y-4"></div>
       </div>
 
-      <!-- En stock / Panier -->
+      <!-- En réserve -->
       <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200/60 space-y-4">
         <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-          <h2 class="font-bold text-slate-400 text-sm flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
-            En réserve / Dans le panier
+          <h2 class="font-bold text-slate-600 text-sm flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            En réserve (Stock suffisant)
           </h2>
-          <button id="btn-vider-panier" class="text-[11px] font-bold text-slate-400 hover:text-rose-500 transition">Tout vider</button>
+          <button id="btn-vider-panier" class="text-[11px] font-bold text-slate-400 hover:text-rose-500 transition">Remettre le stock à 0</button>
         </div>
-        <div id="list-en-stock" class="space-y-1 divide-y divide-slate-50 text-slate-400"></div>
+        <div id="list-en-stock" class="space-y-1 text-slate-600"></div>
       </div>
     </div>
 
@@ -124,9 +124,9 @@
           ➕ Ajouter un produit au placard
         </h2>
         <form id="form-add-custom-item" class="grid grid-cols-1 sm:grid-cols-12 gap-2 text-xs">
-          <input type="text" id="custom-nom" placeholder="Ex: Pâtes Penne, Conserve de tomates..." required class="sm:col-span-5 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
-          <input type="text" id="custom-qte" placeholder="Quantité (ex: 500g, 3 pièces)" class="sm:col-span-3 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
-          <input type="text" id="custom-date" placeholder="Achat / Péremption" class="sm:col-span-2 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="text" id="custom-nom" placeholder="Ex: Carottes, Pâtes, Thon..." required class="sm:col-span-5 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="number" step="any" min="0" id="custom-qte" placeholder="Qté en stock (ex: 3)" required class="sm:col-span-3 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          <input type="text" id="custom-unit" placeholder="Unité (ex: pièces, g)" class="sm:col-span-2 px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
           <button type="submit" class="sm:col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl py-2.5 transition active:scale-95">Ajouter</button>
         </form>
       </div>
@@ -136,7 +136,7 @@
         <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
           <div>
             <h2 class="font-extrabold text-slate-900 text-base">📦 Mon Placard & Frigo</h2>
-            <p class="text-xs text-slate-500">Cochez ce que vous avez. Saisissez votre propre quantité sans risque de duplication.</p>
+            <p class="text-xs text-slate-500">Ajustez les quantités en stock. Vos ajouts personnalisés s'insèrent automatiquement dans la bonne section.</p>
           </div>
         </div>
         <div id="inventaire-container" class="space-y-4"></div>
@@ -200,53 +200,368 @@
           cuisine: "🌱 Printemps • Haute Protéine",
           entree: {
             nom: "Salade croquante d'asperges vertes & radis", prep: 10, cuisson: 5, difficulte: 1,
-            materiel: ["Économe", "Casserole large"],
-            ingredients: ["300g d'asperges vertes", "1/2 botte de radis", "30g de graines de tournesol", "1.5 cs d'huile de colza"],
-            miseenplace: ["Laver les légumes.", "Émincer les radis."],
-            etapes: ["Porte de l'eau salée à ébullition.", "Cuis les asperges 5 min.", "Torréfie les graines.", "Assaisonne le tout."],
-            astuce: "Plonge les asperges dans l'eau glacée pour fixer le vert."
+            materiel: ["Économe", "Casserole large", "Bol d'eau glacée"],
+            ingredients: [
+              { nom: "Asperges vertes", qte: 300, unite: "g" },
+              { nom: "Radis", qte: 0.5, unite: "botte" },
+              { nom: "Graines de tournesol", qte: 30, unite: "g" },
+              { nom: "Huile d'olive", qte: 1, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Casser le pied fibreux des asperges.", "Laver et émincer finement les radis en rondelles."],
+            etapes: ["Porte une grande casserole d'eau salée à ébullition.", "Plonge les asperges et laisse cuire 4 à 5 minutes.", "Égoutte et plonge immédiatement dans l'eau glacée.", "Torréfie les graines de tournesol à sec dans une poêle 2 min.", "Dresse les asperges, ajoute les radis et arrose d'huile d'olive."],
+            astuce: "Le choc thermique dans l'eau glacée stoppe la cuisson et fixe une couleur vert vif irréprochable."
           },
           plat: {
             nom: "Poulet poêlé aux herbes, boulgour & épinards", prep: 12, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle antiadhésive", "Casserole"],
-            ingredients: ["350g de filet de poulet bio", "150g de boulgour cru", "300g de pousses d'épinards", "1 cc de curcuma", "15ml d'huile d'olive"],
-            miseenplace: ["Couper le poulet.", "Rincer les épinards."],
-            etapes: ["Cuire le boulgour 10 min.", "Dorer le poulet.", "Faire tomber les épinards hors du feu."],
-            astuce: "La chaleur résiduelle suffit pour les épinards."
+            materiel: ["Poêle antiadhésive", "Casserole avec couvercle"],
+            ingredients: [
+              { nom: "Filet de poulet bio", qte: 350, unite: "g" },
+              { nom: "Boulgour cru", qte: 150, unite: "g" },
+              { nom: "Pousses d'épinards", qte: 300, unite: "g" },
+              { nom: "Herbes de Provence", qte: 1, unite: "c. à café" }
+            ],
+            miseenplace: ["Couper le poulet en aiguillettes.", "Rincer abondamment le boulgour et les épinards."],
+            etapes: ["Fais cuire le boulgour dans 2 fois son volume d'eau salée 10 min à couvert.", "Saisis le poulet à feu vif avec l'huile et les herbes 3 à 4 min par face.", "Ajoute les poussés d'épinards dans la poêle chaude hors du feu pour les faire tomber.", "Mélange le boulgour avec le jus de cuisson du poulet."],
+            astuce: "Assaisonne le poulet de sel uniquement après la cuisson pour éviter qu'il perde son jus."
           },
-          dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: ["250g de fraises", "2 yaourts grecs", "1 cs de miel"] }
+          dessert: { nom: "Fraises & yaourt grec au miel", prep: 5, ingredients: [{ nom: "Fraises", qte: 250, unite: "g" }, { nom: "Yaourt grec", qte: 2, unite: "pièces" }] }
+        },
+        {
+          cuisine: "🌱 Printemps • Énergie & Vitalité",
+          entree: {
+            nom: "Velouté tiède de petits pois & menthe", prep: 10, cuisson: 12, difficulte: 1,
+            materiel: ["Casserole", "Mixeur plongeant"],
+            ingredients: [
+              { nom: "Petits pois frais ou surgelés", qte: 350, unite: "g" },
+              { nom: "Échalotes", qte: 1, unite: "pièce" },
+              { nom: "Menthe", qte: 4, unite: "brins" }
+            ],
+            miseenplace: ["Émincer l'échalote.", "Effeuiller la menthe fraîche."],
+            etapes: ["Fais suer l'échalote avec une goutte d'huile dans la casserole.", "Ajoute les petits pois et couvre d'eau à hauteur avec une pincée de sel.", "Laisse bouillonner 10 minutes.", "Ajoute la menthe au tout dernier moment et mixe jusqu'à consistance très lisse."],
+            astuce: "Ne fais pas cuire la menthe : ajouter les feuilles crues au moment de mixer préserve la fraîcheur du parfum."
+          },
+          plat: {
+            nom: "Cabillaud rôti, écrasé de pommes de terre & fèves", prep: 15, cuisson: 20, difficulte: 2,
+            materiel: ["Plat à four", "Presse-purée ou fourchette", "Casserole"],
+            ingredients: [
+              { nom: "Dos de cabillaud", qte: 300, unite: "g" },
+              { nom: "Pommes de terre", qte: 400, unite: "g" },
+              { nom: "Fèves", qte: 150, unite: "g" },
+              { nom: "Huile d'olive", qte: 2, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Éplucher les pommes de terre et les couper en gros morceaux.", "Dérober les fèves si elles sont fraîches."],
+            etapes: ["Fais bouillir les pommes de terre 18 min dans de l'eau salée.", "Enfourne le cabillaud avec un filet d'huile à 180°C pendant 12 min.", "Écrase grossièrement les pommes de terre à la fourchette en incorporant les fèves et l'huile d'olive."],
+            astuce: "Pour un poisson ultra-moelleux, arrose-le à mi-cuisson avec son propre jus et une touche de citron."
+          },
+          dessert: { nom: "Carpaccio de kiwis au citron vert", prep: 5, ingredients: [{ nom: "Kiwi", qte: 3, unite: "pièces" }, { nom: "Citron", qte: 1, unite: "pièce" }] }
+        },
+        {
+          cuisine: "🌱 Printemps • Végétal Créatif",
+          entree: {
+            nom: "Salade de fèves fraîches, feta & zeste de citron", prep: 12, cuisson: 3, difficulte: 1,
+            materiel: ["Saladier", "Casserole"],
+            ingredients: [
+              { nom: "Fèves", qte: 250, unite: "g" },
+              { nom: "Feta", qte: 100, unite: "g" },
+              { nom: "Citron", qte: 1, unite: "pièce" },
+              { nom: "Huile d'olive", qte: 1, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Plonger les fèves 2 min dans l'eau bouillante et enlever la seconde peau.", "Émietter la feta."],
+            etapes: ["Mélange les fèves blanchies et la feta émiettée dans un saladier.", "Ajoute le zeste râpé et le jus d'un demi-citron.", "Arrose d'huile d'olive et poivre généreusement."],
+            astuce: "La double peau des fèves s'enlève très facilement entre deux doigts une fois ébouillantées."
+          },
+          plat: {
+            nom: "Risotto d'épeautre aux asperges & parmesan", prep: 15, cuisson: 25, difficulte: 2,
+            materiel: ["Sauteuse", "Louche"],
+            ingredients: [
+              { nom: "Petit épeautre", qte: 160, unite: "g" },
+              { nom: "Asperges vertes", qte: 250, unite: "g" },
+              { nom: "Échalotes", qte: 2, unite: "pièces" },
+              { nom: "Parmesan râpé", qte: 40, unite: "g" }
+            ],
+            miseenplace: ["Couper les asperges en tronçons de 2 cm.", "Émincer les échalotes."],
+            etapes: ["Fais revenir les échalotes dans la sauteuse puis ajoute l'épeautre.", "Nappe progressivement avec du bouillon chaud louche par louche pendant 20-25 min.", "Incorpore les tronçons d'asperges à mi-cuisson.", "Hors du feu, lie avec le parmesan."],
+            astuce: "Le petit épeautre garde un croquant unique par rapport au riz à risotto traditionnel."
+          },
+          dessert: { nom: "Tartare de fraises au basilic", prep: 8, ingredients: [{ nom: "Fraises", qte: 250, unite: "g" }, { nom: "Basilic", qte: 4, unite: "brins" }] }
         }
       ],
       ete: [
         {
           cuisine: "☀️ Été • Équilibre Fraîcheur",
           entree: {
-            nom: "Tartare de concombre & edamames", prep: 10, cuisson: 0, difficulte: 1,
-            materiel: ["Planche"], ingredients: ["1 concombre bio", "150g d'edamames cuits", "1 cs d'huile de sésame"],
-            miseenplace: ["Dés de concombre."], etapes: ["Mélanger les ingrédients et assaisonner."], astuce: "Servir très frais."
+            nom: "Tartare de concombre & edamames au sésame", prep: 10, cuisson: 0, difficulte: 1,
+            materiel: ["Planche à découper", "Bol", "Couteau de chef"],
+            ingredients: [
+              { nom: "Concombre bio", qte: 1, unite: "pièce" },
+              { nom: "Edamames cuits", qte: 150, unite: "g" },
+              { nom: "Graines de sésame", qte: 1, unite: "c. à soupe" },
+              { nom: "Huile de sésame", qte: 1, unite: "c. à café" }
+            ],
+            miseenplace: ["Couper le concombre en tout petits dés.", "Égoutter les edamames."],
+            etapes: ["Mélange les dés de concombre et les edamames dans un bol.", "Assaisonne avec l'huile de sésame et le sel.", "Saupoudre généreusement de graines de sésame avant de servir."],
+            astuce: "Si le concombre rend trop d'eau, fais-le dégourdir 5 min avec du sel dans une passerelle."
           },
           plat: {
             nom: "Saumon poêlé & quinoa aux courgettes", prep: 10, cuisson: 15, difficulte: 2,
-            materiel: ["Poêle", "Casserole"], ingredients: ["300g de pavés de saumon", "150g de quinoa", "400g de courgettes"],
-            miseenplace: ["Dés de courgettes."], etapes: ["Cuire le quinoa.", "Poêler les courgettes et le saumon."], astuce: "Saisir le saumon côté peau."
+            materiel: ["Poêle antiadhésive", "Casserole"],
+            ingredients: [
+              { nom: "Pavé de saumon", qte: 300, unite: "g" },
+              { nom: "Quinoa", qte: 150, unite: "g" },
+              { nom: "Courgettes", qte: 400, unite: "g" },
+              { nom: "Citron", qte: 1, unite: "pièce" }
+            ],
+            miseenplace: ["Tailler les courgettes en petits cubes.", "Rincer le quinoa à l'eau froide."],
+            etapes: ["Cuis le quinoa dans deux fois son volume d'eau pendant 12 min.", "Poêle les courgettes 8 min avec un trait d'huile.", "Cuis le saumon côté peau en premier pendant 4 min, puis 2 min de l'autre côté.", "Assemble le quinoa et les courgettes avec un filet de citron."],
+            astuce: "Commence la cuisson du saumon à poêle bien chaude sans matière grasse, la peau rendra son propre gras."
           },
-          dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: ["3 pêches", "2 yaourts", "1 cs de miel"] }
+          dessert: { nom: "Pêches & yaourt au miel", prep: 5, ingredients: [{ nom: "Pêches", qte: 3, unite: "pièces" }, { nom: "Yaourt", qte: 2, unite: "pièces" }] }
+        },
+        {
+          cuisine: "☀️ Été • Méditerranéen & Médicinal",
+          entree: {
+            nom: "Salade de tomates anciennes, feta & huile au basilic", prep: 10, cuisson: 0, difficulte: 1,
+            materiel: ["Planche", "Saladier"],
+            ingredients: [
+              { nom: "Tomates", qte: 4, unite: "pièces" },
+              { nom: "Feta", qte: 100, unite: "g" },
+              { nom: "Basilic", qte: 6, unite: "brins" },
+              { nom: "Huile d'olive", qte: 2, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Trancher les tomates en tranches épaisses.", "Ciseler le basilic."],
+            etapes: ["Dispose les tranches de tomates en rosace dans un plat.", "Émiette la feta par-dessus.", "Arrose généreusement d'huile d'olive et ajoute le basilic frais.", "Fleur de sel et poivre du moulin."],
+            astuce: "Ne conserve jamais les tomates au frigo pour préserver pleinement leurs arômes."
+          },
+          plat: {
+            nom: "Brochettes de dinde marinées & poivronnade au bulgur", prep: 15, cuisson: 12, difficulte: 2,
+            materiel: ["Grill ou poêle", "Brochettes en bois"],
+            ingredients: [
+              { nom: "Filet de dinde", qte: 350, unite: "g" },
+              { nom: "Poivrons", qte: 2, unite: "pièces" },
+              { nom: "Boulgour cru", qte: 150, unite: "g" },
+              { nom: "Paprika", qte: 1, unite: "c. à café" }
+            ],
+            miseenplace: ["Couper la dinde et les poivrons en gros dés réguliers.", "Enfiler sur les pics à brochette."],
+            etapes: ["Marine les brochettes avec huile et paprika 10 min.", "Fais cuire le boulgour 10 min dans l'eau bouillante.", "Grille les brochettes 10-12 minutes en les retournant régulièrement.", "Sers les brochettes sur le lit de boulgour."],
+            astuce: "Fais tremper les brochettes en bois dans l'eau 15 min avant d'enfiler les aliments pour éviter qu'elles ne brûlent."
+          },
+          dessert: { nom: "Tranches de melon au citron vert", prep: 5, ingredients: [{ nom: "Melon", qte: 1, unite: "pièce" }, { nom: "Citron", qte: 1, unite: "pièce" }] }
+        },
+        {
+          cuisine: "☀️ Été • Protéines & Soleil",
+          entree: {
+            nom: "Gaspacho de tomates, poivrons & pointe d'ail", prep: 12, cuisson: 0, difficulte: 1,
+            materiel: ["Mixeur ou Blender"],
+            ingredients: [
+              { nom: "Tomates", qte: 5, unite: "pièces" },
+              { nom: "Poivrons", qte: 1, unite: "pièce" },
+              { nom: "Ail", qte: 1, unite: "gousse" },
+              { nom: "Huile d'olive", qte: 2, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Laver et épépiner les légumes.", "Couper grossièrement."],
+            etapes: ["Place les tomates, le poivron et la gousse d'ail dans le blender.", "Mixer à forte vitesse pendant 2 minutes.", "Incorpore l'huile d'olive en filet tout en continuant de mixer pour émulsionner.", "Réserve au frais au moins 1h."],
+            astuce: "Ajoute un filet de vinaigre de cidre pour relever l'acidité naturelle des tomates."
+          },
+          plat: {
+            nom: "Pavé de thon snacké & poêlée d'aubergines au sésame", prep: 10, cuisson: 12, difficulte: 2,
+            materiel: ["Poêle en fonte ou antiadhésive"],
+            ingredients: [
+              { nom: "Thon", qte: 300, unite: "g" },
+              { nom: "Aubergine", qte: 2, unite: "pièces" },
+              { nom: "Graines de sésame", qte: 2, unite: "c. à soupe" },
+              { nom: "Huile d'olive", qte: 2, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Couper les aubergines en petits dés."],
+            etapes: ["Fais sauter les dés d'aubergine dans la poêle avec l'huile pendant 10 min jusqu'à tendreté.", "Dans une poêle très chaude, snacker le thon 1 minute par face pour garder le cœur mi-cuit.", "Enrobe le thon de graines de sésame et tranche-le."],
+            astuce: "Le thon doit être saisi très rapidement à feu vif pour rester tendre et juteux à l'intérieur."
+          },
+          dessert: { nom: "Sorbet minute de pastèque", prep: 5, ingredients: [{ nom: "Pastèque", qte: 400, unite: "g" }] }
         }
       ],
       automne: [
         {
           cuisine: "🍂 Automne • Densité Nutritionnelle",
-          entree: { nom: "Houmous de lentilles corail", prep: 10, cuisson: 10, difficulte: 1, materiel: ["Mixeur"], ingredients: ["120g de lentilles corail", "2 cs de tahini", "3 carottes"], miseenplace: ["Cuire lentilles"], etapes: ["Mixer avec le tahini."], astuce: "Assaisonner généreusement." },
-          plat: { nom: "Curry express de tofu & pois chiches", prep: 12, cuisson: 15, difficulte: 2, materiel: ["Sauteuse"], ingredients: ["250g de tofu ferme", "250g de pois chiches", "150g de riz basmati", "120ml de lait de coco"], miseenplace: ["Dés de tofu"], etapes: ["Dorer le tofu, ajouter la sauce coco et les pois chiches."], astuce: "Laisser réduire la sauce." },
-          dessert: { nom: "Poire mûre & noix", prep: 5, ingredients: ["2 poires", "30g de noix"] }
+          entree: {
+            nom: "Houmous de lentilles corail au tahini", prep: 10, cuisson: 10, difficulte: 1,
+            materiel: ["Mixeur", "Casserole"],
+            ingredients: [
+              { nom: "Lentilles corail", qte: 120, unite: "g" },
+              { nom: "Tahini", qte: 2, unite: "c. à soupe" },
+              { nom: "Carottes", qte: 3, unite: "pièces" },
+              { nom: "Citron", qte: 1, unite: "pièce" }
+            ],
+            miseenplace: ["Rincer les lentilles corail.", "Éplucher les carottes et les tailler en bâtonnets."],
+            etapes: ["Fais cuire les lentilles dans l'eau salée 10 minutes puis égoutte-les.", "Mixe les lentilles chaudes avec le tahini, le jus de citron et un peu d'eau si nécessaire.", "Sers le houmous tiède accompagné de sticks de carottes fraîches."],
+            astuce: "Mixer les lentilles encore bien chaudes rend la texture beaucoup plus crémeuse."
+          },
+          plat: {
+            nom: "Curry express de tofu, pois chiches & riz basmati", prep: 12, cuisson: 15, difficulte: 2,
+            materiel: ["Sauteuse", "Casserole"],
+            ingredients: [
+              { nom: "Tofu ferme", qte: 250, unite: "g" },
+              { nom: "Pois chiches", qte: 250, unite: "g" },
+              { nom: "Lait de coco", qte: 200, unite: "ml" },
+              { nom: "Riz basmati", qte: 150, unite: "g" },
+              { nom: "Curry", qte: 1, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Presser le tofu dans un essuie-tout et le couper en dés.", "Rincer le riz."],
+            etapes: ["Lance la cuisson du riz basmati (10-12 min dans l'eau bouillante).", "Fais dorer le tofu à la sauteuse 5 min.", "Ajoute le curry, les pois chiches rincés et le lait de coco.", "Laisse mijoter doucement pendant 8 minutes."],
+            astuce: "Presse bien le tofu avant cuisson pour enlever l'eau : il sera beaucoup plus croustillant une fois doré."
+          },
+          dessert: { nom: "Poire mûre & noix", prep: 5, ingredients: [{ nom: "Poires", qte: 2, unite: "pièces" }, { nom: "Noix", qte: 30, unite: "g" }] }
+        },
+        {
+          cuisine: "🍂 Automne • Réconfort & Épices",
+          entree: {
+            nom: "Velouté de potimarron au cumin & graines torréfiées", prep: 12, cuisson: 20, difficulte: 1,
+            materiel: ["Grande casserole", "Mixeur plongeant"],
+            ingredients: [
+              { nom: "Potimarron", qte: 500, unite: "g" },
+              { nom: "Cumin", qte: 1, unite: "c. à café" },
+              { nom: "Graines de tournesol", qte: 20, unite: "g" },
+              { nom: "Oignon", qte: 1, unite: "pièce" }
+            ],
+            miseenplace: ["Laver le potimarron (inutile de l'éplucher).", "Émincer l'oignon."],
+            etapes: ["Fais revenir l'oignon et le cumin 3 min dans la casserole.", "Ajoute le potimarron coupé en morceaux et couvre d'eau salée.", "Laisse cuire 20 min à couvert jusqu'à ce que la chair soit tendre.", "Mixe finement. Parsème de graines de tournesol au service."],
+            astuce: "La peau du potimarron s'assouplit complètement à la cuisson et apporte une superbe couleur dorée."
+          },
+          plat: {
+            nom: "Sauté de poulet aux champignons & semoule complète", prep: 15, cuisson: 15, difficulte: 2,
+            materiel: ["Poêle large", "Bol pour semoule"],
+            ingredients: [
+              { nom: "Filet de poulet bio", qte: 350, unite: "g" },
+              { nom: "Champignon", qte: 250, unite: "g" },
+              { nom: "Semoule", qte: 150, unite: "g" },
+              { nom: "Ail", qte: 1, unite: "gousse" }
+            ],
+            miseenplace: ["Nettoyer et émincer les champignons.", "Découper le poulet en morceaux."],
+            etapes: ["Verse de l'eau bouillante salée sur la semoule (1 vol pour 1 vol), couvre 5 min.", "Saisis le poulet et l'ail haché dans la poêle pendant 6 min.", "Ajoute les champignons et poursuis la cuisson 7-8 min.", "Égrène la semoule à la fourchette et sert avec le sauté."],
+            astuce: "Ne lave pas les champignons à grande eau pour ne pas qu'ils se gorgent d'eau : essuie-les avec un linge humide."
+          },
+          dessert: { nom: "Pomme au four à la cannelle", prep: 5, ingredients: [{ nom: "Pommes", qte: 2, unite: "pièces" }, { nom: "Cannelle", qte: 1, unite: "c. à café" }] }
+        },
+        {
+          cuisine: "🍂 Automne • Terroir & Équilibre",
+          entree: {
+            nom: "Salade tiède de lentilles vertes & échalotes confites", prep: 10, cuisson: 25, difficulte: 1,
+            materiel: ["Casserole", "Saladier"],
+            ingredients: [
+              { nom: "Lentilles vertes", qte: 150, unite: "g" },
+              { nom: "Échalotes", qte: 3, unite: "pièces" },
+              { nom: "Moutarde", qte: 1, unite: "c. à café" },
+              { nom: "Vinaigre", qte: 1, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Émincer finement les échalotes."],
+            etapes: ["Démarre la cuisson des lentilles à l'eau froide sans sel pendant 25 min.", "Dans une petite poêle, fais confire doucement les échalotes émincées 8 min.", "Prépare une vinaigrette avec la moutarde, le vinaigre et l'huile.", "Mélange les lentilles tièdes égouttées avec la vinaigrette et les échalotes."],
+            astuce: "Saler les lentilles en fin de cuisson seulement : le sel mis au début durcit leur peau."
+          },
+          plat: {
+            nom: "Pâtes au thon, olives & sauce tomate mijotée", prep: 10, cuisson: 15, difficulte: 1,
+            materiel: ["Faitout pour les pâtes", "Sauteuse"],
+            ingredients: [
+              { nom: "Pâtes", qte: 180, unite: "g" },
+              { nom: "Thon", qte: 160, unite: "g" },
+              { nom: "Tomates", qte: 3, unite: "pièces" },
+              { nom: "Olive", qte: 40, unite: "g" }
+            ],
+            miseenplace: ["Couper les tomates en concassé.", "Dédenoyauter et couper les olives."],
+            etapes: ["Cuis les pâtes al dente selon le temps indiqué sur le paquet.", "Fais mijoter les tomates concassées et les olives 10 min à la sauteuse.", "Ajoute le thon égoutté à la sauce au dernier moment sans trop l'émietter.", "Mélange les pâtes directement dans la sauce."],
+            astuce: "Conserve toujours 2 cuillères d'eau de cuisson des pâtes pour lier parfaitement la sauce tomate."
+          },
+          dessert: { nom: "Compotée de figues tièdes", prep: 5, ingredients: [{ nom: "Figues", qte: 4, unite: "pièces" }] }
         }
       ],
       hiver: [
         {
           cuisine: "❄️ Hiver • Chaud & Épicé",
-          entree: { nom: "Salade tiède de lentilles vertes", prep: 10, cuisson: 20, difficulte: 1, materiel: ["Casserole"], ingredients: ["150g de lentilles vertes", "2 échalotes", "1 cs de moutarde"], miseenplace: ["Cuire lentilles"], etapes: ["Mélanger tiède avec la vinaigrette."], astuce: "Assaisonner chaud." },
-          plat: { nom: "Poêlée de dinde au curcuma & poireaux", prep: 12, cuisson: 18, difficulte: 2, materiel: ["Sauteuse"], ingredients: ["350g de dinde", "2 poireaux", "150g de quinoa"], miseenplace: ["Émincer poireaux"], etapes: ["Confire poireaux, saisir la dinde."], astuce: "Bien laver les poireaux." },
-          dessert: { nom: "Compotée de pommes aux dattes", prep: 5, ingredients: ["2 pommes", "4 dattes"] }
+          entree: {
+            nom: "Salade de fenouil croquant, orange & olives noires", prep: 12, cuisson: 0, difficulte: 1,
+            materiel: ["Mandoline ou couteau bien aiguisé", "Saladier"],
+            ingredients: [
+              { nom: "Fenouil", qte: 1, unite: "pièce" },
+              { nom: "Oranges", qte: 2, unite: "pièces" },
+              { nom: "Olive", qte: 30, unite: "g" },
+              { nom: "Huile d'olive", qte: 1, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Émincer le fenouil très finement.", "Peler l'orange à vif et prélever les suprêmes."],
+            etapes: ["Dépose le fenouil émincé dans un saladier.", "Ajoute les suprêmes d'orange et les olives noires.", "Presse le cœur de l'orange restant pour en tirer le jus et forme ta vinaigrette avec l'huile.", "Mélange bien et laisse reposer 5 min."],
+            astuce: "Pour peler à vif, coupe les deux extrémités de l'orange puis retire la peau au couteau en suivant la courbe du fruit."
+          },
+          plat: {
+            nom: "Poêlée de dinde au curcuma, poireaux & quinoa", prep: 12, cuisson: 18, difficulte: 2,
+            materiel: ["Sauteuse", "Casserole"],
+            ingredients: [
+              { nom: "Filet de dinde", qte: 350, unite: "g" },
+              { nom: "Poireaux", qte: 2, unite: "pièces" },
+              { nom: "Quinoa", qte: 150, unite: "g" },
+              { nom: "Curcuma", qte: 1, unite: "c. à café" }
+            ],
+            miseenplace: ["Fendre et laver soigneusement les poireaux, puis les émincer en rondelles.", "Rincer le quinoa."],
+            etapes: ["Fais cuire le quinoa dans de l'eau bouillante 12 min.", "Dans la sauteuse, fais étuver les poireaux 10 min avec un fond d'eau et d'huile.", "Ajoute la dinde coupée en dés et le curcuma. Cuis à feu vif 6 à 8 min.", "Associe le quinoa et le mélange poireaux-dinde."],
+            astuce: "Le curcuma libère encore mieux ses vertus antioxydantes lorsqu'il est associé à une pincée de poivre noir."
+          },
+          dessert: { nom: "Compotée de pommes aux dattes", prep: 8, ingredients: [{ nom: "Pommes", qte: 2, unite: "pièces" }, { nom: "Datte", qte: 4, unite: "pièces" }] }
+        },
+        {
+          cuisine: "❄️ Hiver • Confort & Vitalité",
+          entree: {
+            nom: "Soupe de carottes au gingembre & lait de coco", prep: 10, cuisson: 20, difficulte: 1,
+            materiel: ["Casserole", "Mixeur plongeant"],
+            ingredients: [
+              { nom: "Carottes", qte: 400, unite: "g" },
+              { nom: "Gingembre", qte: 15, unite: "g" },
+              { nom: "Lait de coco", qte: 100, unite: "ml" },
+              { nom: "Oignon", qte: 1, unite: "pièce" }
+            ],
+            miseenplace: ["Éplucher carottes et gingembre.", "Couper en rondelles."],
+            etapes: ["Fais revenir l'oignon et le gingembre râpé 3 min dans la casserole.", "Ajoute les carottes et couvre d'eau salée à hauteur.", "Laisse bouillonner 20 min jusqu'à ce que les carottes soient fondantes.", "Mixe avec le lait de coco."],
+            astuce: "Râpe le gingembre frais plutôt que de le couper pour éviter les morceaux fibreux sous la dent."
+          },
+          plat: {
+            nom: "Parmentier de cabillaud à la purée de patate douce", prep: 15, cuisson: 20, difficulte: 2,
+            materiel: ["Casserole", "Plat à four"],
+            ingredients: [
+              { nom: "Dos de cabillaud", qte: 300, unite: "g" },
+              { nom: "Patates douces", qte: 450, unite: "g" },
+              { nom: "Échalotes", qte: 2, unite: "pièces" },
+              { nom: "Huile d'olive", qte: 1, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Éplucher et couper les patates douces en dés.", "Hacher les échalotes."],
+            etapes: ["Fais cuire les patates douces 15 min à l'eau bouillante salée, puis écrase-les en purée.", "Fais pocher ou poêler le cabillaud 6 min avec les échalotes puis émiette-le.", "Dans un plat, dresse le poisson puis recouvre de purée de patate douce.", "Passe 10 min sous le grill du four à 200°C."],
+            astuce: "Assaisonne la purée d'une touche de noix de muscade pour relever le goût sucré de la patate douce."
+          },
+          dessert: { nom: "Salade d'oranges à la cannelle", prep: 5, ingredients: [{ nom: "Oranges", qte: 2, unite: "pièces" }, { nom: "Cannelle", qte: 1, unite: "c. à café" }] }
+        },
+        {
+          cuisine: "❄️ Hiver • Énergie Protéinée",
+          entree: {
+            nom: "Salade de chou rouge, pommes & noisettes", prep: 10, cuisson: 0, difficulte: 1,
+            materiel: ["Saladier", "Râpe ou couteau"],
+            ingredients: [
+              { nom: "Chou rouge", qte: 200, unite: "g" },
+              { nom: "Pommes", qte: 1, unite: "pièce" },
+              { nom: "Noisette", qte: 30, unite: "g" },
+              { nom: "Vinaigre", qte: 1, unite: "c. à soupe" }
+            ],
+            miseenplace: ["Émincer le chou rouge très finement.", "Tailler la pomme en bâtonnets."],
+            etapes: ["Masse le chou rouge avec le vinaigre et une pincée de sel pendant 1 min pour l'assouplir.", "Ajoute la pomme et les noisettes concassées.", "Assaisonne d'un trait d'huile d'olive."],
+            astuce: "Masser le chou rouge cru avec du sel et de l'acide (vinaigre) le rend beaucoup plus tendre et digeste."
+          },
+          plat: {
+            nom: "Dahl de lentilles corail aux épinards & riz basmati", prep: 10, cuisson: 20, difficulte: 1,
+            materiel: ["Sauteuse", "Casserole"],
+            ingredients: [
+              { nom: "Lentilles corail", qte: 150, unite: "g" },
+              { nom: "Pousses d'épinards", qte: 150, unite: "g" },
+              { nom: "Riz basmati", qte: 150, unite: "g" },
+              { nom: "Curry", qte: 1, unite: "c. à soupe" },
+              { nom: "Ail", qte: 1, unite: "gousse" }
+            ],
+            miseenplace: ["Rincer le riz et les lentilles."],
+            etapes: ["Lancer la cuisson du riz dans l'eau salée 11 min.", "Dans la sauteuse, fais revenir l'ail et le curry 1 min.", "Ajoute les lentilles et 3 volumes d'eau. Cuis 15 min à feu doux.", "Incorpore les épinards en fin de cuisson jusqu'à ce qu'ils tombent.", "Sers chaud sur le riz."],
+            astuce: "Les lentilles corail n'ont pas besoin de trempage préalable et cuisent très rapidement."
+          },
+          dessert: { nom: "Duo de kiwis & graines de sésame", prep: 5, ingredients: [{ nom: "Kiwi", qte: 2, unite: "pièces" }] }
         }
       ]
     };
@@ -254,9 +569,67 @@
     const recettesShabbat = [
       {
         cuisine: "✡️ Shabbat • Le Grand Mijoté", fete: true,
-        entree: { nom: "Matbucha maison", prep: 15, cuisson: 30, difficulte: 2, materiel: ["Sauteuse"], ingredients: ["5 tomates mûres", "3 poivrons", "3 gousses d'ail"], miseenplace: ["Hacher légumes"], etapes: ["Mijoter à feu doux 30 min."], astuce: "Confire doucement." },
-        plat: { nom: "Poulet rôti aux citrons confits & patates douces", prep: 20, cuisson: 50, difficulte: 2, materiel: ["Plat à four"], ingredients: ["1 poulet bio entier", "400g de patates douces", "3 citrons confits"], miseenplace: ["Préchauffer four"], etapes: ["Enfourner 50 min à 190°C."], astuce: "Arroser régulièrement." },
-        dessert: { nom: "Salade d'oranges à la cannelle", prep: 10, ingredients: ["4 oranges", "6 dattes Medjool"] }
+        entree: {
+          nom: "Matbucha maison traditionnelle", prep: 15, cuisson: 40, difficulte: 2,
+          materiel: ["Sauteuse ou grande poêle profonde"],
+          ingredients: [
+            { nom: "Tomates", qte: 6, unite: "pièces" },
+            { nom: "Poivrons", qte: 3, unite: "pièces" },
+            { nom: "Ail", qte: 4, unite: "gousses" },
+            { nom: "Huile d'olive", qte: 3, unite: "c. à soupe" },
+            { nom: "Paprika", qte: 1, unite: "c. à soupe" }
+          ],
+          miseenplace: ["Éplucher les tomates après les avoir ébouillantées.", "Couper les poivrons en petits dés.", "Émincer l'ail."],
+          etapes: ["Fais suer les poivrons et l'ail dans l'huile à feu moyen pendant 15 min.", "Ajoute les tomates concassées et le paprika.", "Laisse mijoter à feu doux pendant 25-30 min en remuant régulièrement jusqu'à ce que l'eau se soit évaporée.", "Sers frais ou à température ambiante."],
+          astuce: "La vraie matbucha réussie repose sur une réduction lente jusqu'à ce que l'huile remonte à la surface."
+        },
+        plat: {
+          nom: "Poulet rôti aux citrons confits & patates douces", prep: 20, cuisson: 50, difficulte: 2,
+          materiel: ["Grand plat à four"],
+          ingredients: [
+            { nom: "Poulet bio entier", qte: 1, unite: "pièce" },
+            { nom: "Patates douces", qte: 400, unite: "g" },
+            { nom: "Citron confit", qte: 2, unite: "pièces" },
+            { nom: "Oignon", qte: 2, unite: "pièces" },
+            { nom: "Zaatar", qte: 1, unite: "c. à soupe" }
+          ],
+          miseenplace: ["Couper les patates douces et oignons en gros quartiers.", "Hacher les citrons confits."],
+          etapes: ["Préchauffe le four à 190°C.", "Dispose le poulet au centre du plat entouré des patates douces et oignons.", "Ajoute les citrons confits et saupoudre généreusement de zaatar.", "Arrose d'huile d'olive et enfourne pendant 50 min en arrosant toutes les 15 minutes avec le jus."],
+          astuce: "Arroser le poulet régulièrement en cours de cuisson garantit une peau croustillante et une chair ultra-tendre."
+        },
+        dessert: { nom: "Salade d'oranges à la fleur d'oranger & cannelle", prep: 10, ingredients: [{ nom: "Oranges", qte: 4, unite: "pièces" }, { nom: "Cannelle", qte: 1, unite: "c. à café" }] }
+      },
+      {
+        cuisine: "✡️ Shabbat • Saveurs d'Orient", fete: true,
+        entree: {
+          nom: "Salade d'aubergines brûlées au tahini (Baba Ganoush)", prep: 15, cuisson: 30, difficulte: 2,
+          materiel: ["Plaque de four", "Fourchette", "Bol"],
+          ingredients: [
+            { nom: "Aubergine", qte: 2, unite: "pièces" },
+            { nom: "Tahini", qte: 2, unite: "c. à soupe" },
+            { nom: "Ail", qte: 1, unite: "gousse" },
+            { nom: "Citron", qte: 1, unite: "pièce" }
+          ],
+          miseenplace: ["Piquer la peau des aubergines avec une fourchette."],
+          etapes: ["Enfourne les aubergines entières à 220°C pendant 30 min jusqu'à ce qu'elles flétrissent.", "Racle la chair de l'aubergine à la cuillère.", "Écrase la chair avec le tahini, l'ail haché et le jus de citron.", "Assaisonne et sert à température ambiante."],
+          astuce: "La peau doit être bien grillée et presque noire pour donner ce subtil goût fumé caractériste."
+        },
+        plat: {
+          nom: "Poisson style Chraime (Cabillaud en sauce tomate épicée)", prep: 15, cuisson: 25, difficulte: 2,
+          materiel: ["Large sauteuse couverte"],
+          ingredients: [
+            { nom: "Dos de cabillaud", qte: 400, unite: "g" },
+            { nom: "Tomates", qte: 4, unite: "pièces" },
+            { nom: "Poivrons", qte: 1, unite: "pièce" },
+            { nom: "Ail", qte: 4, unite: "gousses" },
+            { nom: "Cumin", qte: 1, unite: "c. à soupe" },
+            { nom: "Paprika", qte: 1, unite: "c. à soupe" }
+          ],
+          miseenplace: ["Hacher l'ail et tailler le poivron en lanières.", "Découper le poisson en grands pavés."],
+          etapes: ["Fais revenir l'ail, le poivron, le cumin et le paprika dans de l'huile à la sauteuse 3 min.", "Ajoute les tomates concassées et 100ml d'eau, laisse réduire 15 min.", "Dépose délicatement les pavés de cabillaud dans la sauce.", "Couvre et laisse pocher 10 min à feu doux."],
+          astuce: "Arrose le poisson avec la sauce chaude à mi-cuisson sans le retourner pour ne pas le briser."
+        },
+        dessert: { nom: "Compotée de poires aux dattes & cardamome", prep: 10, ingredients: [{ nom: "Poires", qte: 4, unite: "pièces" }, { nom: "Datte", qte: 4, unite: "pièces" }] }
       }
     ];
 
@@ -275,10 +648,10 @@
     function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
     const RAYONS = [
-      { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","fèves","avocat","patate douce","potimarron","champignon","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","persil","gingembre","fraise","pêche","melon","pastèque","poire","pomme","orange","kiwi","figue","datte"] },
+      { nom: "🥬 Fruits & Légumes", mots: ["asperge","radis","épinard","courgette","tomate","poivron","concombre","aubergine","carotte","fenouil","fèves","avocat","patate douce","potimarron","champignon","poireau","pomme de terre","oignon","échalote","ail","citron","basilic","menthe","coriandre","persil","gingembre","fraise","pêche","melon","pastèque","poire","pomme","orange","kiwi","figue","datte","chou rouge","petits pois"] },
       { nom: "🐟 Poissons & Viandes", mots: ["poulet","saumon","cabillaud","dinde","bœuf","boeuf","thon"] },
       { nom: "🧀 Frais & Crèmerie", mots: ["feta","mozzarella","yaourt","œuf","oeuf","tofu","edamame","chèvre","beurre","lait"] },
-      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","tahini","huile","vinaigre","graine","sésame","noix","noisette","miel","cannelle","curcuma","cumin","curry","paprika","zaatar","citron confit","lait de coco","moutarde","olive","pain","pâtes","conserve"] }
+      { nom: "🌾 Épicerie & Secs", mots: ["quinoa","riz","boulgour","semoule","lentille","pois chiche","tahini","huile","vinaigre","graine","sésame","noix","noisette","miel","cannelle","curcuma","cumin","curry","paprika","zaatar","citron confit","lait de coco","moutarde","olive","pain","pâtes","conserve","épeautre"] }
     ];
     const ORDRE_RAYONS = ["🥬 Fruits & Légumes","🐟 Poissons & Viandes","🧀 Frais & Crèmerie","🌾 Épicerie & Secs","🛒 Autres"];
 
@@ -292,7 +665,7 @@
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    const STORAGE_KEY = "chef-raphael-touati-v1";
+    const STORAGE_KEY = "chef-raphael-touati-v3";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
     function persister() { safeSet({ menuSemaine, stockPlacard, customItems, joursSelectionnes, jourActiveIndex }); }
@@ -331,8 +704,8 @@
     } else {
       menuSemaine = genererMenuSemaineDynamique();
       stockPlacard = {
-        "Huile d'olive": { enStock: true, qte: "1 bouteille", date: "En stock" },
-        "Sel & Poivre": { enStock: true, qte: "Stock permanent", date: "" }
+        "Carottes": { qte: 0, unite: "pièces" },
+        "Tomates": { qte: 0, unite: "pièces" }
       };
       customItems = [];
       joursSelectionnes = [0, 1, 2, 3, 4, 5, 6];
@@ -418,27 +791,24 @@
           <div class="pt-2 border-t border-slate-100">
             <div class="flex justify-between items-center mb-2.5">
               <h4 class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                📋 Ingrédients du jour <span class="text-[10px] text-slate-400 font-semibold">(To-Do List)</span>
+                📋 Ingrédients du jour
               </h4>
-              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                ${ings.filter(i => stockPlacard[i] && stockPlacard[i].enStock).length} / ${ings.length} en stock
-              </span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               ${ings.map(ing => {
-                const itemStock = stockPlacard[ing];
-                const enStock = itemStock && itemStock.enStock;
+                const stockItem = stockPlacard[ing.nom] || { qte: 0 };
+                const stockDisponible = stockItem.qte || 0;
+                const enStockComplet = stockDisponible >= ing.qte;
                 return `
-                  <label class="flex items-center gap-2.5 p-2.5 rounded-xl border transition cursor-pointer ${enStock ? 'bg-slate-50 border-slate-200/60 text-slate-400' : 'bg-white border-slate-200 text-slate-800 hover:border-emerald-300'}">
-                    <input type="checkbox" data-ing-toggle="${ing}" ${enStock ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                  <div class="flex items-center justify-between p-2.5 rounded-xl border ${enStockComplet ? 'bg-slate-50 border-slate-200/60' : 'bg-white border-slate-200'}">
                     <div class="flex flex-col min-w-0">
-                      <span class="text-xs font-semibold truncate ${enStock ? 'line-through' : ''}">${ing}</span>
-                      ${itemStock && itemStock.qte ? `<span class="text-[9px] text-slate-400 font-medium">${itemStock.qte}</span>` : ''}
+                      <span class="text-xs font-semibold text-slate-800">${ing.nom}</span>
+                      <span class="text-[10px] text-slate-500">Nécessaire : ${ing.qte} ${ing.unite || ''}</span>
                     </div>
-                    <span class="ml-auto text-[9px] font-bold shrink-0 ${enStock ? 'text-slate-400 bg-slate-100' : 'text-emerald-700 bg-emerald-50'} px-1.5 py-0.5 rounded">
-                      ${enStock ? 'En stock' : 'À acheter'}
+                    <span class="text-[10px] font-bold shrink-0 ${enStockComplet ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-amber-700 bg-amber-50 border border-amber-200'} px-2 py-1 rounded-lg">
+                      En stock : ${stockDisponible} ${ing.unite || ''}
                     </span>
-                  </label>`;
+                  </div>`;
               }).join('')}
             </div>
           </div>
@@ -466,59 +836,92 @@
               </div>
             </div>
           </div>
-          <button data-switch-to-day="${index}" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl transition">Voir détails & To-Do List ➔</button>
+          <button data-switch-to-day="${index}" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-xl transition">Voir détails ➔</button>
         </div>`).join('');
     }
 
-    function itemHTML(ing, achete) {
-      const details = stockPlacard[ing];
-      return `
-        <label class="flex items-center gap-3 py-2.5 cursor-pointer group">
-          <input type="checkbox" data-ing-toggle="${ing}" ${achete ? 'checked' : ''} class="w-4 h-4 rounded-md text-emerald-600 focus:ring-emerald-500 border-slate-300 transition">
-          <div class="flex justify-between items-center w-full">
-            <span class="text-xs font-semibold transition ${achete ? 'line-through text-slate-400' : 'text-slate-700 group-hover:text-slate-900'}">${ing}</span>
-            ${details && details.qte ? `<span class="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-100">${details.qte}</span>` : ''}
-          </div>
-        </label>`;
+    function calculerSyntheseIngrédients() {
+      const joursAffiches = menuSemaine.filter((_, idx) => joursSelectionnes.includes(idx));
+      const besoins = {};
+
+      joursAffiches.forEach(m => {
+        ingredientsDuJour(m).forEach(ing => {
+          if (!besoins[ing.nom]) {
+            besoins[ing.nom] = { qte: 0, unite: ing.unite || "" };
+          }
+          besoins[ing.nom].qte += ing.qte;
+        });
+      });
+
+      const aAcheter = [];
+      const enReserve = [];
+
+      Object.keys(besoins).forEach(nom => {
+        const besoin = besoins[nom];
+        const stockItem = stockPlacard[nom] || { qte: 0 };
+        const stockDispo = stockItem.qte || 0;
+        const differentiel = besoin.qte - stockDispo;
+
+        if (differentiel > 0) {
+          aAcheter.push({ nom, qteBesoin: besoin.qte, qteAcheter: differentiel, stockDispo, unite: besoin.unite });
+        } else {
+          enReserve.push({ nom, qteBesoin: besoin.qte, stockDispo, unite: besoin.unite });
+        }
+      });
+
+      return { aAcheter, enReserve, totalCategories: Object.keys(besoins).length };
     }
 
     function rendreCourses() {
       const joursAffiches = menuSemaine.filter((_, idx) => joursSelectionnes.includes(idx));
       document.getElementById("active-days-tag").innerText = joursAffiches.length === 7 ? "Toute la semaine" : joursAffiches.map(j => j.jour.split(' ')[0]).join(', ');
 
-      const tousIngs = [];
-      joursAffiches.forEach(m => tousIngs.push(...ingredientsDuJour(m)));
-      const ingsUniques = [...new Set(tousIngs)];
+      const { aAcheter, enReserve, totalCategories } = calculerSyntheseIngrédients();
 
-      const aAcheter = ingsUniques.filter(i => !(stockPlacard[i] && stockPlacard[i].enStock));
-      const achetes = ingsUniques.filter(i => stockPlacard[i] && stockPlacard[i].enStock);
-
-      const groupes = {};
-      aAcheter.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
+      const groupesAcheter = {};
+      aAcheter.forEach(item => { const r = rayonPour(item.nom); (groupesAcheter[r] = groupesAcheter[r] || []).push(item); });
 
       document.getElementById("list-a-acheter").innerHTML = ORDRE_RAYONS
-        .filter(r => groupes[r] && groupes[r].length)
+        .filter(r => groupesAcheter[r] && groupesAcheter[r].length)
         .map(r => `
           <div>
-            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1.5">${r}</p>
-            <div class="divide-y divide-slate-50">${groupes[r].map(i => itemHTML(i, false)).join('')}</div>
-          </div>`).join('') || '<p class="text-xs text-slate-400 py-2 font-medium">Tout est en réserve ou acheté ✅</p>';
+            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">${r}</p>
+            <div class="space-y-1.5">
+              ${groupesAcheter[r].map(item => `
+                <div class="flex justify-between items-center py-2 px-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <div>
+                    <span class="text-xs font-bold text-slate-800">${item.nom}</span>
+                    <p class="text-[10px] text-slate-400">Besoin: ${item.qteBesoin} ${item.unite} | En stock: ${item.stockDispo} ${item.unite}</p>
+                  </div>
+                  <span class="text-xs font-black text-rose-600 bg-rose-50 border border-rose-100 px-2.5 py-1 rounded-lg">
+                    Manque : ${item.qteAcheter} ${item.unite}
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </div>`).join('') || '<p class="text-xs text-slate-400 py-2 font-medium">Tout est en réserve ! ✅</p>';
 
-      document.getElementById("list-en-stock").innerHTML = achetes.length
-        ? achetes.map(i => itemHTML(i, true)).join('')
-        : '<p class="text-xs text-slate-300 py-2 font-medium">Aucun élément en réserve.</p>';
+      document.getElementById("list-en-stock").innerHTML = enReserve.length
+        ? enReserve.map(item => `
+            <div class="flex justify-between items-center py-2 px-3 bg-emerald-50/50 rounded-xl border border-emerald-100 mb-1.5">
+              <span class="text-xs font-bold text-emerald-900">${item.nom}</span>
+              <span class="text-[11px] font-semibold text-emerald-700">
+                Stock suffisant (${item.stockDispo} / ${item.qteBesoin} ${item.unite})
+              </span>
+            </div>`).join('')
+        : '<p class="text-xs text-slate-400 py-2 font-medium">Aucun ingrédient en réserve.</p>';
 
       document.getElementById("count-a-acheter").innerText = aAcheter.length;
-      const total = ingsUniques.length, done = achetes.length;
-      document.getElementById("progress-label").innerText = `${done} / ${total} en réserve`;
-      document.getElementById("progress-bar").style.width = total ? `${Math.round(done / total * 100)}%` : "0%";
+      const done = enReserve.length;
+      document.getElementById("progress-label").innerText = `${done} / ${totalCategories} ingrédients couverts`;
+      document.getElementById("progress-bar").style.width = totalCategories ? `${Math.round(done / totalCategories * 100)}%` : "0%";
     }
 
     function rendreInventaire() {
-      const ingredientsMenu = [];
-      menuSemaine.forEach(m => ingredientsMenu.push(...ingredientsDuJour(m)));
+      const ingredientsMenuNoms = [];
+      menuSemaine.forEach(m => ingredientsDuJour(m).forEach(ing => ingredientsMenuNoms.push(ing.nom)));
       
-      const tousIngs = [...new Set([...ingredientsMenu, ...customItems, ...Object.keys(stockPlacard)])];
+      const tousIngs = [...new Set([...ingredientsMenuNoms, ...customItems, ...Object.keys(stockPlacard)])];
 
       const groupes = {};
       tousIngs.forEach(i => { const r = rayonPour(i); (groupes[r] = groupes[r] || []).push(i); });
@@ -530,42 +933,22 @@
           <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-100 space-y-2">
             <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">${r}</h3>
             <div class="space-y-2">
-              ${groupes[r].map(ing => {
-                const item = stockPlacard[ing] || { enStock: false, qte: "", date: "" };
-                const estStock = item.enStock;
-                const estCustom = customItems.includes(ing);
+              ${groupes[r].map(ingNom => {
+                const item = stockPlacard[ingNom] || { qte: 0, unite: "" };
+                const estCustom = customItems.includes(ingNom);
                 return `
-                  <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 gap-2">
-                    <label class="flex items-center gap-2.5 cursor-pointer min-w-0">
-                      <input type="checkbox" data-ing-toggle="${ing}" ${estStock ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
-                      <span class="text-xs font-bold ${estStock ? 'text-emerald-800' : 'text-slate-600'}">${ing}</span>
-                    </label>
-                    <div class="flex items-center gap-2 pl-6 sm:pl-0 text-xs">
-                      <input type="text" data-update-qte="${ing}" value="${item.qte || ''}" placeholder="Quantité" class="w-28 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                      <input type="text" data-update-date="${ing}" value="${item.date || ''}" placeholder="Péremption" class="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                      ${estCustom ? `<button data-remove-custom="${ing}" class="text-slate-300 hover:text-rose-500 p-1 text-xs" title="Supprimer">✕</button>` : ''}
+                  <div class="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 gap-2">
+                    <span class="text-xs font-bold text-slate-800">${ingNom}</span>
+                    <div class="flex items-center gap-2 text-xs">
+                      <label class="text-[10px] font-semibold text-slate-400">Qté en stock :</label>
+                      <input type="number" step="any" min="0" data-update-qte="${ingNom}" value="${item.qte}" class="w-20 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                      <span class="text-[10px] text-slate-400 font-medium">${item.unite || ''}</span>
+                      ${estCustom ? `<button data-remove-custom="${ingNom}" class="text-slate-300 hover:text-rose-500 p-1 text-xs" title="Supprimer">✕</button>` : ''}
                     </div>
                   </div>`;
               }).join('')}
             </div>
           </div>`).join('');
-    }
-
-    function toggleStock(ing) {
-      if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: false, qte: "", date: "" };
-      
-      const etat = !stockPlacard[ing].enStock;
-      stockPlacard[ing].enStock = etat;
-      
-      // Affecte "En stock" uniquement si aucun texte personnalisé n'est déjà entré
-      if (etat && (!stockPlacard[ing].qte || stockPlacard[ing].qte.includes("+"))) {
-        stockPlacard[ing].qte = "En stock";
-      }
-
-      persister();
-      rendreVueJour();
-      rendreCourses();
-      rendreInventaire();
     }
 
     function rendreFiltresJours() {
@@ -616,9 +999,9 @@
       } else matWrap.classList.add("hidden");
 
       document.getElementById("modal-ingredients").innerHTML = data.ingredients.map(ing => `
-        <li class="flex items-center gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-          <span>${ing}</span>
+        <li class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span class="font-semibold text-slate-800">${ing.nom}</span>
+          <span class="text-emerald-700 font-bold">${ing.qte} ${ing.unite || ''}</span>
         </li>`).join('');
 
       const mepWrap = document.getElementById("modal-miseenplace-wrap");
@@ -657,50 +1040,35 @@
       e.preventDefault();
       const nomInput = document.getElementById("custom-nom");
       const qteInput = document.getElementById("custom-qte");
-      const dateInput = document.getElementById("custom-date");
+      const unitInput = document.getElementById("custom-unit");
 
       const nom = nomInput.value.trim();
-      const qteSaisie = qteInput.value.trim();
-      const date = dateInput.value.trim();
+      const qte = parseFloat(qteInput.value) || 0;
+      const unite = unitInput.value.trim();
 
       if (nom) {
-        if (!customItems.includes(nom)) {
-          customItems.push(nom);
-        }
-        
-        const qteFinale = qteSaisie !== "" ? qteSaisie : "En stock";
-        stockPlacard[nom] = { enStock: true, qte: qteFinale, date: date };
+        if (!customItems.includes(nom)) customItems.push(nom);
+        stockPlacard[nom] = { qte: qte, unite: unite };
         
         persister();
         nomInput.value = "";
         qteInput.value = "";
-        dateInput.value = "";
+        unitInput.value = "";
         
         rendreMenuComplet();
       }
     });
 
-    document.addEventListener("change", (e) => {
-      const ingToggle = e.target.closest("[data-ing-toggle]");
-      if (ingToggle) {
-        toggleStock(ingToggle.dataset.ingToggle);
-        return;
-      }
+    document.addEventListener("input", (e) => {
       const updateQte = e.target.closest("[data-update-qte]");
       if (updateQte) {
-        const ing = updateQte.dataset.updateQte;
-        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: true, qte: "", date: "" };
-        stockPlacard[ing].qte = updateQte.value;
+        const ingNom = updateQte.dataset.updateQte;
+        const val = parseFloat(updateQte.value);
+        if (!stockPlacard[ingNom]) stockPlacard[ingNom] = { qte: 0, unite: "" };
+        stockPlacard[ingNom].qte = isNaN(val) ? 0 : val;
         persister();
-        return;
-      }
-      const updateDate = e.target.closest("[data-update-date]");
-      if (updateDate) {
-        const ing = updateDate.dataset.updateDate;
-        if (!stockPlacard[ing]) stockPlacard[ing] = { enStock: true, qte: "", date: "" };
-        stockPlacard[ing].date = updateDate.value;
-        persister();
-        return;
+        rendreVueJour();
+        rendreCourses();
       }
     });
 
@@ -760,7 +1128,7 @@
     });
 
     document.getElementById("btn-vider-panier").addEventListener("click", () => {
-      Object.keys(stockPlacard).forEach(k => stockPlacard[k].enStock = false);
+      Object.keys(stockPlacard).forEach(k => stockPlacard[k].qte = 0);
       persister();
       rendreMenuComplet();
     });
