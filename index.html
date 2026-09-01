@@ -292,7 +292,6 @@
       return [...item.entree.ingredients, ...item.plat.ingredients, ...(item.dessert ? item.dessert.ingredients : [])];
     }
 
-    // EXTRACTION AUTOMATIQUE DES QUANTITÉS DU MENU
     function obtenirQuantiteMenu(nomAliment) {
       const nomLower = nomAliment.toLowerCase();
       const quantites = [];
@@ -312,7 +311,7 @@
     const STORAGE_KEY = "chef-raphael-touati-v1";
     function safeGet() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); } catch { return null; } }
     function safeSet(obj) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
-    function persister() { safeSet({ menuSemaine, stockPlacard, me-custom-items: customItems, joursSelectionnes, jourActiveIndex }); }
+    function persister() { safeSet({ menuSemaine, stockPlacard, customItems, joursSelectionnes, jourActiveIndex }); }
 
     const saisonActuelle = obtenirSaisonActuelle();
     const poolRecettesSaison = catalogueSaisons[saisonActuelle] || catalogueSaisons["printemps"];
@@ -342,7 +341,7 @@
     if (sauvegarde && Array.isArray(sauvegarde.menuSemaine) && sauvegarde.menuSemaine.length) {
       menuSemaine = sauvegarde.menuSemaine;
       stockPlacard = sauvegarde.stockPlacard || {};
-      customItems = sauvegarde['me-custom-items'] || [];
+      customItems = sauvegarde.customItems || [];
       joursSelectionnes = sauvegarde.joursSelectionnes || [0, 1, 2, 3, 4, 5, 6];
       jourActiveIndex = sauvegarde.jourActiveIndex !== undefined ? sauvegarde.jourActiveIndex : meGetJourActuelIndex();
     } else {
@@ -432,7 +431,6 @@
             </div>` : ''}
           </div>
 
-          <!-- TO DO LIST INGRÉDIENTS DU JOUR -->
           <div class="pt-2 border-t border-slate-100">
             <div class="flex justify-between items-center mb-2.5">
               <h4 class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
@@ -575,7 +573,6 @@
       const etat = !stockPlacard[ing].enStock;
       stockPlacard[ing].enStock = etat;
       
-      // Calcule et attribue automatiquement la quantité nécessaire si elle n'a pas été saisie à la main
       if (etat && !stockPlacard[ing].qte) {
         stockPlacard[ing].qte = obtenirQuantiteMenu(ing);
       }
@@ -671,7 +668,6 @@
       rendreMenuComplet();
     }
 
-    // FORMULAIRE ET ÉVÉNEMENTS
     document.getElementById("form-add-custom-item").addEventListener("submit", (e) => {
       e.preventDefault();
       const nomInput = document.getElementById("custom-nom");
@@ -683,14 +679,11 @@
       const date = dateInput.value.trim();
 
       if (nom) {
-        // Enregistrer dans la liste globale des ajouts libres
         if (!customItems.includes(nom)) {
           customItems.push(nom);
         }
         
-        // Calcul automatique si la quantité n'est pas renseignée
         const qteFinale = qteSaisie !== "" ? qteSaisie : obtenirQuantiteMenu(nom);
-
         stockPlacard[nom] = { enStock: true, qte: qteFinale, date: date };
         
         persister();
